@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist", // Папка для скомпилированных файлов
+    "rootDir": "./src", // Корневая папка исходных файлов
+    "strict": true, // Включить строгий режим
+    "module": "commonjs", // Модульная система CommonJS
+    "target": "ES6", // Целевая версия ECMAScript
+    "esModuleInterop": true, // Включить интероперабельность с ES модулями
+    "skipLibCheck": true, // Пропуск проверки типов библиотек
+    "forceConsistentCasingInFileNames": true, // Требовать консистентность в именах файлов
+    "lib": ["es2015", "dom"]
+  },
+  "include": [
+    "src/**/*.ts" // Включаем все файлы TypeScript в папке src
+  ]
+}

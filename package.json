@@ -26,6 +26,9 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/babel__template": "^7.4.4",
+    "@types/babel__traverse": "^7.20.6",
+    "@types/prop-types": "^15.7.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
