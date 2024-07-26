@@ -1,16 +1,20 @@
 {
   "compilerOptions": {
-    "outDir": "./dist", // Папка для скомпилированных файлов
-    "rootDir": "./src", // Корневая папка исходных файлов
-    "strict": true, // Включить строгий режим
-    "module": "commonjs", // Модульная система CommonJS
-    "target": "ES6", // Целевая версия ECMAScript
-    "esModuleInterop": true, // Включить интероперабельность с ES модулями
-    "skipLibCheck": true, // Пропуск проверки типов библиотек
-    "forceConsistentCasingInFileNames": true, // Требовать консистентность в именах файлов
-    "lib": ["es2015", "dom"]
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": [
-    "src/**/*.ts" // Включаем все файлы TypeScript в папке src
-  ]
+  "include": ["src"]
 }
