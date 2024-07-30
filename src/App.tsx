@@ -1,9 +1,8 @@
 import { useState } from "react";
 import "./App.css";
+import { Main } from "./components/mainBlock/Main";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <div>asdf</div>;
+  return <Main></Main>;
 }
 export default App;

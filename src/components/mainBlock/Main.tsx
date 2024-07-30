@@ -1,9 +1,15 @@
-import React from "react";
 
-function App() {
-  console.log(123);
+import { Heading } from "./Heading/Heading";
+import { Cards } from "./Cards/Cards";
 
-  return <div>TSX</div>;
+export function Main() {
+
+  return (
+    <div className="bg-sky-50 aspect-square">
+      <Heading></Heading>
+      <Cards></Cards>
+      <button className="button__up">Наверх</button>
+    </div>
+  )
 }
 
-export default App;
