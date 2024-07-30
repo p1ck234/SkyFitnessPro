@@ -1,9 +1,15 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./src/**/*.{html,js}"],
+module.exports = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Roboto", "sans-serif"],
+      },
+      colors: {
+        customYellow: "#FFC700",
+        customGreen: "#BCEC30",
+      },
+    },
   },
   plugins: [],
-}
-
+};
