@@ -5,10 +5,10 @@ import Header from "./components/header/Header";
 import { Main } from "./components/mainBlock/Main";
 const App = () => {
   return (
-    <div className="container-xl mx-auto p-6 font-sans">
+    <div className="container-xl mx-auto p-6 font-sans cursor-custom">
       <Header />
       <Course />
-      <Main/>
+      <Main />
     </div>
   );
 };

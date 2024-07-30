@@ -9,6 +9,9 @@ module.exports = {
         customYellow: "#FFC700",
         customGreen: "#BCEC30",
       },
+      cursor: {
+        custom: "url(/img/customCursor.png), auto", // Убедитесь, что путь к изображению правильный
+      },
     },
   },
   plugins: [],
