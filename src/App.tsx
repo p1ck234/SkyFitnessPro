@@ -3,13 +3,13 @@ import "./index.css";
 import Course from "./components/coursesBlock/Course";
 import Header from "./components/header/Header";
 import { Main } from "./components/mainBlock/Main";
+import { AppRoutes } from "./Routes";
+import HomePage from "./components/homePage/HomePage";
+
 const App = () => {
+
   return (
-    <div className="container-xl mx-auto p-6 font-sans cursor-custom">
-      <Header />
-      <Course />
-      <Main />
-    </div>
+       <AppRoutes />
   );
 };
 
