@@ -5,7 +5,7 @@ import { constRoutes } from "../../lib/paths";
 const Header = () => {
   return (
     <>
-      <header className="flex justify-between items-center py-4 p-48">
+      <header className="flex justify-between items-center p-6 mx-auto container">
         <div className="flex items-center">
           <img src="logo.svg" alt="Logo" className="h-8 mr-2" />
         </div>
