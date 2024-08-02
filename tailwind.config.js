@@ -1,18 +1,12 @@
+// tailwind.config.js
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["Roboto", "sans-serif"],
-      },
       colors: {
-        customYellow: "#FFC700",
-        customGreen: "#BCEC30",
-      },
-      cursor: {
-        custom: "url(/img/customCursor.png), auto", // Убедитесь, что путь к изображению правильный
+        customGreen: "#34D399",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

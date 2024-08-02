@@ -1,3 +1,19 @@
+/* styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 1px; /* Ширина полосы прокрутки */
+    }
+  
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: black; /* Цвет полосы прокрутки */
+      border-radius: 4px; /* Скругление углов полосы прокрутки */
+    }
+  
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: #f1f1f1; /* Цвет трека полосы прокрутки */
+    }
+  }
