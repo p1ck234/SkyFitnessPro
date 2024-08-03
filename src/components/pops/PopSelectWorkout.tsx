@@ -10,6 +10,7 @@ export const PopSelectWorkouts = () => {
 
   const closeModal = () => {
     setIsModalVisible(false);
+    navigate(location.state?.backgroundLocation || "/profile");
   };
 
   const toggleCheckbox = (id: number) => {
@@ -31,18 +32,24 @@ export const PopSelectWorkouts = () => {
     }
   };
 
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
+
   if (!isModalVisible) return null;
 
   return (
     <>
-      <div className="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50">
-        <div className="relative bg-white rounded-3xl shadow-xl p-4 w-100 p-8">
-          <button
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-            onClick={closeModal}
-          >
-            ×
-          </button>
+      <div
+        className="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50"
+        onClick={handleBackgroundClick} // Добавляем обработчик клика на фоне, чтобы закрыть окно
+      >
+        <div
+          className="relative bg-white rounded-3xl shadow-xl p-4 w-100 p-8"
+          onClick={(e) => e.stopPropagation} //Останавливаем распространение клика внутри модального окна
+        >
           <form className="flex flex-col items-center w-full rounded-xl">
             <h1 className="text-center text-3xl mb-6">Выберите тренировку</h1>
             <ul className="w-full flex flex-col overflow-y-auto max-h-[60vh] scrollbar-thin">

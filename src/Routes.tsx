@@ -1,7 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ProfilePage } from "./pages/profile";
 import Course from "./components/coursesBlock/Course";
-import { PopSelectWorkouts } from "./components/pops/PopSelectWorkout";
 import { PopSelectWorkoutPage } from "./pages/popSelectWorkout";
 
 export const AppRoutes = () => {
