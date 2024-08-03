@@ -12,13 +12,16 @@ export const Person = () => {
   };
   return (
     <>
-      <p className="cursor-pointer" onClick={toggleWorkout}>
+      {/* <p className="cursor-pointer" onClick={toggleWorkout}>
         выбор тренировки
-      </p>
-      <h1 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8">
-        Профиль
+      </p> */}
+      <h1
+        className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
+        onClick={toggleWorkout} // Временно вызов окна выбора тренировки здесь
+      >
+        Профиль{" "}
       </h1>
-      <div className="border rounded-3xl bg-white p-6 shadow-lg">
+      <div className="border rounded-3xl bg-white p-6 shadow-lg mt-10 mb-12">
         <div className="flex w-1/2">
           <div className="flex-none mr-4">
             <img src={"img/Mask group.png"}></img>
