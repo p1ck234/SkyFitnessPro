@@ -6,9 +6,10 @@ export const PopSelectWorkouts = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(true);
 
   const closeModal = () => {
-    navigate(location.state?.backgroundLocation || "/", { replace: true });
+    setIsModalVisible(false);
   };
 
   const toggleCheckbox = (id: number) => {
@@ -18,6 +19,19 @@ export const PopSelectWorkouts = () => {
         : [...prevChecked, id]
     );
   };
+
+  const openWorkout = () => {
+    // переход на выбранный урок (еше не реализованно)
+    if (checkedWorkouts.length > 0) {
+      alert("Страницы еще не реализованы");
+      //   const selectedWorkoutId = checkedWorkouts[0];
+      //   navigate("/worcouts/${selectedWorkoutId}");
+    } else {
+      alert("Выберите тренировку");
+    }
+  };
+
+  if (!isModalVisible) return null;
 
   return (
     <>
@@ -76,7 +90,10 @@ export const PopSelectWorkouts = () => {
                 </li>
               ))}
             </ul>
-            <button className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full mt-6">
+            <button
+              className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full mt-6"
+              onClick={openWorkout}
+            >
               Начать
             </button>
           </form>
