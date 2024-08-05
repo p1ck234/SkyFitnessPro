@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { ProfilePage } from "./pages/profile";
 import Course from "./components/coursesBlock/Course";
 import { PopSelectWorkoutPage } from "./pages/popSelectWorkout";
+import { Exit } from "./pages/exit";
 
 export const AppRoutes = () => {
   const location = useLocation();
@@ -13,11 +14,13 @@ export const AppRoutes = () => {
         <Route path="/" element={<Course />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
+        <Route path="/exit" element={<Exit />} />
         {/* <Route path="/worouts/:id" element={<WorkoutBlock />} /> */}
       </Routes>
       {state?.backgroundLocation && (
         <Routes>
           <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
+          {/* <Route path="/exit" element={<Exit />} /> */}
         </Routes>
       )}
     </>

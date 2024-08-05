@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useRef } from "react";
 import "../../index.css";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const loginButtonRef = useRef<HTMLButtonElement>(null);
+
+  const toggleMyProfile = () => {
+    if (loginButtonRef.current) {
+      const buttonPosition = loginButtonRef.current.getBoundingClientRect();
+      navigate("/exit", { state: { buttonPosition } });
+    }
+  };
   return (
     <>
       <header className="flex justify-between items-center py-4 p-48">
-        <div className="flex items-center">
+        <div className="flex flex-col items-start gap-4">
           <img src="logo.svg" alt="Logo" className="h-8 mr-2" />
+          <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
         </div>
-        <button className="bg-customGreen text-black py-2 px-4 rounded-lg">
+        <button
+          ref={loginButtonRef} // Добавляем привязку ref к кнопке
+          className="bg-customGreen text-black py-2 px-6 rounded-full"
+          onClick={toggleMyProfile}
+        >
           Войти
         </button>
       </header>

@@ -8,11 +8,6 @@ export const PopSelectWorkouts = () => {
   const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(true);
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-    navigate(location.state?.backgroundLocation || "/profile");
-  };
-
   const toggleCheckbox = (id: number) => {
     setCheckedWorkouts((prevChecked) =>
       prevChecked.includes(id)
@@ -36,6 +31,11 @@ export const PopSelectWorkouts = () => {
     if (e.target === e.currentTarget) {
       closeModal();
     }
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigate(location.state?.backgroundLocation || "/profile");
   };
 
   if (!isModalVisible) return null;
