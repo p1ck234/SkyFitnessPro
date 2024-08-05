@@ -1,3 +1,6 @@
+/*global module*/
+/*eslint no-undef: "error"*/
+
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -8,7 +11,7 @@ module.exports = {
       colors: {
         customYellow: "#FFC700",
         customGreen: "#BCEC30",
-      },
+      }
     },
   },
   plugins: [],
