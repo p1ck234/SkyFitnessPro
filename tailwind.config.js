@@ -1,14 +1,9 @@
-/*global module*/
-/*eslint no-undef: "error"*/
-
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["Roboto", "sans-serif"],
-      },
       colors: {
+        customGreenCurse: "#34D399",
         customYellow: "#FFC700",
         customGreen: "#BCEC30",
       },
@@ -20,5 +15,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

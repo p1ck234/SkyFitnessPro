@@ -6,7 +6,6 @@ import { Main } from "../mainBlock/Main";
 export default function HomePage() {
   return (
     <div className="container-xl mx-auto p-6 font-sans cursor-custom">
-      <Course />
       <Main />
       <Outlet />
     </div>
