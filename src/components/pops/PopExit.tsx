@@ -45,7 +45,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50"
+      className="fixed inset-0 bg-transparent flex justify-center items-center z-50"
       onClick={handleBackgroundClick}
     >
       <div

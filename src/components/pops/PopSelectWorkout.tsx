@@ -43,7 +43,7 @@ export const PopSelectWorkouts = () => {
   return (
     <>
       <div
-        className="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50"
+        className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
         onClick={handleBackgroundClick} // Добавляем обработчик клика на фоне, чтобы закрыть окно
       >
         <div

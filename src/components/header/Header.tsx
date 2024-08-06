@@ -13,15 +13,10 @@ const Header = () => {
     if (loginButtonRef.current) {
       const buttonPosition = loginButtonRef.current.getBoundingClientRect();
       openModal("exit");
+      navigate("", { state: { buttonPosition } });
     }
   };
 
-  // const toggleMyProfile = () => {
-  //   if (loginButtonRef.current) {
-  //     const buttonPosition = loginButtonRef.current.getBoundingClientRect();
-  //     navigate("/exit", { state: { buttonPosition } });
-  //   }
-  // };
   return (
     <>
       <header className="flex justify-between items-center py-4 p-48">
