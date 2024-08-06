@@ -7,12 +7,12 @@ export const Layout = () => {
   const { modalState, closeModal } = useModal();
 
   return (
-    <div>
-        <Header />
-        <main>
+    <div className="container-xl mx-auto p-6 font-sans cursor-custom">
+      <Header />
+      <main>
         <Outlet />
       </main>
-      {modalState === "exit" && (<PopExit closeModal={closeModal}/>)}
+      {modalState === "exit" && <PopExit closeModal={closeModal} />}
     </div>
   );
 };
