@@ -3,7 +3,8 @@ import Header from "./components/header/Header";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
 import { AppRoutes } from "./Routes";
-
+import { ModalProvider } from "./context";
+import { BrowserRouter } from "react-router-dom";
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -18,8 +19,7 @@ const App = () => {
   };
 
   return (
-    <>
-      <Header openModal={openModal} />
+    <ModalProvider>
       <AppRoutes openModal={openModal} />
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -38,7 +38,7 @@ const App = () => {
           </div>
         </div>
       )}
-    </>
+    </ModalProvider>
   );
 };
 

@@ -8,11 +8,6 @@ export const PopSelectWorkouts = () => {
   const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(true);
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-    navigate(location.state?.backgroundLocation || "/profile");
-  };
-
   const toggleCheckbox = (id: number) => {
     setCheckedWorkouts((prevChecked) =>
       prevChecked.includes(id)
@@ -38,12 +33,17 @@ export const PopSelectWorkouts = () => {
     }
   };
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigate(location.state?.backgroundLocation || "/profile");
+  };
+
   if (!isModalVisible) return null;
 
   return (
     <>
       <div
-        className="fixed inset-0 bg-gray-100 bg-opacity-75 flex justify-center items-center z-50"
+        className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
         onClick={handleBackgroundClick} // Добавляем обработчик клика на фоне, чтобы закрыть окно
       >
         <div
@@ -64,6 +64,7 @@ export const PopSelectWorkouts = () => {
                       checked={checkedWorkouts.includes(work.id)}
                       onChange={() => toggleCheckbox(work.id)}
                       className="hidden"
+                      onClick={openWorkout}
                     />
                     <span
                       className={`inline-block h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${
@@ -97,12 +98,6 @@ export const PopSelectWorkouts = () => {
                 </li>
               ))}
             </ul>
-            <button
-              className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full mt-6"
-              onClick={openWorkout}
-            >
-              Начать
-            </button>
           </form>
         </div>
       </div>
