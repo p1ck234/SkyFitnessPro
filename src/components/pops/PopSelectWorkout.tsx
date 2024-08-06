@@ -64,6 +64,7 @@ export const PopSelectWorkouts = () => {
                       checked={checkedWorkouts.includes(work.id)}
                       onChange={() => toggleCheckbox(work.id)}
                       className="hidden"
+                      onClick={openWorkout}
                     />
                     <span
                       className={`inline-block h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${
@@ -97,12 +98,6 @@ export const PopSelectWorkouts = () => {
                 </li>
               ))}
             </ul>
-            <button
-              className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full mt-6"
-              onClick={openWorkout}
-            >
-              Начать
-            </button>
           </form>
         </div>
       </div>

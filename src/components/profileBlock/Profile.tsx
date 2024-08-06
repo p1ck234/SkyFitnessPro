@@ -6,7 +6,6 @@ export const Profile = () => {
     
   return (
     <div className="bg-gray-200">
-      <Header />
       <div className="px-48 pt-10">
         <Person />
         <h1 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold my-8"

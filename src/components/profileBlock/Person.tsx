@@ -1,12 +1,22 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../Button";
 
 export const Person = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const openMyProfile = () => {
+    navigate("/select_workouts", {
+      state: { backgroundLocation: location },
+    });
+  };
+
   return (
     <>
-      <h1 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer">
+      <h1
+        className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
+        onClick={openMyProfile}
+      >
         Профиль{" "}
       </h1>
       <div className="border rounded-3xl bg-white p-6 shadow-lg mt-10 mb-12">
@@ -19,12 +29,10 @@ export const Person = () => {
             <p className="text-xl">Логин: sergey.petrov96</p>
             <p className="text-xl">Пароль: ыоваЛЫО</p>
             <div className="flex gap-2 mt-6">
-              <button className="bg-customGreen text-xl text-black py-2 px-4 rounded-full flex-1">
-                Изменить пароль
-              </button>
-              <button className="bg-customWhite border border-black text-xl text-black py-2 px-4 rounded-full flex-1">
+              <Button className="flex-1">Изменить пароль</Button>
+              <Button className="flex-1" color="white" borderColor="black">
                 Выйти
-              </button>
+              </Button>
             </div>
           </div>
         </div>

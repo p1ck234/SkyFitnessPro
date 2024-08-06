@@ -1,17 +1,27 @@
 import React, { useRef } from "react";
 import "../../index.css";
+// import { useNavigate } from "react-router-dom";
+import { useModal } from "@/context";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
   const loginButtonRef = useRef<HTMLButtonElement>(null);
+  const { openModal } = useModal();
 
-  const toggleMyProfile = () => {
+  const handleOpenModal = () => {
     if (loginButtonRef.current) {
       const buttonPosition = loginButtonRef.current.getBoundingClientRect();
-      navigate("/exit", { state: { buttonPosition } });
+      openModal("exit");
     }
   };
+
+  // const toggleMyProfile = () => {
+  //   if (loginButtonRef.current) {
+  //     const buttonPosition = loginButtonRef.current.getBoundingClientRect();
+  //     navigate("/exit", { state: { buttonPosition } });
+  //   }
+  // };
   return (
     <>
       <header className="flex justify-between items-center py-4 p-48">
@@ -22,7 +32,7 @@ const Header = () => {
         <button
           ref={loginButtonRef} // Добавляем привязку ref к кнопке
           className="bg-customGreen text-black py-2 px-6 rounded-full"
-          onClick={toggleMyProfile}
+          onClick={handleOpenModal}
         >
           Войти
         </button>
