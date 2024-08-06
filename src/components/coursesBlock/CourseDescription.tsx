@@ -32,7 +32,7 @@ const CourseDescription = () => {
       {/* Courses Section */}
       <section className="mb-6 mt-14">
         <h2 className="text-5xl font-bold mb-4">Направления</h2>
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 bg-customGreen p-6 rounded-lg">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8 bg-customGreenCurse p-6 rounded-lg">
           <div className="flex flex-col items-start space-y-4">
             <div className="flex items-center space-x-2">
               <img src="Sparcle.svg" alt="" className="w-8 h-8" />
@@ -85,7 +85,7 @@ const CourseDescription = () => {
           </ul>
 
           <div className="flex">
-            <button className="bg-customGreen text-black py-2 px-4 rounded-lg">
+            <button className="bg-customGreenCurse text-black py-2 px-4 rounded-lg">
               Войдите, чтобы добавить курс
             </button>
           </div>

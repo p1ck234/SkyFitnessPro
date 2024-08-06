@@ -3,9 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        customGreenCurse: "#34D399",
+        customGreen: "#34D399",
         customYellow: "#FFC700",
-        customGreen: "#BCEC30",
+        customGreenCurse: "#BCEC30",
       },
       cursor: {
         custom: "url(/img/customCursor.png), auto", // Ensure the image path is correct

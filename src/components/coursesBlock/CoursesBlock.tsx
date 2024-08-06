@@ -10,9 +10,9 @@ const CoursesBlock = () => {
       >
         <h1 className="text-6xl font-bold text-white z-10">Йога</h1>
         <img
-          src="ioga_image.jpeg"
+          src="yoga.png"
           alt="Hero"
-          className="absolute inset-y-100 -right-36 -bottom-36"
+          className="absolute inset-y-100 right-12 bottom-12"
         />
       </section>
     </div>
