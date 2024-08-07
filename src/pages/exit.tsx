@@ -1,8 +1,7 @@
 import { PopExit } from "@/components/pops/PopExit";
+import { useModal } from "@/context";
 
-interface ModalContextType {
-  closeModal: () => void;
-}
-export const Exit = ({ closeModal }: ModalContextType) => {
+export const Exit = () => {
+  const { closeModal } = useModal();
   return <PopExit closeModal={closeModal} />;
 };

@@ -1,14 +1,22 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
+import { useModal } from "@/context";
+import { constRoutes } from "@/lib/paths";
 
 export const Person = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { openModal } = useModal();
 
   const openMyProfile = () => {
     navigate("/select_workouts", {
       state: { backgroundLocation: location },
     });
+  };
+
+  const handleChangePassword = () => {
+    openModal("exit");
+    navigate(constRoutes.EXIT, { state: { backgroundLocation: location } });
   };
 
   return (
@@ -29,7 +37,7 @@ export const Person = () => {
             <p className="text-xl">Логин: sergey.petrov96</p>
             <p className="text-xl">Пароль: ыоваЛЫО</p>
             <div className="flex gap-2 mt-6">
-              <Button className="flex-1">Изменить пароль</Button>
+              <Button className="flex-1" onClick={handleChangePassword}>Изменить пароль</Button>
               <Button className="flex-1" color="white" borderColor="black">
                 Выйти
               </Button>
