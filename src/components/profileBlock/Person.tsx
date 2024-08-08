@@ -37,8 +37,9 @@ export const Person = () => {
                 Изменить пароль
               </Button>
               <Button
-                className="flex-1 max-w-60 min-w-60 border border-black"
+                className="flex-1 max-w-60 min-w-60 border border-black variant-custom-achrom "
                 color="white"
+                variant="custom-achrom"
               >
                 Выйти
               </Button>

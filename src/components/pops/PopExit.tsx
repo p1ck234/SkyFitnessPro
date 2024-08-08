@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../Button";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -65,15 +66,18 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
           <p>sergey.petrov96@mail.ru</p>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <button
+          <Button
             className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
-          </button>
-          <button className="bg-white text-lg w-full border border-black text-black py-2 px-4 rounded-full">
+          </Button>
+          <Button
+            className="bg-white text-lg w-full border border-black text-black py-2 px-4 rounded-full"
+            variant="custom-achrom"
+          >
             Выйти
-          </button>
+          </Button>
         </div>
       </div>
     </div>
