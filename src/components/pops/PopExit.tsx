@@ -30,11 +30,16 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [location.state]);
 
+  // const toggleMyProfile = () => {
+  //   navigate("/select_workouts", {
+  //     state: { backgroundLocation: location },
+  //     replace: true,
+  //   });
+  // };
+
   const toggleMyProfile = () => {
-    navigate("/select_workouts", {
-      state: { backgroundLocation: location },
-      replace: true,
-    });
+    navigate("/profile");
+    closeModal();
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -52,7 +57,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto p-8 flex flex-col gap-6"
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
-        style={{ position: "absolute", top: position.top, left: position.left }} 
+        style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
           {/* здесь будут рендерятся данные из стейтов или пропсы */}

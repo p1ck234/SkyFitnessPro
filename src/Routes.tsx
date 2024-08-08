@@ -7,9 +7,9 @@ import { PageLayout } from "./pages/pageLayout";
 import { Workouts } from "./pages/workouts";
 import { useModal } from "./context";
 import { constRoutes } from "./lib/paths";
-import HomePage from "./components/homePage/HomePage";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
+import HomePage from "./pages/homePage";
 
 interface AppRoutesProps {
   openModal: (isLoginMode: boolean) => void;
@@ -37,8 +37,6 @@ export const AppRoutes: React.FC<AppRoutesProps> = ({ openModal }) => {
         {/* <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/select_workouts" element={<PopSelectWorkoutPage />} /> */}
-        
-        
       </Routes>
 
       {state?.backgroundLocation && (

@@ -1,38 +1,39 @@
 import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "@/context";
 import { Logo } from "../shared/logo/Logo";
+import { Button } from "../Button";
 
-interface HeaderProps {
-  openModal: (isLoginMode: boolean) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ openModal }) => {
+const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const loginButtonRef = useRef<HTMLButtonElement>(null);
   const { openModal: contextOpenModal } = useModal();
 
   const handleOpenModal = () => {
     if (loginButtonRef.current) {
       const buttonPosition = loginButtonRef.current.getBoundingClientRect();
+      navigate(location.pathname, {
+        state: { ...location.state, buttonPosition },
+      });
       contextOpenModal("exit");
-      navigate("", { state: { buttonPosition } });
     }
   };
 
   return (
-    <header className="flex justify-between items-center py-4 p-48">
+    <header className="flex justify-between items-center">
       <div className="flex flex-col items-start gap-4">
         <Logo />
-        <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
       </div>
-      <button
+      <Button
         ref={loginButtonRef}
-        className="bg-customGreen text-black py-2 px-6 rounded-full"
+        color="bg-customGreen"
+        width="w-auto"
+        className="text-black py-2 px-6 rounded-full"
         onClick={handleOpenModal}
       >
         Войти
-      </button>
+      </Button>
     </header>
   );
 };

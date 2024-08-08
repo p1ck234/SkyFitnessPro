@@ -4,7 +4,7 @@ type ModalState = 'exit' | 'otherState' | null;
 
 interface ModalContextType {
   modalState: string | null;
-  openModal: (modalType: string) => void;
+  openModal: (modalType: ModalState) => void;
   closeModal: () => void;
 }
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -15,7 +15,7 @@ interface ModalProviderProps {
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalState, setModalState] = useState<string | null>(null);
 
-  const openModal = (modalType: string) => {
+  const openModal = (modalType: ModalState) => {
     setModalState(modalType);
   };
 

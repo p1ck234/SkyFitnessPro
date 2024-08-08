@@ -1,7 +1,5 @@
+import { Main } from "@/components/mainBlock/Main";
 import { Outlet } from "react-router-dom";
-import Header from "../header/Header";
-import Course from "../coursesBlock/Course";
-import { Main } from "../mainBlock/Main";
 
 export default function HomePage() {
   return (
