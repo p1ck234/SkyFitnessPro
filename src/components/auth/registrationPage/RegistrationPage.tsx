@@ -3,13 +3,16 @@ import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
+import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
 }
 
-export const RegistrationPage: React.FC<RegistrationPageProps> = ({ switchToLogin }) => {
+export const RegistrationPage: React.FC<RegistrationPageProps> = ({
+  switchToLogin,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,7 +22,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ switchToLogi
 
   const handleSwitchToLogin = () => {
     switchToLogin();
-    navigate(constRoutes.LOGIN, { state: { backgroundLocation: location.state?.backgroundLocation } });
+    navigate(constRoutes.LOGIN, {
+      state: { backgroundLocation: location.state?.backgroundLocation },
+    });
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -29,7 +34,8 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ switchToLogi
       return;
     }
     try {
-      await register(email, password);
+      const user = await register(email, password);
+      await saveUser(user.uid, { email: user.email, createdAt: new Date() });
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
