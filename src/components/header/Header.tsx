@@ -1,22 +1,27 @@
 import React, { useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useModal } from "@/context";
 import { Logo } from "../shared/logo/Logo";
+import { constRoutes } from "@/lib/paths";
+import { useUser } from "@/context/userContext";
 import { Button } from "../Button";
 
-const Header = () => {
+const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { openModal, setCurrentPath } = useModal();
+  const { user } = useUser();
   const loginButtonRef = useRef<HTMLButtonElement>(null);
-  const { openModal: contextOpenModal } = useModal();
 
-  const handleOpenModal = () => {
+  const handleOpenLoginModal = () => {
     if (loginButtonRef.current) {
       const buttonPosition = loginButtonRef.current.getBoundingClientRect();
       navigate(location.pathname, {
         state: { ...location.state, buttonPosition },
       });
-      contextOpenModal("exit");
+      setCurrentPath(constRoutes.LOGIN);
+      openModal("login");
+      navigate(constRoutes.LOGIN, { state: { backgroundLocation: location } });
     }
   };
 
@@ -25,15 +30,19 @@ const Header = () => {
       <div className="flex flex-col items-start gap-4">
         <Logo />
       </div>
-      <Button
-        ref={loginButtonRef}
-        color="bg-customGreen"
-        width="w-auto"
-        className="text-black py-2 px-6 rounded-full"
-        onClick={handleOpenModal}
-      >
-        Войти
-      </Button>
+      {user ? (
+        <div>Welcome, {user.email}</div>
+      ) : (
+        <Button
+          ref={loginButtonRef}
+          color="bg-customGreen"
+          width="w-auto"
+          className="text-black py-2 px-6 rounded-full"
+          onClick={handleOpenLoginModal}
+        >
+          Войти
+        </Button>
+      )}
     </header>
   );
 };
