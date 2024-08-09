@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
+import { useUser } from "@/context/userContext";
+import { logout } from "@/services/authService";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -8,6 +10,7 @@ interface PopExitProps {
 export const PopExit = ({ closeModal }: PopExitProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useUser();
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -15,8 +18,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
     const updatePosition = () => {
       if (modalRef.current && location.state?.buttonPosition) {
         const { buttonPosition } = location.state;
-        const { offsetWidth: modalWidth, offsetHeight: modalHeight } =
-          modalRef.current;
+        const { offsetWidth: modalWidth } = modalRef.current;
 
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
@@ -31,16 +33,19 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
     return () => window.removeEventListener("resize", updatePosition);
   }, [location.state]);
 
-  // const toggleMyProfile = () => {
-  //   navigate("/select_workouts", {
-  //     state: { backgroundLocation: location },
-  //     replace: true,
-  //   });
-  // };
-
   const toggleMyProfile = () => {
     navigate("/profile");
     closeModal();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      closeModal();
+      navigate("/"); // Перенаправление на главную страницу после выхода
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -55,15 +60,14 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto p-8 flex flex-col gap-6"
+        className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6"
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          {/* здесь будут рендерятся данные из стейтов или пропсы */}
-          <p className="font-bold">Сергей</p>
-          <p>sergey.petrov96@mail.ru</p>
+          <p className="font-bold">{user?.displayName || user?.email}</p>
+          <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
@@ -74,7 +78,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
           </Button>
           <Button
             className="bg-white text-lg w-full border border-black text-black py-2 px-4 rounded-full"
-            variant="custom-achrom"
+            onClick={handleLogout}
           >
             Выйти
           </Button>
