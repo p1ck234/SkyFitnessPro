@@ -9,7 +9,7 @@ export const Layout = () => {
   const { modalState, closeModal, openModal } = useModal();
 
   return (
-    <div className="container-xl mx-auto p-6 font-sans cursor-custom">
+    <div className="container mx-auto py-10 px-4 lg:py-12 lg:px-36 font-sans cursor-custom max-w-phone lg:max-w-laptop">
       <Header />
       <main>
         <Outlet />

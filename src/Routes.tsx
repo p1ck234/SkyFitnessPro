@@ -7,9 +7,9 @@ import { PageLayout } from "./pages/pageLayout";
 import { Workouts } from "./pages/workouts";
 import { useModal } from "./context";
 import { constRoutes } from "./lib/paths";
-import HomePage from "./components/homePage/HomePage";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
+import HomePage from "./pages/homePage";
 import { useEffect } from "react";
 import { PopExit } from "./components/pops/PopExit";
 
@@ -17,19 +17,20 @@ export const AppRoutes: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as { backgroundLocation?: Location };
-  const { modalState, openModal, closeModal, setCurrentPath, currentPath } = useModal();
+  const { modalState, openModal, closeModal, setCurrentPath, currentPath } =
+    useModal();
 
   useEffect(() => {
     if (location.pathname !== currentPath) {
       setCurrentPath(location.pathname);
       if (location.pathname === constRoutes.LOGIN) {
-        openModal('login');
+        openModal("login");
       } else if (location.pathname === constRoutes.REGISTRATION) {
-        openModal('register');
+        openModal("register");
       } else if (location.pathname === constRoutes.SELECT_WORKOUTS) {
-        openModal('select_workouts');
+        openModal("select_workouts");
       } else if (location.pathname === constRoutes.EXIT) {
-        openModal('exit');
+        openModal("exit");
       } else {
         closeModal();
       }
@@ -48,18 +49,26 @@ export const AppRoutes: React.FC = () => {
         </Route>
       </Routes>
 
-      {modalState === 'login' && (
-        <LogInPage switchToRegister={() => navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location } })} />
+      {modalState === "login" && (
+        <LogInPage
+          switchToRegister={() =>
+            navigate(constRoutes.REGISTRATION, {
+              state: { backgroundLocation: location },
+            })
+          }
+        />
       )}
-      {modalState === 'register' && (
-        <RegistrationPage switchToLogin={() => navigate(constRoutes.LOGIN, { state: { backgroundLocation: location } })} />
+      {modalState === "register" && (
+        <RegistrationPage
+          switchToLogin={() =>
+            navigate(constRoutes.LOGIN, {
+              state: { backgroundLocation: location },
+            })
+          }
+        />
       )}
-      {modalState === 'select_workouts' && (
-        <PopSelectWorkoutPage />
-      )}
-      {modalState === 'exit' && (
-        <PopExit closeModal={closeModal} />
-      )}
+      {modalState === "select_workouts" && <PopSelectWorkoutPage />}
+      {modalState === "exit" && <PopExit closeModal={closeModal} />}
     </>
   );
 };

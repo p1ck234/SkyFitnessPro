@@ -9,7 +9,7 @@ type ModalState =
   | null;
 
 interface ModalContextType {
-  modalState: ModalState;
+  modalState: string | null;
   openModal: (modalType: ModalState) => void;
   closeModal: () => void;
   currentPath: string;
