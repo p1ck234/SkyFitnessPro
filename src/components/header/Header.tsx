@@ -1,23 +1,18 @@
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useModal } from "@/context";
 import { Logo } from "../shared/logo/Logo";
+import { constRoutes } from "@/lib/paths";
 
-interface HeaderProps {
-  openModal: (isLoginMode: boolean) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ openModal }) => {
+const Header: React.FC = () => {
   const navigate = useNavigate();
-  const loginButtonRef = useRef<HTMLButtonElement>(null);
-  const { openModal: contextOpenModal } = useModal();
+  const location = useLocation();
+  const { openModal, setCurrentPath } = useModal();
 
-  const handleOpenModal = () => {
-    if (loginButtonRef.current) {
-      const buttonPosition = loginButtonRef.current.getBoundingClientRect();
-      contextOpenModal("exit");
-      navigate("", { state: { buttonPosition } });
-    }
+  const handleOpenLoginModal = () => {
+    setCurrentPath(constRoutes.LOGIN);
+    openModal("login");
+    navigate(constRoutes.LOGIN, { state: { backgroundLocation: location } });
   };
 
   return (
@@ -27,9 +22,8 @@ const Header: React.FC<HeaderProps> = ({ openModal }) => {
         <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
       </div>
       <button
-        ref={loginButtonRef}
         className="bg-customGreen text-black py-2 px-6 rounded-full"
-        onClick={handleOpenModal}
+        onClick={handleOpenLoginModal}
       >
         Войти
       </button>

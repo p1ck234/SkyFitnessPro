@@ -10,50 +10,55 @@ import { constRoutes } from "./lib/paths";
 import HomePage from "./components/homePage/HomePage";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
+import { useEffect } from "react";
+import { PopExit } from "./components/pops/PopExit";
 
-interface AppRoutesProps {
-  openModal: (isLoginMode: boolean) => void;
-}
-
-export const AppRoutes: React.FC<AppRoutesProps> = ({ openModal }) => {
+export const AppRoutes: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location.state as { backgroundLocation?: Location };
-  // const navigate = useNavigate();
-  const { closeModal } = useModal(); // Получаем closeModal из контекста
+  const { modalState, openModal, closeModal, setCurrentPath, currentPath } = useModal();
+
+  useEffect(() => {
+    if (location.pathname !== currentPath) {
+      setCurrentPath(location.pathname);
+      if (location.pathname === constRoutes.LOGIN) {
+        openModal('login');
+      } else if (location.pathname === constRoutes.REGISTRATION) {
+        openModal('register');
+      } else if (location.pathname === constRoutes.SELECT_WORKOUTS) {
+        openModal('select_workouts');
+      } else if (location.pathname === constRoutes.EXIT) {
+        openModal('exit');
+      } else {
+        closeModal();
+      }
+    }
+  }, [location, currentPath, openModal, closeModal, setCurrentPath]);
 
   return (
     <>
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
-          {/* <Route path="/register" element={<SignUp />} />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/workouts" element={<Workouts />} /> */}
           <Route path="/" element={<HomePage />} />
           <Route path={constRoutes.COURSE} element={<Course />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
-          <Route path="/exit" element={<Exit closeModal={closeModal} />} />
+          <Route path="/exit" element={<Exit />} />
         </Route>
-        {/* <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/select_workouts" element={<PopSelectWorkoutPage />} /> */}
-        
-        
       </Routes>
 
-      {state?.backgroundLocation && (
-        <Routes>
-          <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
-          <Route path="/exit" element={<Exit closeModal={closeModal} />} />
-          <Route
-            path={constRoutes.LOGIN}
-            element={<LogInPage switchToRegister={() => openModal(false)} />}
-          />
-          <Route
-            path={constRoutes.REGISTRATION}
-            element={<RegistrationPage switchToLogin={() => openModal(true)} />}
-          />
-        </Routes>
+      {modalState === 'login' && (
+        <LogInPage switchToRegister={() => navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location } })} />
+      )}
+      {modalState === 'register' && (
+        <RegistrationPage switchToLogin={() => navigate(constRoutes.LOGIN, { state: { backgroundLocation: location } })} />
+      )}
+      {modalState === 'select_workouts' && (
+        <PopSelectWorkoutPage />
+      )}
+      {modalState === 'exit' && (
+        <PopExit closeModal={closeModal} />
       )}
     </>
   );
