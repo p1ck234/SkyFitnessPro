@@ -15,7 +15,7 @@ module.exports = {
       },
       screens: {
         laptop: "1440px",
-        phone: "375px",
+        phone: "376px",
       },
       spacing: {
         "50px": "50px",
