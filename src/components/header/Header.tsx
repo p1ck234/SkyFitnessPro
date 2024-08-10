@@ -51,7 +51,9 @@ const Header: React.FC = () => {
             alt="avatar"
             className="w-10 h-10 rounded-full"
           />
-          <span className="ml-2 text-lg font-medium">{user.displayName || user.email}</span>
+          <span className="ml-2 text-lg font-medium hidden sm:inline">
+            {user.displayName || user.email}
+          </span>
           <svg
             className="ml-2 w-4 h-4"
             xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +74,7 @@ const Header: React.FC = () => {
           ref={profileButtonRef}
           color="bg-customGreen"
           width="w-auto"
-          className="text-black py-2 px-6 rounded-full"
+          className="text-black px-6 rounded-full text-xl"
           onClick={handleOpenLoginModal}
         >
           Войти

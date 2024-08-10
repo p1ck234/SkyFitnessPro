@@ -90,7 +90,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
           <Button
             color="bg-customGreen"
             width="w-full"
-            className="text-black py-2 px-6 rounded-full"
+            className="text-black py-2 px-6 rounded-full text-xl"
             type="submit"
           >
             Зарегистрироваться
@@ -98,7 +98,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
           <Button
             color="bg-white"
             width="w-full"
-            className="text-black py-2 px-6 rounded-full border border-black mt-2.5"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToLogin}
           >
             Войти

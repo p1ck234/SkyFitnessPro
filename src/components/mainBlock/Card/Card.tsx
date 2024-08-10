@@ -17,7 +17,7 @@ export function Card() {
         </button>
       </div>
       <div className="w-80 p-3 flex flex-col">
-        <h3 className="font-bold text-3xl py-5">Йога</h3>
+        <h3 className="font-bold text-2xl py-5 phone:text-3xl">Йога</h3>
         <div className="flex flex-row flex-wrap gap-4">
           <div className="bg-gray-200 rounded-lg px-2 py-1 flex items-center gap-1">
             <img src="icons/calendar.svg" alt="calendar" />

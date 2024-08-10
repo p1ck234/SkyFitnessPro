@@ -23,7 +23,8 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
-          left: buttonPosition.left + buttonPosition.width / 2 - modalWidth / 2,
+          left:
+            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
         });
 
         setIsPositioned(true); // Позиция вычислена, можно показывать модальное окно
@@ -63,24 +64,26 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${isPositioned ? '' : 'invisible'}`}
+        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${
+          isPositioned ? "" : "invisible"
+        }`}
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          <p className="font-bold">{user?.displayName || user?.email}</p>
+          <p className="font-bold">{user?.username || user?.email}</p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full"
+            className="bg-customGreen text-sm sm:text-2lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
           </Button>
           <Button
-            className="bg-white text-lg w-full border border-black text-black py-2 px-4 rounded-full"
+            className="bg-white text-sm sm:text-lg w-full border border-black text-black py-2 px-4 rounded-full"
             onClick={handleLogout}
           >
             Выйти
