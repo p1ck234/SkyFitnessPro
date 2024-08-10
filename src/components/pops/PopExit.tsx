@@ -72,7 +72,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          <p className="font-bold">{user?.username || user?.email}</p>
+          <p className="font-bold">{user?.displayName || user?.email}</p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
