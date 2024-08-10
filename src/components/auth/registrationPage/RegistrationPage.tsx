@@ -18,6 +18,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState(""); // Состояние для имени пользователя
   const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
+  const [error, setError] = useState<string | null>(null); // Состояние для ошибки
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -31,8 +32,24 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Сбрасываем ошибку перед новой попыткой регистрации
+
+    // Проверка на совпадение паролей
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setError("Пароли не совпадают");
+      return;
+    }
+
+    // Проверка на минимальную длину пароля
+    if (password.length < 6) {
+      setError("Пароль должен содержать не менее 6 символов");
+      return;
+    }
+
+    // Простейшая проверка email на соответствие шаблону
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Неверно указана почта");
       return;
     }
 
@@ -49,8 +66,12 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       });
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
-    } catch (error) {
-      console.error("Registration failed:", error);
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        setError("Данная почта уже используется. Попробуйте войти.");
+      } else {
+        setError("Регистрация не удалась. Попробуйте еще раз.");
+      }
     } finally {
       setIsLoading(false); // Завершаем загрузку
     }
@@ -76,7 +97,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
         <Logo />
         <div className="mt-10 w-full">
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="username"
             type="text"
             placeholder="Имя пользователя"
@@ -85,7 +108,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="email"
             type="text"
             placeholder="Эл.почта"
@@ -94,7 +119,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="password"
             type="password"
             placeholder="Пароль"
@@ -103,7 +130,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-10"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-10 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="confirmPassword"
             type="password"
             placeholder="Повторите пароль"
@@ -111,6 +140,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             onChange={(e) => setConfirmPassword(e.target.value)}
             disabled={isLoading} // Отключаем поле во время загрузки
           />
+          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
           <button
             className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
