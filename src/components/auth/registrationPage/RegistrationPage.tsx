@@ -16,6 +16,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState(""); // Добавляем состояние для имени пользователя
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -35,7 +36,13 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     }
     try {
       const user = await register(email, password);
-      await saveUser(user.uid, { email: user.email, createdAt: new Date() });
+      // Сохраняем пользователя с именем пользователя и паролем
+      await saveUser(user.uid, { 
+        email: user.email, 
+        username, // Сохраняем имя пользователя
+        password, // Сохраняем пароль
+        createdAt: new Date() 
+      });
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
@@ -62,6 +69,14 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       >
         <Logo />
         <div className="mt-10 w-full">
+          <input
+            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            name="username"
+            type="text"
+            placeholder="Имя пользователя"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
             name="email"
