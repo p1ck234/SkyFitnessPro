@@ -16,7 +16,8 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState(""); // Добавляем состояние для имени пользователя
+  const [username, setUsername] = useState(""); // Состояние для имени пользователя
+  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -34,6 +35,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       alert("Passwords do not match");
       return;
     }
+
+    setIsLoading(true); // Начинаем загрузку
+
     try {
       const user = await register(email, password);
       // Сохраняем пользователя с именем пользователя и паролем
@@ -47,6 +51,8 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
       console.error("Registration failed:", error);
+    } finally {
+      setIsLoading(false); // Завершаем загрузку
     }
   };
 
@@ -102,15 +108,17 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <button
-            className="rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4"
+            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             type="submit"
+            disabled={isLoading}
           >
-            Зарегистрироваться
+            {isLoading ? "Загрузка..." : "Зарегистрироваться"}
           </button>
           <button
             onClick={handleSwitchToLogin}
             className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
             type="button"
+            disabled={isLoading}
           >
             Войти
           </button>
