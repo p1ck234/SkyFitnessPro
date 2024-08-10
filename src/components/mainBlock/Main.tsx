@@ -4,7 +4,7 @@ import { Cards } from "./Cards/Cards";
 export function Main() {
   return (
     <>
-      <div className="container mx-auto min-h-screen">
+      <div className="mx-auto">
         <Heading />
         <Cards />
         <div className="flex  justify-center">
