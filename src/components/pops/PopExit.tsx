@@ -12,6 +12,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const location = useLocation();
   const { user } = useUser();
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,6 +25,8 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
           top: buttonPosition.top + buttonPosition.height + 10,
           left: buttonPosition.left + buttonPosition.width / 2 - modalWidth / 2,
         });
+
+        setIsPositioned(true); // Позиция вычислена, можно показывать модальное окно
       }
     };
 
@@ -60,7 +63,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6"
+        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${isPositioned ? '' : 'invisible'}`}
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
