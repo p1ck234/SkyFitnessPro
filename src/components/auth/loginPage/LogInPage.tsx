@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { login } from "@/services/authService";
 import { useModal } from "@/context";
+import { Button } from "@/components/Button";
 
 interface LogInPageProps {
   switchToRegister: () => void;
@@ -18,7 +19,9 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location.state?.backgroundLocation } });
+    navigate(constRoutes.REGISTRATION, {
+      state: { backgroundLocation: location.state?.backgroundLocation },
+    });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -49,7 +52,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleLogin}
       >
-        <Logo showTagline={false}/>
+        <Logo showTagline={false} />
         <div className="mt-10 w-full">
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
@@ -60,26 +63,29 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-10"
+            className="rounded-lg border text-base w-full py-4 px-4 mb-8"
             name="password"
             type="password"
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button
-            className="rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black"
+          <Button
+            color="bg-customGreen"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full"
             type="submit"
           >
             Войти
-          </button>
-          <button
+          </Button>
+          <Button
+            color="bg-white"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5"
             onClick={handleSwitchToRegister}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
-            type="button"
           >
             Зарегистрироваться
-          </button>
+          </Button>
         </div>
       </form>
     </div>

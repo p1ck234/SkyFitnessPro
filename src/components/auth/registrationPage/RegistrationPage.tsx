@@ -5,6 +5,7 @@ import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
 import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context";
+import { Button } from "@/components/Button";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -60,7 +61,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleRegister}
       >
-        <Logo showTagline={false}/>
+        <Logo showTagline={false} />
         <div className="mt-10 w-full">
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
@@ -79,26 +80,29 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             onChange={(e) => setPassword(e.target.value)}
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-10"
+            className="rounded-lg border text-base w-full py-4 px-4 mb-8"
             name="confirmPassword"
             type="password"
             placeholder="Повторите пароль"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button
-            className="rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4"
+          <Button
+            color="bg-customGreen"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full"
             type="submit"
           >
             Зарегистрироваться
-          </button>
-          <button
+          </Button>
+          <Button
+            color="bg-white"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5"
             onClick={handleSwitchToLogin}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
-            type="button"
           >
             Войти
-          </button>
+          </Button>
         </div>
       </form>
     </div>
