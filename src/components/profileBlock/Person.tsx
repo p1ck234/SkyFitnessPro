@@ -14,11 +14,6 @@ export const Person = () => {
     });
   };
 
-  const handleChangePassword = () => {
-    openModal("exit");
-    navigate(constRoutes.EXIT, { state: { backgroundLocation: location } });
-  };
-
   return (
     <>
       <h1
@@ -41,10 +36,7 @@ export const Person = () => {
             <p className="text-xl">Логин: sergey.petrov96</p>
             <p className="text-xl">Пароль: ыоваЛЫО</p>
             <div className="flex flex-col md:flex-row items-center gap-2 mt-6 max-w-full">
-              <Button
-                className="flex-1 max-w-60 min-w-60"
-                onClick={handleChangePassword}
-              >
+              <Button className="flex-1 max-w-60 min-w-60">
                 Изменить пароль
               </Button>
               <Button
