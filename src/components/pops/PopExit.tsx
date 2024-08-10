@@ -77,7 +77,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-sm sm:text-2lg w-full text-black py-2 px-4 rounded-full"
+            className="bg-customGreen text-sm sm:text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
