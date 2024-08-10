@@ -4,7 +4,6 @@ import { Cards } from "./Cards/Cards";
 export function Main() {
   return (
     <>
-      <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
       <div className="container mx-auto min-h-screen">
         <Heading />
         <Cards />

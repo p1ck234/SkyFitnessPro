@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex justify-between items-center">
-      <div className="flex flex-col items-start gap-4">
+      <div className="flex flex-col items-start">
         <Logo />
       </div>
       {user ? (
