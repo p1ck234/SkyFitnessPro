@@ -49,7 +49,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleLogin}
       >
-        <Logo />
+        <Logo showTagline={false}/>
         <div className="mt-10 w-full">
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
