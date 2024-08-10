@@ -6,7 +6,7 @@ export const Logo = () => {
   return (
     <Link to={constRoutes.HOME}>
       <div className="h-8 mr-2">
-        <img src="../public/logo.svg" alt="Логотип" width={183} height={29} />
+        <img src="logo.svg" alt="Логотип" width={183} height={29} />
       </div>
     </Link>
   );

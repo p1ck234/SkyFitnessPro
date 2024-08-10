@@ -15,8 +15,12 @@ export const Layout = () => {
         <Outlet />
       </main>
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
-      {modalState === "login" && <LogInPage switchToRegister={() => openModal('register')} />}
-      {modalState === "register" && <RegistrationPage switchToLogin={() => openModal('login')} />}
+      {modalState === "login" && (
+        <LogInPage switchToRegister={() => openModal("register")} />
+      )}
+      {modalState === "register" && (
+        <RegistrationPage switchToLogin={() => openModal("login")} />
+      )}
     </div>
   );
 };
