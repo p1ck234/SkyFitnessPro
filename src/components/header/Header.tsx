@@ -11,11 +11,21 @@ const Header: React.FC = () => {
   const location = useLocation();
   const { openModal, setCurrentPath } = useModal();
   const { user } = useUser();
-  const loginButtonRef = useRef<HTMLButtonElement>(null);
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleOpenProfileModal = () => {
+    if (profileButtonRef.current) {
+      const buttonPosition = profileButtonRef.current.getBoundingClientRect();
+      navigate(location.pathname, {
+        state: { ...location.state, buttonPosition },
+      });
+      openModal("exit"); // Открываем PopExit
+    }
+  };
 
   const handleOpenLoginModal = () => {
-    if (loginButtonRef.current) {
-      const buttonPosition = loginButtonRef.current.getBoundingClientRect();
+    if (profileButtonRef.current) {
+      const buttonPosition = profileButtonRef.current.getBoundingClientRect();
       navigate(location.pathname, {
         state: { ...location.state, buttonPosition },
       });
@@ -31,10 +41,35 @@ const Header: React.FC = () => {
         <Logo />
       </div>
       {user ? (
-        <div>Welcome, {user.email}</div>
+        <button
+          ref={profileButtonRef}
+          className="flex items-center cursor-pointer"
+          onClick={handleOpenProfileModal}
+        >
+          <img
+            src={user.photoURL || "./img/icon/user.svg"}
+            alt="avatar"
+            className="w-10 h-10 rounded-full"
+          />
+          <span className="ml-2 text-lg font-medium">{user.displayName || user.email}</span>
+          <svg
+            className="ml-2 w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
       ) : (
         <Button
-          ref={loginButtonRef}
+          ref={profileButtonRef}
           color="bg-customGreen"
           width="w-auto"
           className="text-black py-2 px-6 rounded-full"
