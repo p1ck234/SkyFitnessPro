@@ -12,23 +12,30 @@ interface LogInPageProps {
 export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location.state?.backgroundLocation } });
+    navigate(constRoutes.REGISTRATION, {
+      state: { backgroundLocation: location.state?.backgroundLocation },
+    });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true); // Начинаем загрузку
+
     try {
       await login(email, password);
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false); // Завершаем загрузку
     }
   };
 
@@ -58,6 +65,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             placeholder="Логин"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-10"
@@ -66,17 +74,22 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <button
-            className="rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black"
+            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
+            disabled={isLoading} // Отключаем кнопку во время загрузки
           >
-            Войти
+            {isLoading ? "Загрузка..." : "Войти"}
           </button>
           <button
             onClick={handleSwitchToRegister}
             className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
             type="button"
+            disabled={isLoading} // Отключаем кнопку во время загрузки
           >
             Зарегистрироваться
           </button>

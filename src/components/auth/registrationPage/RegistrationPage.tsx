@@ -41,11 +41,11 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     try {
       const user = await register(email, password);
       // Сохраняем пользователя с именем пользователя и паролем
-      await saveUser(user.uid, { 
-        email: user.email, 
+      await saveUser(user.uid, {
+        email: user.email,
         username, // Сохраняем имя пользователя
         password, // Сохраняем пароль
-        createdAt: new Date() 
+        createdAt: new Date(),
       });
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
@@ -82,6 +82,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Имя пользователя"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
@@ -90,6 +91,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Эл.почта"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-4"
@@ -98,6 +100,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
             className="rounded-lg border text-base w-full py-4 px-4 mb-10"
@@ -106,9 +109,12 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Повторите пароль"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={isLoading} // Отключаем поле во время загрузки
           />
           <button
-            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
             disabled={isLoading}
           >
