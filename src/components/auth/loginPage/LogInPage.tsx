@@ -13,20 +13,20 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
+  const [error, setError] = useState<string | null>(null); // Состояние ошибки
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, {
-      state: { backgroundLocation: location.state?.backgroundLocation },
-    });
+    navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location.state?.backgroundLocation } });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true); // Начинаем загрузку
+    setError(null); // Сбрасываем ошибку
 
     try {
       await login(email, password);
@@ -34,6 +34,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
+      setError("Пароль введен неверно, попробуйте еще раз."); // Устанавливаем сообщение об ошибке
     } finally {
       setIsLoading(false); // Завершаем загрузку
     }
@@ -59,7 +60,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
         <Logo />
         <div className="mt-10 w-full">
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${error ? 'border-red-500 text-red-500' : ''}`}
             name="email"
             type="text"
             placeholder="Логин"
@@ -68,7 +69,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-10"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${error ? 'border-red-500 text-red-500' : ''}`}
             name="password"
             type="password"
             placeholder="Пароль"
@@ -76,10 +77,13 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading} // Отключаем поле во время загрузки
           />
+          {error && (
+            <div className="text-red-500 text-sm mb-4 text-center">
+              {error} <a href="#" className="text-red-500 underline">Восстановить пароль?</a>
+            </div>
+          )}
           <button
-            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             type="submit"
             disabled={isLoading} // Отключаем кнопку во время загрузки
           >
