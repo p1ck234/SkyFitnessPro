@@ -15,7 +15,7 @@ export const Logo: React.FC<LogoProps> = ({ showTagline = true }) => {
         </div>
       </Link>
       {showTagline && (
-        <p className="text-gray-450 opacity-50">
+        <p className="text-gray-450 opacity-50 hidden phone:block">
           Онлайн-тренировки для занятий дома
         </p>
       )}
