@@ -62,7 +62,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       await saveUser(user.uid, {
         email: user.email,
         username, // Сохраняем имя пользователя
-        password, // Сохраняем пароль
+        // password, // Сохраняем пароль
         createdAt: new Date(),
       });
       closeModal();
