@@ -7,10 +7,11 @@ import { logout } from "@/services/authService";
 interface PopExitProps {
   closeModal: () => void;
 }
+
 export const PopExit = ({ closeModal }: PopExitProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
+  const { user, userData } = useUser(); // Достаем user и userData из контекста
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -63,13 +64,18 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${isPositioned ? '' : 'invisible'}`}
+        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${
+          isPositioned ? "" : "invisible"
+        }`}
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          <p className="font-bold">{user?.displayName || user?.email}</p>
+          {/* Отображаем username, если он есть, иначе displayName или email */}
+          <p className="font-bold">
+            {userData?.username || user?.email}
+          </p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
