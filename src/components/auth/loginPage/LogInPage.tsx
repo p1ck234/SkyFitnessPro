@@ -44,6 +44,10 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   };
 
   const handlePasswordReset = async () => {
+    if (!email) {
+      setError("Введите email и оставьте поле пароль пустым"); // Устанавливаем сообщение об ошибке, если email пустой
+      return;
+    }
     try {
       await resetPassword(email); // Вызов функции для восстановления пароля
       openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
@@ -98,7 +102,8 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
           />
           {error && (
             <div className="text-red-500 text-sm mb-4 text-center">
-              {error}{" "}
+              {error}
+              <br />
               <button
                 type="button"
                 onClick={handlePasswordReset}
