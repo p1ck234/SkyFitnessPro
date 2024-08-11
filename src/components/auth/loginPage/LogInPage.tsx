@@ -3,7 +3,8 @@ import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { login } from "@/services/authService";
-import { useModal } from "@/context";
+import { useModal } from "@/context/modalContext";
+import { Button } from "@/components/Button";
 
 interface LogInPageProps {
   switchToRegister: () => void;
@@ -18,7 +19,9 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location.state?.backgroundLocation } });
+    navigate(constRoutes.REGISTRATION, {
+      state: { backgroundLocation: location.state?.backgroundLocation },
+    });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -41,7 +44,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50"
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-20 z-50"
       onClick={handleBackgroundClick}
     >
       <form
@@ -67,19 +70,30 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button
+          {/* <button
             className="rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black"
             type="submit"
           >
             Войти
-          </button>
-          <button
+          </button> */}
+          <Button className="w-full  py-4 px-4 mb-4" type="submit">
+            Войти
+          </Button>
+          {/* <Button
             onClick={handleSwitchToRegister}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
+            className="w-full py-4 px-4"
             type="button"
+            variant="custom-achrom"
           >
             Зарегистрироваться
-          </button>
+          </Button> */}
+          <Button
+            className="bg-white w-full py-4 px-4 border border-black"
+            variant="custom-achrom"
+            onClick={handleSwitchToRegister}
+          >
+            Зарегистрироваться
+          </Button>
         </div>
       </form>
     </div>

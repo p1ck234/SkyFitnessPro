@@ -5,13 +5,16 @@ import { PopSelectWorkoutPage } from "./pages/popSelectWorkout";
 import { Exit } from "./pages/exit";
 import { PageLayout } from "./pages/pageLayout";
 import { Workouts } from "./pages/workouts";
-import { useModal } from "./context";
+import { useModal } from "./context/modalContext";
 import { constRoutes } from "./lib/paths";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
 import HomePage from "./pages/homePage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PopExit } from "./components/pops/PopExit";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -19,6 +22,9 @@ export const AppRoutes: React.FC = () => {
   const state = location.state as { backgroundLocation?: Location };
   const { modalState, openModal, closeModal, setCurrentPath, currentPath } =
     useModal();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
   useEffect(() => {
     if (location.pathname !== currentPath) {
@@ -42,10 +48,23 @@ export const AppRoutes: React.FC = () => {
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path={constRoutes.COURSE} element={<Course />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
-          <Route path="/exit" element={<Exit />} />
+          {/* Оборачиваем защищенные маршруты в ProtectedRoute */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Routes>
+                  <Route path={constRoutes.COURSE} element={<Course />} />
+                  <Route path={constRoutes.PROFILE} element={<ProfilePage />} />
+                  <Route
+                    path="/select_workouts"
+                    element={<PopSelectWorkoutPage />}
+                  />
+                  <Route path="/exit" element={<Exit />} />
+                </Routes>
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
 

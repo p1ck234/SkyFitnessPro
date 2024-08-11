@@ -1,12 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
-import { useModal } from "@/context";
 import { constRoutes } from "@/lib/paths";
+import { useModal } from "@/context/modalContext";
+import { useUser } from "@/context/userContext";
 
 export const Person = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { openModal } = useModal();
+  const { user } = useUser();
 
   const openMyProfile = () => {
     navigate("/select_workouts", {
@@ -37,13 +39,27 @@ export const Person = () => {
             />
           </div>
           <div className="flex-1 flex flex-col justify-center gap-6">
-            <p className="font-bold text-3xl">Сергей</p>
-            <p className="text-xl">Логин: sergey.petrov96</p>
-            <p className="text-xl">Пароль: ыоваЛЫО</p>
-            <div className="flex flex-col md:flex-row items-center gap-2 mt-6 max-w-full">
+            {user ? (
+              <>
+                <p className="font-bold text-3xl">
+                  {user.displayName || "Сергей"}
+                </p>{" "}
+                {/* Подстановка логина */}
+                <div>
+                  <span className="text-lg font-medium">
+                    {user.displayName || user.email}
+                  </span>
+                  <p className="text-xl">Пароль: ыоваЛЫО</p>
+                </div>
+              </>
+            ) : (
+              <p>Пользователь не авторизован</p>
+            )}
+
+            <div className="flex flex-col md:flex-row items-center gap-2 max-w-full">
               <Button
                 className="flex-1 max-w-60 min-w-60"
-                onClick={handleChangePassword}
+                // onClick={handleChangePassword}
               >
                 Изменить пароль
               </Button>

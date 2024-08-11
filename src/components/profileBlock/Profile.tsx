@@ -2,9 +2,9 @@ import CoursesBlock from "../coursesBlock/CoursesBlock";
 import Header from "../header/Header";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
-import { useModal } from "@/context";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
+import { useModal } from "@/context/modalContext";
 
 export const Profile = () => {
   const { openModal } = useModal();

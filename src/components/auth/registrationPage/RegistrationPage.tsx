@@ -4,7 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
 import { saveUser } from "@/services/firestoreService";
-import { useModal } from "@/context";
+import { useModal } from "@/context/modalContext";
+import { Button } from "@/components/Button";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -86,19 +87,16 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button
-            className="rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4"
-            type="submit"
-          >
+          <Button className="w-full  py-4 px-4 mb-4" type="submit">
             Зарегистрироваться
-          </button>
-          <button
+          </Button>
+          <Button
+            className="bg-white w-full py-4 px-4 border border-black"
+            variant="custom-achrom"
             onClick={handleSwitchToLogin}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
-            type="button"
           >
             Войти
-          </button>
+          </Button>
         </div>
       </form>
     </div>

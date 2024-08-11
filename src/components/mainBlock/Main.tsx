@@ -3,9 +3,9 @@ import { Cards } from "./Cards/Cards";
 
 export function Main() {
   return (
-    <>
+    <div>
       <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
-      <div className="container mx-auto min-h-screen">
+      <div className="bg-gray-200 mt-14">
         <Heading />
         <Cards />
         <div className="flex  justify-center">
@@ -14,6 +14,6 @@ export function Main() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

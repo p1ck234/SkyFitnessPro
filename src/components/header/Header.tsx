@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useModal } from "@/context";
 import { Logo } from "../shared/logo/Logo";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "../Button";
+import { useModal } from "@/context/modalContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex justify-between items-center">
-      <div className="flex flex-col items-start gap-4">
+      <div className="flex flex-col items-start gap-4 flex-shrink-0">
         <Logo />
       </div>
       {user ? (
@@ -51,7 +51,9 @@ const Header: React.FC = () => {
             alt="avatar"
             className="w-10 h-10 rounded-full"
           />
-          <span className="ml-2 text-lg font-medium">{user.displayName || user.email}</span>
+          <span className="ml-2 text-lg font-medium">
+            {user.displayName || user.email}
+          </span>
           <svg
             className="ml-2 w-4 h-4"
             xmlns="http://www.w3.org/2000/svg"

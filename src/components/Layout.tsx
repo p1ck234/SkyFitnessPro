@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Header from "./header/Header";
-import { useModal } from "@/context";
 import { PopExit } from "./pops/PopExit";
 import { LogInPage } from "./auth/loginPage/LogInPage";
 import { RegistrationPage } from "./auth/registrationPage/RegistrationPage";
+import { useModal } from "@/context/modalContext";
 
 export const Layout = () => {
   const { modalState, closeModal, openModal } = useModal();
