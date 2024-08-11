@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
-import { login } from "@/services/authService";
+import { login, resetPassword } from "@/services/authService";
 import { useModal } from "@/context";
 
 interface LogInPageProps {
@@ -10,17 +10,19 @@ interface LogInPageProps {
 }
 
 export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // Email пользователя
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
   const navigate = useNavigate();
   const location = useLocation();
-  const { closeModal } = useModal();
+  const { closeModal, openModal } = useModal();
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, { state: { backgroundLocation: location.state?.backgroundLocation } });
+    navigate(constRoutes.REGISTRATION, {
+      state: { backgroundLocation: location.state?.backgroundLocation },
+    });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -37,6 +39,18 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
       setError("Пароль введен неверно, попробуйте еще раз."); // Устанавливаем сообщение об ошибке
     } finally {
       setIsLoading(false); // Завершаем загрузку
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    try {
+      await resetPassword(email); // Вызов функции для восстановления пароля
+      openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
+    } catch (error) {
+      setError(
+        "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
+      );
+      console.error("Password reset failed:", error);
     }
   };
 
@@ -60,16 +74,20 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
         <Logo />
         <div className="mt-10 w-full">
           <input
-            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${error ? 'border-red-500 text-red-500' : ''}`}
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="email"
             type="text"
             placeholder="Логин"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)} // Обновляем состояние email
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           <input
-            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${error ? 'border-red-500 text-red-500' : ''}`}
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="password"
             type="password"
             placeholder="Пароль"
@@ -79,11 +97,20 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
           />
           {error && (
             <div className="text-red-500 text-sm mb-4 text-center">
-              {error} <a href="#" className="text-red-500 underline">Восстановить пароль?</a>
+              {error}{" "}
+              <button
+                type="button"
+                onClick={handlePasswordReset}
+                className="text-red-500 underline"
+              >
+                Восстановить пароль?
+              </button>
             </div>
           )}
           <button
-            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             type="submit"
             disabled={isLoading} // Отключаем кнопку во время загрузки
           >
