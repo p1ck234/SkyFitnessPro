@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { openModal, setCurrentPath } = useModal();
-  const { user } = useUser();
+  const { user, userData } = useUser(); // Достаем user и userData из контекста
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenProfileModal = () => {
@@ -52,7 +52,7 @@ const Header: React.FC = () => {
             className="w-10 h-10 rounded-full"
           />
           <span className="ml-2 text-lg font-medium hidden sm:inline">
-            {user.displayName || user.email}
+          {userData?.username || user.email}
           </span>
           <svg
             className="ml-2 w-4 h-4"
