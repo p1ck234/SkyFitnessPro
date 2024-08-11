@@ -51,7 +51,7 @@ export const Person = () => {
   return (
     <>
       <h1
-        className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
+        className="text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
         onClick={openMyProfile}
       >
         Профиль
@@ -69,19 +69,17 @@ export const Person = () => {
             <p className="font-bold text-3xl">
               {userData?.username || user?.email}
             </p>
-            <p className="text-xl">
-              Логин: {user?.email}
-            </p>
+            <p className="text-xl">Логин: {user?.email}</p>
             <p className="text-xl">Пароль: *******</p>
             <div className="flex flex-col md:flex-row items-center gap-2 mt-6 max-w-full">
               <Button
-                className="flex-1 max-w-60 min-w-60"
+                className="flex-1 text-xl max-w-60 min-w-60"
                 onClick={handlePasswordReset}
               >
                 Изменить пароль
               </Button>
               <Button
-                className="flex-1 max-w-60 min-w-60 border"
+                className="flex-1 text-xl max-w-60 min-w-60 border"
                 color="white"
                 borderColor="black"
                 variant="custom-achrom"

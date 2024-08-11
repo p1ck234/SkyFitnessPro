@@ -5,6 +5,7 @@ import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
 import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context";
+import { Button } from "@/components/Button";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -56,7 +57,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     setIsLoading(true); // Начинаем загрузку
 
     try {
-      const user = await register(email, password);
+      const user = await register(email, password, username);
       // Сохраняем пользователя с именем пользователя и паролем
       await saveUser(user.uid, {
         email: user.email,
@@ -94,7 +95,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleRegister}
       >
-        <Logo />
+        <Logo showTagline={false} />
         <div className="mt-10 w-full">
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
@@ -141,23 +142,24 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             disabled={isLoading} // Отключаем поле во время загрузки
           />
           {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-          <button
-            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 text-black mb-4 ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+
+          <Button
+            color="bg-customGreen"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full text-xl"
             type="submit"
             disabled={isLoading}
           >
             {isLoading ? "Загрузка..." : "Зарегистрироваться"}
-          </button>
-          <button
+          </Button>
+          <Button
+            color="bg-white"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToLogin}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
-            type="button"
-            disabled={isLoading}
           >
             Войти
-          </button>
+          </Button>
         </div>
       </form>
     </div>

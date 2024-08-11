@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { login, resetPassword } from "@/services/authService";
 import { useModal } from "@/context";
+import { Button } from "@/components/Button";
 
 interface LogInPageProps {
   switchToRegister: () => void;
@@ -71,7 +72,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleLogin}
       >
-        <Logo />
+        <Logo showTagline={false} />
         <div className="mt-10 w-full">
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
@@ -107,23 +108,23 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
               </button>
             </div>
           )}
-          <button
-            className={`rounded-lg bg-customGreen text-base w-full py-4 px-4 mb-4 text-black ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+          <Button
+            color="bg-customGreen"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full text-xl"
             type="submit"
             disabled={isLoading} // Отключаем кнопку во время загрузки
           >
             {isLoading ? "Загрузка..." : "Войти"}
-          </button>
-          <button
+          </Button>
+          <Button
+            color="bg-white"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToRegister}
-            className="rounded-lg border text-base w-full py-4 px-4 text-black border-black"
-            type="button"
-            disabled={isLoading} // Отключаем кнопку во время загрузки
           >
             Зарегистрироваться
-          </button>
+          </Button>
         </div>
       </form>
     </div>
