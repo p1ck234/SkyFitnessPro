@@ -5,6 +5,7 @@ import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { useNavigate } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
+import { Button } from "@/components/Button";
 
 export function Card() {
   const { courses, loading, error, progress } = useCourses();
@@ -70,13 +71,18 @@ export function Card() {
               </div>
             </div>
             {user ? (
-              <div className=" mt-4">
+              <div className=" my-4">
                 <p>Прогресс {progress}%</p>
                 <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
                   <div
                     className="h-1 bg-custumBlue"
                     style={{ width: `${progress}%` }}
                   ></div>
+                </div>
+                <div>
+                  <Button width="w-full">
+                    {!progress ? "Начать тренировки" : "Продолжить"}
+                  </Button>
                 </div>
               </div>
             ) : (

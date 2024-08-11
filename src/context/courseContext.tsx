@@ -26,7 +26,7 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress]=useState<number>(20)
+  const [progress, setProgress]=useState<number>(25)
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
