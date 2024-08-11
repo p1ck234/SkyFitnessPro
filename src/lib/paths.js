@@ -10,4 +10,5 @@ export const constRoutes = {
   NEWCARD: "/newCard",
   PRUF: "/popPruf",
   SELECT_WORKOUTS: "/select_workouts",
+  PROFILE: "/profile",
 };

@@ -1,22 +1,25 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import Header from "./components/header/Header";
-import { AppRoutes } from "./Routes";
-import { ModalProvider } from "./context";
+import { ModalProvider } from "./context/modalContext";
 import { UserProvider } from "./context/userContext";
 import { CourseProvider } from "./context/courseContext";
+import { AppRoutes } from "./Routes";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
-const App = () => {
+const App: React.FC = () => {
   return (
-    <UserProvider>
-      <CourseProvider>
-        <ModalProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </ModalProvider>
-      </CourseProvider>
-    </UserProvider>
+    <Provider store={store}>
+      <UserProvider>
+        <CourseProvider>
+          <ModalProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ModalProvider>
+        </CourseProvider>
+      </UserProvider>
+    </Provider>
   );
 };
 

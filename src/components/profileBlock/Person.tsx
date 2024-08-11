@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
-import { useModal } from "@/context";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { logout, resetPassword } from "@/services/authService";
 import { useState } from "react";
+import { useModal } from "@/context/modalContext";
 
 export const Person = () => {
   const navigate = useNavigate();
@@ -29,7 +29,6 @@ export const Person = () => {
   };
 
   const handlePasswordReset = async () => {
-    // Используем опциональную цепочку и nullish coalescing для более надежного получения email
     const email = user?.email;
 
     if (!email) {
@@ -66,12 +65,23 @@ export const Person = () => {
             />
           </div>
           <div className="flex-1 flex flex-col justify-center gap-6">
-            <p className="font-bold text-3xl">
-              {userData?.username || user?.email}
-            </p>
-            <p className="text-xl">Логин: {user?.email}</p>
-            <p className="text-xl">Пароль: *******</p>
-            <div className="flex flex-col md:flex-row items-center gap-2 mt-6 max-w-full">
+            {user ? (
+              <>
+                <p className="font-bold text-3xl">
+                  {user.displayName || userData?.username || "Сергей"}
+                </p>
+                <div>
+                  <span className="text-lg font-medium">
+                    {user.displayName || user.email}
+                  </span>
+                  <p className="text-xl">Пароль: *******</p>
+                </div>
+              </>
+            ) : (
+              <p>Пользователь не авторизован</p>
+            )}
+
+            <div className="flex flex-col md:flex-row items-center gap-2 max-w-full">
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60"
                 onClick={handlePasswordReset}
@@ -88,6 +98,7 @@ export const Person = () => {
                 Выйти
               </Button>
             </div>
+            {error && <p className="text-red-500">{error}</p>}
           </div>
         </div>
       </div>

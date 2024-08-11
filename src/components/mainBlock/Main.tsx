@@ -8,7 +8,7 @@ export function Main() {
       <div className="mx-auto">
         <Heading />
         <Cards />
-        <div className="flex  justify-center">
+        <div className="flex justify-center">
           <a
             href="#heading-section"
             className=" font-normal text-lg grid rounded-3xl bg-customGreen px-4 py-3"

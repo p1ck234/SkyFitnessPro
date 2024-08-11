@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useModal } from "@/context";
 import { Logo } from "../shared/logo/Logo";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "../Button";
+import { useModal } from "@/context/modalContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();

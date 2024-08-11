@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
+import { useModal } from "@/context/modalContext";
 import { login, resetPassword } from "@/services/authService";
-import { useModal } from "@/context";
 import { Button } from "@/components/Button";
 
 interface LogInPageProps {
@@ -68,7 +68,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50"
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-20 z-50"
       onClick={handleBackgroundClick}
     >
       <form
