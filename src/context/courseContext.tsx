@@ -1,4 +1,4 @@
-// src/context/courseContext.tsx
+// courseContext.tsx
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCourses } from "@/services/firestoreService";
@@ -41,8 +41,8 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchCourses();
-  }, []);
-
+  }, []); 
+  
   return (
     <CourseContext.Provider value={{ courses, loading, error }}>
       {children}

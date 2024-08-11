@@ -43,13 +43,13 @@ const CourseDescription = () => {
         <div className="mt-6 md:mt-10 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 bg-customGreenCurse p-4 md:p-6 rounded-lg">
           <div className="flex flex-col items-start space-y-2 md:space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">
                 Йога для новичков
               </p>
             </div>
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">
                 Классическая йога
               </p>
@@ -57,21 +57,21 @@ const CourseDescription = () => {
           </div>
           <div className="flex flex-col items-start space-y-2 md:space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">Кундалини-йога</p>
             </div>
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">Йогатерапия</p>
             </div>
           </div>
           <div className="flex flex-col items-start space-y-2 md:space-y-4">
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">Хатха-йога</p>
             </div>
             <div className="flex items-center space-x-2">
-              <img src="Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
+              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
               <p className="text-black text-xl md:text-2xl">Аштанга-йога</p>
             </div>
           </div>
@@ -101,7 +101,7 @@ const CourseDescription = () => {
         </div>
         <div className="relative w-full md:w-1/2 flex justify-center md:justify-end">
           <img
-            src="img/runner.svg"
+            src="/img/runner.svg"
             alt="Course Description"
             className="w-3/4 md:w-9/12 object-cover"
           />
