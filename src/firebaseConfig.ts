@@ -1,8 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getStorage } from "firebase/storage"; // Импорт Firebase Storage
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD9Dmb_NQ2UnUrP5xJrdT5fAhIojhVdmm0",
   authDomain: "skyprofitness-38202.firebaseapp.com",
@@ -13,9 +12,8 @@ const firebaseConfig = {
   measurementId: "G-6C3P5XX8WQ",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const storage = getStorage(app); // Инициализация Firebase Storage
+const storage = getStorage(app); 
 
-export { firebaseConfig, storage }; // Экспорт storage для использования в других модулях
+export { firebaseConfig, storage }; 

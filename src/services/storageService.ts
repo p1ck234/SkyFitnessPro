@@ -1,5 +1,5 @@
 import { getDownloadURL, ref } from "firebase/storage";
-import { storage } from "../firebaseConfig"; // Импорт Firebase Storage
+import { storage } from "../firebaseConfig";
 
 export const getFileURL = async (filePath: string): Promise<string> => {
   try {
