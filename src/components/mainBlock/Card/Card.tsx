@@ -9,7 +9,11 @@ export function Card() {
   const navigate = useNavigate();
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="absolute inset-0 flex justify-center items-center">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   if (error) {

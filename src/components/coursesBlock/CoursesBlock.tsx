@@ -15,7 +15,7 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
         className="relative p-8 mb-6 items-center"
         style={{ height: "300px" }}
       >
-        <h1 className="absolute text-3xl md:text-6xl font-bold text-white z-10 hidden phone:block p-6">
+        <h1 className="absolute text-3xl md:text-6xl font-bold text-white z-10 hidden phone:block p-6" >
           {course.name}
         </h1>
 

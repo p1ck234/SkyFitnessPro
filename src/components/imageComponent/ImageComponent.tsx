@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { getFileURL } from "@/services/storageService";
 
 interface ImageComponentProps {
-  filePath: string;
-  altText?: string;
-  className?: string;
+  filePath: string; // Пропс для пути к файлу
+  altText?: string; // Пропс для альтернативного текста (опционально)
+  className?: string; // Пропс для дополнительных классов
+  onLoad?: () => void; // Пропс для обработки события загрузки изображения
+  onError?: () => void; // Пропс для обработки ошибки загрузки изображения
 }
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({
   filePath,
   altText = "Image",
   className = "",
+  onLoad,
+  onError,
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true); // Добавляем состояние загрузки
@@ -22,19 +26,18 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
         setImageUrl(url);
       } catch (error) {
         console.error("Error fetching image:", error);
-      } finally {
-        setIsLoading(false); // Завершаем загрузку
+        if (onError) onError();
       }
     };
 
     fetchImage();
-  }, [filePath]);
+  }, [filePath, onError]);
 
   return (
     <div className={`relative ${className}`}>
       {isLoading && (
         <div className="absolute inset-0 flex justify-center items-center">
-          <div className="loader"></div> {/* Замените на ваш лоадер */}
+          <div className="loader"></div>
         </div>
       )}
       {imageUrl && (
@@ -42,7 +45,14 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
           className={`rounded-3xl ${isLoading ? "opacity-0" : "opacity-100"}`}
           src={imageUrl}
           alt={altText}
-          onLoad={() => setIsLoading(false)}
+          onLoad={() => {
+            setIsLoading(false);
+            if (onLoad) onLoad();
+          }}
+          onError={() => {
+            setIsLoading(false);
+            if (onError) onError();
+          }}
         />
       )}
     </div>

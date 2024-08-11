@@ -12,7 +12,11 @@ const Course: React.FC = () => {
   console.log("Loaded courses:", courses);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="absolute inset-0 flex justify-center items-center">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   const course = courses.find((course) => course.id.toString() === id);
