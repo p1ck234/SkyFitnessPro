@@ -1,7 +1,8 @@
+// paths.js
 export const constRoutes = {
   HOME: "/",
   EXIT: "/exit",
-  COURSE: "/course",
+  COURSE: "/course/:id", // Динамический маршрут для курса
   LOGIN: "/login",
   REGISTRATION: "/registration",
   NOT_FOUND: "*",
