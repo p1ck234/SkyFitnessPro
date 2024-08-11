@@ -42,7 +42,8 @@ export const AppRoutes: React.FC = () => {
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path={constRoutes.COURSE} element={<Course />} />
+          <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />{" "}
+          {/* Динамический маршрут для курса */}
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/select_workouts" element={<PopSelectWorkoutPage />} />
           <Route path="/exit" element={<Exit />} />

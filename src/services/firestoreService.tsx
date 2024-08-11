@@ -35,38 +35,6 @@ export const getUser = async (uid: string) => {
   }
 };
 
-// Create Course
-export const createCourse = async (data: any) => {
-  try {
-    const docRef = await addDoc(collection(db, "courses"), data);
-    return docRef.id;
-  } catch (error) {
-    console.error("Error creating course:", error);
-    throw error;
-  }
-};
-
-// Update Course
-export const updateCourse = async (courseId: string, data: any) => {
-  try {
-    const docRef = doc(db, "courses", courseId);
-    await updateDoc(docRef, data);
-  } catch (error) {
-    console.error("Error updating course:", error);
-    throw error;
-  }
-};
-
-// Delete Course
-export const deleteCourse = async (courseId: string) => {
-  try {
-    await deleteDoc(doc(db, "courses", courseId));
-  } catch (error) {
-    console.error("Error deleting course:", error);
-    throw error;
-  }
-};
-
 // Get Courses
 export const getCourses = async () => {
   try {

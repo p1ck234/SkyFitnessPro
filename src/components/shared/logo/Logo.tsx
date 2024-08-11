@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { constRoutes } from "../../../lib/paths";
 
 interface LogoProps {
-  showTagline?: boolean; // Пропс для управления видимостью текста
+  showTagline?: boolean;
 }
 
 export const Logo: React.FC<LogoProps> = ({ showTagline = true }) => {
@@ -11,7 +11,7 @@ export const Logo: React.FC<LogoProps> = ({ showTagline = true }) => {
     <>
       <Link to={constRoutes.HOME}>
         <div className="h-8 mr-2">
-          <img src="logo.svg" alt="Логотип" width={183} height={29} />
+          <img src="/logo.svg" alt="Логотип" width={183} height={29} />
         </div>
       </Link>
       {showTagline && (

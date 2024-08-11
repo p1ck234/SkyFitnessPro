@@ -47,7 +47,7 @@ const Header: React.FC = () => {
           onClick={handleOpenProfileModal}
         >
           <img
-            src={user.photoURL || "./img/icon/user.svg"}
+            src={user.photoURL || "/img/icon/user.svg"}
             alt="avatar"
             className="w-10 h-10 rounded-full"
           />
