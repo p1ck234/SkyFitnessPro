@@ -25,15 +25,7 @@ export const Profile = () => {
         <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
           Мои курсы
         </h1>
-        <div className="flex flex-wrap justify-between">
-          {/* здесь будет массив курсов, выбранных пользователем */}
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        <div className="flex gap-x-20 gap-y-5 mt-12 flex-row flex-wrap content-start">
           <Card />
         </div>
         <button
