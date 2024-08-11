@@ -3,7 +3,7 @@ import { ImageComponent } from "../imageComponent/ImageComponent";
 import { Course } from "@/types/types";
 
 interface CoursesBlockProps {
-  course: Course; 
+  course: Course;
 }
 
 const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
@@ -32,15 +32,17 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
 
         {isImageLoading && (
           <div className="absolute inset-0 flex justify-center items-center">
-            <div className="loader" /> {/* Лоадер */}
+            <div className="loader" />
           </div>
         )}
 
         <ImageComponent
           filePath={isMobile ? course.imgMobile : course.img} // Выбираем изображение на основе ширины экрана
-          className="w-full h-auto rounded-lg object-cover"
-          onLoad={() => setIsImageLoading(false)} 
-          onError={() => setIsImageLoading(false)} 
+          className={`w-full h-auto rounded-lg object-cover ${
+            isImageLoading ? "hidden" : "block"
+          }`}
+          onLoad={() => setIsImageLoading(false)} // Убираем лоадер после загрузки изображения
+          onError={() => setIsImageLoading(false)} // Убираем лоадер если произошла ошибка при загрузке
         />
       </section>
     </div>
