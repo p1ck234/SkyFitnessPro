@@ -4,15 +4,18 @@ import Header from "./components/header/Header";
 import { AppRoutes } from "./Routes";
 import { ModalProvider } from "./context";
 import { UserProvider } from "./context/userContext";
+import { CourseProvider } from "./context/courseContext";
 
 const App = () => {
   return (
     <UserProvider>
-      <ModalProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </ModalProvider>
+      <CourseProvider>
+        <ModalProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ModalProvider>
+      </CourseProvider>
     </UserProvider>
   );
 };
