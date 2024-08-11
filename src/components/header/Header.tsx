@@ -49,10 +49,10 @@ const Header: React.FC = () => {
           <img
             src={user.photoURL || "/img/icon/user.svg"}
             alt="avatar"
-            className="w-10 h-10 rounded-full"
+            className="w-10 mr-1 h-10 rounded-full"
           />
           <span className="ml-2 text-lg font-medium hidden sm:inline">
-          {userData?.username || user.email}
+            {userData?.username || user.email}
           </span>
           <svg
             className="ml-2 w-4 h-4"
