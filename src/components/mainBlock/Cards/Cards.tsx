@@ -2,12 +2,10 @@ import { Card } from "../Card/Card";
 
 export function Cards() {
   return (
-    <div className="flex flex-wrap gap-4 justify-between ">
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+    <div
+      className="flex gap-x-20 gap-y-5 mt-12 flex-row flex-wrap content-start"
+    >
+      <Card></Card>
     </div>
   );
 }

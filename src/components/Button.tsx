@@ -37,7 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`text-xl py-2 px-4 rounded-full ${color} ${width} ${
+        className={`py-2 px-4 rounded-full ${color} ${width} ${
           borderColor ? `border ${borderColor}` : ""
         } ${variantClass} ${className} ${
           isHovered ? "hover" : isActive ? "active" : ""

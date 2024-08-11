@@ -1,14 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { constRoutes } from "@/lib/paths";
-import { useModal } from "@/context/modalContext";
 import { useUser } from "@/context/userContext";
+import { logout, resetPassword } from "@/services/authService";
+import { useState } from "react";
+import { useModal } from "@/context/modalContext";
 
 export const Person = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, userData } = useUser(); // Достаем user и userData из контекста
   const { openModal } = useModal();
-  const { user } = useUser();
+  const [error, setError] = useState<string | null>(null); // Состояние ошибки
 
   const openMyProfile = () => {
     navigate("/select_workouts", {
@@ -16,15 +19,38 @@ export const Person = () => {
     });
   };
 
-  const handleChangePassword = () => {
-    openModal("exit");
-    navigate(constRoutes.EXIT, { state: { backgroundLocation: location } });
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/"); // Перенаправление на главную страницу после выхода
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    const email = user?.email;
+
+    if (!email) {
+      setError("Email пользователя не найден.");
+      return;
+    }
+
+    try {
+      await resetPassword(email); // Вызов функции для восстановления пароля
+      openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
+    } catch (error) {
+      setError(
+        "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
+      );
+      console.error("Password reset failed:", error);
+    }
   };
 
   return (
     <>
       <h1
-        className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
+        className="text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
         onClick={openMyProfile}
       >
         Профиль
@@ -42,14 +68,13 @@ export const Person = () => {
             {user ? (
               <>
                 <p className="font-bold text-3xl">
-                  {user.displayName || "Сергей"}
-                </p>{" "}
-                {/* Подстановка логина */}
+                  {user.displayName || userData?.username || "Сергей"}
+                </p>
                 <div>
                   <span className="text-lg font-medium">
                     {user.displayName || user.email}
                   </span>
-                  <p className="text-xl">Пароль: ыоваЛЫО</p>
+                  <p className="text-xl">Пароль: *******</p>
                 </div>
               </>
             ) : (
@@ -58,20 +83,22 @@ export const Person = () => {
 
             <div className="flex flex-col md:flex-row items-center gap-2 max-w-full">
               <Button
-                className="flex-1 max-w-60 min-w-60"
-                // onClick={handleChangePassword}
+                className="flex-1 text-xl max-w-60 min-w-60"
+                onClick={handlePasswordReset}
               >
                 Изменить пароль
               </Button>
               <Button
-                className="flex-1 max-w-60 min-w-60 border"
+                className="flex-1 text-xl max-w-60 min-w-60 border"
                 color="white"
                 borderColor="black"
                 variant="custom-achrom"
+                onClick={handleLogout}
               >
                 Выйти
               </Button>
             </div>
+            {error && <p className="text-red-500">{error}</p>}
           </div>
         </div>
       </div>

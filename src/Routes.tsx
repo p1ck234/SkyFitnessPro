@@ -10,7 +10,7 @@ import { constRoutes } from "./lib/paths";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
 import { RegistrationPage } from "./components/auth/registrationPage/RegistrationPage";
 import HomePage from "./pages/homePage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PopExit } from "./components/pops/PopExit";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useSelector } from "react-redux";
@@ -48,19 +48,18 @@ export const AppRoutes: React.FC = () => {
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
-          {/* Оборачиваем защищенные маршруты в ProtectedRoute */}
+          <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
           <Route
             path="/*"
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Routes>
-                  <Route path={constRoutes.COURSE} element={<Course />} />
                   <Route path={constRoutes.PROFILE} element={<ProfilePage />} />
                   <Route
-                    path="/select_workouts"
+                    path={constRoutes.SELECT_WORKOUTS}
                     element={<PopSelectWorkoutPage />}
                   />
-                  <Route path="/exit" element={<Exit />} />
+                  <Route path={constRoutes.EXIT} element={<Exit />} />
                 </Routes>
               </ProtectedRoute>
             }
