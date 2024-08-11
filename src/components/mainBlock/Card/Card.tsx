@@ -1,26 +1,31 @@
-// src/components/Card.tsx
-
 import React from "react";
 import { useCourses } from "@/context/courseContext";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
+import { useNavigate } from "react-router-dom";
+import { constRoutes } from "@/lib/paths";
 
 export function Card() {
-  const { courses, loading, error } = useCourses(); // Используем контекст курсов
+  const { courses, loading, error } = useCourses();
+  const navigate = useNavigate();
 
   if (loading) {
-    return <p>Loading...</p>; // Или можно отобразить спиннер
+    return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>; // Отображаем ошибку, если она есть
+    return <p>{error}</p>;
   }
 
+  const handleCardClick = (id: string) => {
+    navigate(`${constRoutes.COURSE}/${id}`);
+  };
   return (
     <>
       {courses.map((course) => (
         <div
           key={course.id}
-          className="bg-white rounded-3xl shadow-lg mb-6 w-90 flex items-center flex-col"
+          className="bg-white rounded-3xl shadow-lg mb-6 w-90 flex items-center flex-col cursor-pointer"
+          onClick={() => handleCardClick(course.id)}
         >
           <div className="relative">
             <ImageComponent filePath={course.imgMobile} />

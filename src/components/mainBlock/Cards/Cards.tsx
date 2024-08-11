@@ -6,10 +6,6 @@ export function Cards() {
       className="flex gap-x-20 gap-y-5 mt-12 flex-row flex-wrap content-start"
     >
       <Card></Card>
-      <Card></Card>
-      <Card></Card>
-      <Card></Card>
-      <Card></Card>
     </div>
   );
 }
