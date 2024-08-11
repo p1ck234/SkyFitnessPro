@@ -14,15 +14,10 @@ export const Person = () => {
     });
   };
 
-  const handleChangePassword = () => {
-    openModal("exit");
-    navigate(constRoutes.EXIT, { state: { backgroundLocation: location } });
-  };
-
   return (
     <>
       <h1
-        className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
+        className="text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
         onClick={openMyProfile}
       >
         Профиль
@@ -41,14 +36,11 @@ export const Person = () => {
             <p className="text-xl">Логин: sergey.petrov96</p>
             <p className="text-xl">Пароль: ыоваЛЫО</p>
             <div className="flex flex-col md:flex-row items-center gap-2 mt-6 max-w-full">
-              <Button
-                className="flex-1 max-w-60 min-w-60"
-                onClick={handleChangePassword}
-              >
+              <Button className="flex-1 text-xl max-w-60 min-w-60">
                 Изменить пароль
               </Button>
               <Button
-                className="flex-1 max-w-60 min-w-60 border"
+                className="flex-1 text-xl max-w-60 min-w-60 border"
                 color="white"
                 borderColor="black"
                 variant="custom-achrom"

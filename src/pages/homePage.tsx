@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 export default function HomePage() {
   return (
-    <div className="container-xl mx-auto p-6 font-sans cursor-custom">
+    <div className="mx-auto font-sans cursor-custom">
       <Main />
       <Outlet />
     </div>

@@ -12,6 +12,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const location = useLocation();
   const { user } = useUser();
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,8 +23,11 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
-          left: buttonPosition.left + buttonPosition.width / 2 - modalWidth / 2,
+          left:
+            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
         });
+
+        setIsPositioned(true); // Позиция вычислена, можно показывать модальное окно
       }
     };
 
@@ -60,7 +64,9 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6"
+        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${
+          isPositioned ? "" : "invisible"
+        }`}
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
@@ -71,13 +77,13 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full"
+            className="bg-customGreen text-sm sm:text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
           </Button>
           <Button
-            className="bg-white text-lg w-full border border-black text-black py-2 px-4 rounded-full"
+            className="bg-white text-sm sm:text-lg w-full border border-black text-black py-2 px-4 rounded-full"
             onClick={handleLogout}
           >
             Выйти
