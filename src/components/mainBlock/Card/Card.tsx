@@ -28,7 +28,7 @@ export function Card() {
       {courses.map((course) => (
         <div
           key={course.id}
-          className="bg-white rounded-3xl shadow-lg mb-6 w-90 flex items-center flex-col cursor-pointer"
+          className="bg-white w-72 md:w-80 lg:w-360px rounded-3xl shadow-lg mb-6 flex items-center flex-col cursor-pointer"
           onClick={() => handleCardClick(course.id)}
         >
           <div className="relative">
@@ -44,22 +44,22 @@ export function Card() {
               </span>
             </button>
           </div>
-          <div className="w-80 p-3 flex flex-col">
+          <div className="p-4 flex flex-col">
             <h3 className="font-bold text-2xl py-5 phone:text-3xl">
               {course.name}
             </h3>
             <div className="flex flex-row flex-wrap gap-4">
               <div className="bg-gray-200 rounded-lg px-2 py-1 flex items-center gap-1">
                 <img src="icons/calendar.svg" alt="calendar" />
-                <p className="text-base">{course.days} дней</p>
+                <p className="text-base lg:text-xl">{course.days} дней</p>
               </div>
               <div className="bg-gray-200 rounded-lg px-2 py-1 flex items-center gap-1">
                 <img src="icons/time.svg" alt="time" />
-                <p className="text-base">{course.range} мин/день</p>
+                <p className="text-base  lg:text-xl">{course.range} мин/день</p>
               </div>
               <div className="bg-gray-200 rounded-lg px-2 py-1 flex items-center gap-1">
                 <img src="icons/difficult.svg" alt="difficulty" />
-                <p className="text-base">Сложность</p>
+                <p className="text-base  lg:text-xl">Сложность</p>
               </div>
             </div>
           </div>

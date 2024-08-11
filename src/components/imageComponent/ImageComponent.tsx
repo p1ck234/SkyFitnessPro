@@ -34,7 +34,7 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
   }, [filePath, onError]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative  ${className}`}>
       {isLoading && (
         <div className="absolute inset-0 flex justify-center items-center">
           <div className="loader"></div>
