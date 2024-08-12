@@ -5,7 +5,8 @@ export type Course = {
   imgMobile: string;
   days: number;
   range: string;
-  good_for_you: string[];   
-  directions: string[];      
-  description: string[];    
+  good_for_you: string[];
+  directions: string[];
+  description: string[];
+  progress?: number;
 };
