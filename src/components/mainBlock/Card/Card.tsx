@@ -1,11 +1,15 @@
-import React from "react";
+import { useState } from "react";
+
 import { useCourses } from "@/context/courseContext";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { useNavigate } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
+import { useUser } from "@/context/userContext";
+import { Button } from "@/components/Button";
 
 export function Card() {
-  const { courses, loading, error } = useCourses();
+  const { courses, loading, error, progress } = useCourses();
+  const { user } = useUser();
   const navigate = useNavigate();
 
   if (loading) {
@@ -33,16 +37,20 @@ export function Card() {
         >
           <div className="relative">
             <ImageComponent filePath={course.imgMobile} />
-            <button className="absolute top-2 right-5 flex items-center group">
-              <img
-                src="/img/icon/plus.svg"
-                alt="Добавить курс"
-                className="w-6 h-6"
-              />
-              <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
-                Добавить курс
-              </span>
-            </button>
+            {user ? (
+              <></>
+            ) : (
+              <button className="absolute top-2 right-5 flex items-center group">
+                <img
+                  src="/img/icon/plus.svg"
+                  alt="Добавить курс"
+                  className="w-6 h-6"
+                />
+                <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+                  Добавить курс
+                </span>
+              </button>
+            )}
           </div>
           <div className="w-80 p-3 flex flex-col">
             <h3 className="font-bold text-2xl py-5 phone:text-3xl">
@@ -62,6 +70,24 @@ export function Card() {
                 <p className="text-base">Сложность</p>
               </div>
             </div>
+            {user ? (
+              <div className=" my-4">
+                <p>Прогресс {progress}%</p>
+                <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
+                  <div
+                    className="h-1 bg-custumBlue"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <div>
+                  <Button width="w-full">
+                    {!progress ? "Начать тренировки" : "Продолжить"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       ))}

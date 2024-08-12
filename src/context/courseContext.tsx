@@ -16,6 +16,7 @@ interface CourseContextType {
   courses: Course[];
   loading: boolean;
   error: string | null;
+  progress: number | null;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -25,6 +26,7 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress]=useState<number>(25)
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []); 
   
   return (
-    <CourseContext.Provider value={{ courses, loading, error }}>
+    <CourseContext.Provider value={{ courses, loading, error, progress }}>
       {children}
     </CourseContext.Provider>
   );
