@@ -106,11 +106,31 @@ export const initializeUserProgress = async (uid: string) => {
   }
 };
 
+// Function to add a course to user's profile
 export const addCourseToUser = async (uid: string, courseId: number) => {
   try {
     const db = getFirestore();
-    const coursesRef = collection(db, "courses");
+    const userProgressRef = doc(db, "dataUsers", uid);
+    const userProgressDoc = await getDoc(userProgressRef);
 
+    // Проверяем, есть ли уже этот курс в прогрессе пользователя
+    if (userProgressDoc.exists()) {
+      const userProgressData = userProgressDoc.data();
+      const existingCourses = userProgressData?.courses_progress || [];
+
+      const courseAlreadyAdded = existingCourses.some(
+        (course: any) => course.id_course === courseId
+      );
+
+      if (courseAlreadyAdded) {
+        console.log(
+          `Course with ID ${courseId} is already added for user ${uid}.`
+        );
+        return; // Если курс уже добавлен, выходим из функции
+      }
+    }
+
+    const coursesRef = collection(db, "courses");
     const q = query(coursesRef, where("id", "==", courseId));
     const querySnapshot = await getDocs(q);
 
@@ -120,40 +140,48 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     }
 
     const courseDoc = querySnapshot.docs[0];
+    const courseRef = courseDoc.ref;
     const courseData = courseDoc.data();
 
-    const userRef = doc(db, "dataUsers", uid);
-    const userDoc = await getDoc(userRef);
+    // Проверка наличия workout
+    if (!courseData.workouts) {
+      console.error("No workouts found for this course.");
+      throw new Error("No workouts found for this course.");
+    }
 
     const workoutsProgress = courseData.workouts.map((workout: any) => {
+      if (!workout.exercise || workout.exercise.length === 0) {
+        console.warn("No exercises found in this workout:", workout);
+        return {
+          id_workout: workout.id,
+          exercises_progress: [],
+          count_progress: 0,
+        };
+      }
+
       return {
-        exercises_progress: workout.exercise.map((ex: any) => ({
-          id_exercise: ex.id,
-          completed: false,
+        id_workout: workout.id,
+        exercises_progress: workout.exercise.map((exercise: any) => ({
+          id_exercise: exercise.id,
           count_completed: 0,
-          max_count: ex.count,
+          completed: false,
+          max_count: exercise.count,
         })),
+        count_progress: 0,
       };
     });
 
-    const courseProgress = {
-      id_course: courseId,
-      progress: 0,
-      workouts_progress: workoutsProgress,
-    };
+    // Добавляем курс в прогресс пользователя
+    await updateDoc(userProgressRef, {
+      courses_progress: arrayUnion({
+        id_course: courseId,
+        progress: 0,
+        workouts_progress: workoutsProgress,
+      }),
+    });
 
-    if (userDoc.exists()) {
-      await updateDoc(userRef, {
-        courses_progress: arrayUnion(courseProgress),
-      });
-    } else {
-      await setDoc(userRef, {
-        courses_progress: [courseProgress],
-      });
-    }
-
-    // Добавление UID пользователя в массив users этого курса
-    await updateDoc(courseDoc.ref, {
+    // Добавляем UID пользователя в массив users этого курса
+    await updateDoc(courseRef, {
       users: arrayUnion(uid),
     });
   } catch (error) {

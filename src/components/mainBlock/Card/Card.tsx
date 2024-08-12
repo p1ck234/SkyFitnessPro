@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { constRoutes } from "@/lib/paths";
@@ -6,7 +6,6 @@ import { useUser } from "@/context/userContext";
 import { Button } from "@/components/Button";
 import { addCourseToUser } from "@/services/firestoreService";
 import { Course } from "@/types/types";
-
 
 interface CardProps {
   course: Course;
@@ -16,15 +15,18 @@ interface CardProps {
 export function Card({ course, isProfile = false }: CardProps) {
   const { user } = useUser();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
 
   const handleAddCourse = async (courseId: string) => {
     if (user) {
+      setIsLoading(true);
       try {
         await addCourseToUser(user.uid, parseInt(courseId));
-        alert("Курс успешно добавлен в ваш профиль");
       } catch (error) {
         console.error("Ошибка при добавлении курса:", error);
         alert("Не удалось добавить курс");
+      } finally {
+        setIsLoading(false);
       }
     } else {
       alert("Для добавления курса нужно войти в систему");
@@ -50,15 +52,22 @@ export function Card({ course, isProfile = false }: CardProps) {
               e.stopPropagation();
               handleAddCourse(course.id);
             }}
+            disabled={isLoading}
           >
-            <img
-              src="/img/icon/plus.svg"
-              alt="Добавить курс"
-              className="w-6 h-6"
-            />
-            <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
-              Добавить курс
-            </span>
+            {isLoading ? (
+              <div className="loader w-6 h-6" /> // Класс для анимации загрузки
+            ) : (
+              <>
+                <img
+                  src="/img/icon/plus.svg"
+                  alt="Добавить курс"
+                  className="w-6 h-6"
+                />
+                <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+                  Добавить курс
+                </span>
+              </>
+            )}
           </button>
         )}
       </div>
