@@ -68,11 +68,11 @@ export const Person = () => {
             {user ? (
               <>
                 <p className="font-bold text-3xl">
-                  {user.displayName || userData?.username || "Сергей"}
+                  {user.displayName || userData?.username || user.email}
                 </p>
                 <div>
                   <span className="text-lg font-medium">
-                    {user.displayName || user.email}
+                    Логин: {user.email}
                   </span>
                   <p className="text-xl">Пароль: *******</p>
                 </div>
