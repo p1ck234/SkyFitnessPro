@@ -120,14 +120,42 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     }
 
     const courseDoc = querySnapshot.docs[0];
-    const courseRef = courseDoc.ref;
-
     const courseData = courseDoc.data();
-    if (!courseData.users.includes(uid)) {
-      await updateDoc(courseRef, {
-        users: arrayUnion(uid),
+
+    const userRef = doc(db, "dataUsers", uid);
+    const userDoc = await getDoc(userRef);
+
+    const workoutsProgress = courseData.workouts.map((workout: any) => {
+      return {
+        exercises_progress: workout.exercise.map((ex: any) => ({
+          id_exercise: ex.id,
+          completed: false,
+          count_completed: 0,
+          max_count: ex.count,
+        })),
+      };
+    });
+
+    const courseProgress = {
+      id_course: courseId,
+      progress: 0,
+      workouts_progress: workoutsProgress,
+    };
+
+    if (userDoc.exists()) {
+      await updateDoc(userRef, {
+        courses_progress: arrayUnion(courseProgress),
+      });
+    } else {
+      await setDoc(userRef, {
+        courses_progress: [courseProgress],
       });
     }
+
+    // Добавление UID пользователя в массив users этого курса
+    await updateDoc(courseDoc.ref, {
+      users: arrayUnion(uid),
+    });
   } catch (error) {
     console.error("Error adding course to user:", error);
     throw error;

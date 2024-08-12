@@ -1,7 +1,15 @@
 // src/customHooks/useUserCourses.ts
 
 import { useState, useEffect } from "react";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 
 export const useUserCourses = () => {
@@ -17,18 +25,40 @@ export const useUserCourses = () => {
           const db = getFirestore();
           const coursesRef = collection(db, "courses");
 
-          // Запрос на все курсы, где user.uid есть в массиве users
-          const q = query(coursesRef, where("users", "array-contains", user.uid));
+          const q = query(
+            coursesRef,
+            where("users", "array-contains", user.uid)
+          );
           const querySnapshot = await getDocs(q);
 
-          const courses = querySnapshot.docs.map(doc => ({
+          const courses = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
 
-          console.log("Fetched courses:", courses); // Добавляем вывод в консоль
+          const userProgressRef = doc(db, "dataUsers", user.uid);
+          const userProgressDoc = await getDoc(userProgressRef);
 
-          setUserCourses(courses);
+          if (userProgressDoc.exists()) {
+            const userProgressData = userProgressDoc.data();
+
+            const coursesWithProgress = courses.map((course) => {
+              const courseProgress = userProgressData.courses_progress.find(
+                (progress: any) => progress.id_course === parseInt(course.id)
+              );
+
+              return {
+                ...course,
+                progress: courseProgress ? courseProgress.progress : 0,
+              };
+            });
+
+            setUserCourses(coursesWithProgress);
+          } else {
+            setUserCourses(courses);
+          }
+
+          console.log("Fetched courses:", courses);
         } catch (error) {
           console.error("Error fetching user courses:", error);
           setError("Ошибка при загрузке курсов");
