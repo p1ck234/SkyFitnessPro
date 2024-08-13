@@ -1,11 +1,31 @@
 import { Course } from "@/types/types";
 import React from "react";
+import { useUser } from "@/context/userContext"; // Добавьте это
+import { useModal } from "@/context/modalContext"; // Добавьте это
+import { addCourseToUser } from "@/services/firestoreService"; // Импорт функции добавления курса
 
 interface CourseDescriptionProps {
-  course: Course; // Используем обновленный тип
+  course: Course;
 }
 
 const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
+  const { user } = useUser(); // Используйте `useUser` для проверки авторизации
+  const { openModal } = useModal(); // Используйте `useModal` для открытия модального окна
+
+  const handleButtonClick = async () => {
+    if (!user) {
+      openModal("login"); // Открываем модальное окно логина, если пользователь не авторизован
+    } else {
+      try {
+        await addCourseToUser(user.uid, parseInt(course.id)); // Добавляем курс в профиль пользователя
+        alert("Курс успешно добавлен в ваш профиль");
+      } catch (error) {
+        console.error("Ошибка при добавлении курса:", error);
+        alert("Не удалось добавить курс");
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 md:gap-16">
       {/* Benefits Section */}
@@ -33,10 +53,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Направления</h2>
         <div className="mt-6 md:mt-10 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 bg-customGreenCurse p-4 md:p-6 rounded-lg">
           {course.directions.map((direction, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-2"
-            >
+            <div key={index} className="flex items-center space-x-2">
               <img
                 src="/img/icon/Sparcle.svg"
                 alt=""
@@ -62,8 +79,11 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
           </ul>
 
           <div className="flex">
-            <button className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto">
-              Войдите, чтобы добавить курс
+            <button
+              className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
+              onClick={handleButtonClick} // Обрабатываем нажатие на кнопку
+            >
+              {!user ? "Войдите, чтобы добавить курс" : "Добавить курс"}
             </button>
           </div>
         </div>
