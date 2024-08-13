@@ -114,21 +114,26 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     const userProgressRef = doc(db, "dataUsers", uid);
     const userProgressDoc = await getDoc(userProgressRef);
 
+    // Если документ не существует, создаем его
+    if (!userProgressDoc.exists()) {
+      await setDoc(userProgressRef, {
+        courses_progress: [],
+      });
+    }
+
     // Проверяем, есть ли уже этот курс в прогрессе пользователя
-    if (userProgressDoc.exists()) {
-      const userProgressData = userProgressDoc.data();
-      const existingCourses = userProgressData?.courses_progress || [];
+    const userProgressData = userProgressDoc.data() || { courses_progress: [] };
+    const existingCourses = userProgressData.courses_progress;
 
-      const courseAlreadyAdded = existingCourses.some(
-        (course: any) => course.id_course === courseId
+    const courseAlreadyAdded = existingCourses.some(
+      (course: any) => course.id_course === courseId
+    );
+
+    if (courseAlreadyAdded) {
+      console.log(
+        `Course with ID ${courseId} is already added for user ${uid}.`
       );
-
-      if (courseAlreadyAdded) {
-        console.log(
-          `Course with ID ${courseId} is already added for user ${uid}.`
-        );
-        return; // Если курс уже добавлен, выходим из функции
-      }
+      return; // Если курс уже добавлен, выходим из функции
     }
 
     const coursesRef = collection(db, "courses");
@@ -185,6 +190,10 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     await updateDoc(courseRef, {
       users: arrayUnion(uid),
     });
+
+    console.log(
+      `Course with ID ${courseId} successfully added to user ${uid}.`
+    );
   } catch (error) {
     console.error("Error adding course to user:", error);
     throw error;
