@@ -1,3 +1,9 @@
+export type Workout = {
+  id: number;
+  name: string;
+  exercises: any[];
+};
+
 export type Course = {
   id: string;
   name: string;
@@ -9,4 +15,5 @@ export type Course = {
   directions: string[];
   description: string[];
   progress?: number;
+  workouts: Workout[];
 };

@@ -6,6 +6,7 @@ import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
+import { Course } from "@/types/types";
 
 export const Profile = () => {
   const { openModal } = useModal();
@@ -14,9 +15,9 @@ export const Profile = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const { userCourses, loading, error } = useUserCourses(refreshKey);
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
 
-  const handleOpenSelectWorkoutModal = (course = null) => {
+  const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
     if (course) {
       setSelectedCourse(course); // Сохраняем выбранный курс, если есть
       setShowSelectWorkouts(true);
@@ -63,7 +64,7 @@ export const Profile = () => {
           <div className="w-full flex justify-center">
             <button
               className="bg-customGreen text-black py-2 px-6 rounded-full mt-4"
-              onClick={() => handleOpenSelectWorkoutModal()}
+              onClick={() => handleOpenSelectWorkoutModal(null)}
             >
               Выбрать тренировки
             </button>
