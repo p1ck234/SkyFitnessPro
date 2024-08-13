@@ -1,18 +1,8 @@
-// src/customHooks/useUserCourses.ts
-
 import { useState, useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 
-export const useUserCourses = () => {
+export const useUserCourses = (refreshKey: number) => {
   const [userCourses, setUserCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,40 +15,18 @@ export const useUserCourses = () => {
           const db = getFirestore();
           const coursesRef = collection(db, "courses");
 
-          const q = query(
-            coursesRef,
-            where("users", "array-contains", user.uid)
-          );
+          // Запрос на все курсы, где user.uid есть в массиве users
+          const q = query(coursesRef, where("users", "array-contains", user.uid));
           const querySnapshot = await getDocs(q);
 
-          const courses = querySnapshot.docs.map((doc) => ({
+          const courses = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data(),
           }));
 
-          const userProgressRef = doc(db, "dataUsers", user.uid);
-          const userProgressDoc = await getDoc(userProgressRef);
-
-          if (userProgressDoc.exists()) {
-            const userProgressData = userProgressDoc.data();
-
-            const coursesWithProgress = courses.map((course) => {
-              const courseProgress = userProgressData.courses_progress.find(
-                (progress: any) => progress.id_course === parseInt(course.id)
-              );
-
-              return {
-                ...course,
-                progress: courseProgress ? courseProgress.progress : 0,
-              };
-            });
-
-            setUserCourses(coursesWithProgress);
-          } else {
-            setUserCourses(courses);
-          }
-
           console.log("Fetched courses:", courses);
+
+          setUserCourses(courses);
         } catch (error) {
           console.error("Error fetching user courses:", error);
           setError("Ошибка при загрузке курсов");
@@ -71,7 +39,7 @@ export const useUserCourses = () => {
     } else {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, refreshKey]); // Добавляем refreshKey как зависимость
 
   return { userCourses, loading, error };
 };

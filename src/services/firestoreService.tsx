@@ -14,6 +14,7 @@ import {
   query,
   where,
   arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { firebaseConfig } from "../firebaseConfig";
 
@@ -186,6 +187,50 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     });
   } catch (error) {
     console.error("Error adding course to user:", error);
+    throw error;
+  }
+};
+
+// Function to remove a course from user's profile
+export const removeCourseFromUser = async (uid: string, courseId: number) => {
+  try {
+    const db = getFirestore();
+    const coursesRef = collection(db, "courses");
+
+    // Запрос на курс по его уникальному ID
+    const q = query(coursesRef, where("id", "==", courseId));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.error(`Course with ID ${courseId} does not exist.`);
+      throw new Error(`Course with ID ${courseId} does not exist.`);
+    }
+
+    // Предполагаем, что ID уникален, и будет найден только один документ
+    const courseDoc = querySnapshot.docs[0];
+    const courseRef = courseDoc.ref;
+
+    // Удаление UID пользователя из массива users этого курса
+    await updateDoc(courseRef, {
+      users: arrayRemove(uid),
+    });
+
+    // Удаление данных о прогрессе пользователя в этом курсе
+    const userProgressRef = doc(db, "dataUsers", uid);
+    const userProgressSnap = await getDoc(userProgressRef);
+
+    if (userProgressSnap.exists()) {
+      const userProgressData = userProgressSnap.data();
+      const updatedCoursesProgress = (
+        userProgressData.courses_progress || []
+      ).filter((progress: any) => progress.id_course !== courseId);
+
+      await updateDoc(userProgressRef, {
+        courses_progress: updatedCoursesProgress,
+      });
+    }
+  } catch (error) {
+    console.error("Error removing course from user:", error);
     throw error;
   }
 };
