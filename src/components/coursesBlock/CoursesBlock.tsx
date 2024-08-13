@@ -22,10 +22,7 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
 
   return (
     <div>
-      <section
-        className="relative p-0 sm:p-8 mb-6 items-center"
-        style={{ height: "300px" }}
-      >
+      <section className="flex p-0 sm:p-8 mb-6 items-center">
         <h1 className="absolute text-3xl md:text-6xl font-bold text-white z-10 hidden phone:block p-6">
           {course.name}
         </h1>

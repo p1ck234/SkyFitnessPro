@@ -14,7 +14,7 @@ interface CardProps {
   course: Course;
   isProfile?: boolean;
   onCourseRemoved?: () => void;
-  onSelectWorkouts?: () => void; // Добавляем пропс для обработки выбора тренировок
+  onSelectWorkouts?: () => void;
 }
 
 export function Card({
@@ -99,15 +99,30 @@ export function Card({
           disabled={loading}
         >
           {loading ? (
-            <div className="loader"></div> // Замените это на ваш компонент или стили лоадера
+            <div className="loader"></div>
           ) : (
-            <img
-              src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
-              alt={isProfile ? "Удалить курс" : "Добавить курс"}
-              className="w-6 h-6"
-            />
+            <div>
+              <img
+                src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
+                alt={isProfile ? "Удалить курс" : "Добавить курс"}
+                className="w-6 h-6"
+              />
+              <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+                {isProfile ? "Удалить курс" : "Добавить курс"}
+              </span>
+            </div>
           )}
         </button>
+        {/* <button className="absolute top-2 right-5 flex items-center group">
+          <img
+            src="/img/icon/plus.svg"
+            alt="Добавить курс"
+            className="w-6 h-6"
+          />
+          <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+            Добавить курс
+          </span>
+        </button> */}
       </div>
       <div className="w-80 p-3 flex flex-col">
         <h3 className="font-bold text-2xl py-5 phone:text-3xl">
