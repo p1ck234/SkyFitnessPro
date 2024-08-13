@@ -1,3 +1,5 @@
+import { WorkoutBlock } from "../components/workoutBlock/WorkoutBlock";
+
 export const Workouts = () => {
-  return alert("Страница еще не реализована");
+  return <WorkoutBlock />;
 };
