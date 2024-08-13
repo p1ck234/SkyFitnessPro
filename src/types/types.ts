@@ -15,5 +15,5 @@ export type Course = {
   directions: string[];
   description: string[];
   progress?: number;
-  workouts: Workout[];
+  workouts?: Workout[];
 };
