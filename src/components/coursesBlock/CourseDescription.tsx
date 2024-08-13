@@ -1,27 +1,31 @@
 import { Course } from "@/types/types";
-import React from "react";
-import { useUser } from "@/context/userContext"; // Добавьте это
-import { useModal } from "@/context/modalContext"; // Добавьте это
-import { addCourseToUser } from "@/services/firestoreService"; // Импорт функции добавления курса
+import React, { useState } from "react";
+import { useUser } from "@/context/userContext";
+import { useModal } from "@/context/modalContext";
+import { addCourseToUser } from "@/services/firestoreService";
 
 interface CourseDescriptionProps {
   course: Course;
 }
 
 const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
-  const { user } = useUser(); // Используйте `useUser` для проверки авторизации
-  const { openModal } = useModal(); // Используйте `useModal` для открытия модального окна
+  const { user } = useUser();
+  const { openModal } = useModal();
+  const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
 
   const handleButtonClick = async () => {
     if (!user) {
-      openModal("login"); // Открываем модальное окно логина, если пользователь не авторизован
+      openModal("login");
     } else {
       try {
-        await addCourseToUser(user.uid, parseInt(course.id)); // Добавляем курс в профиль пользователя
+        setIsLoading(true); // Устанавливаем состояние загрузки
+        await addCourseToUser(user.uid, parseInt(course.id));
         alert("Курс успешно добавлен в ваш профиль");
       } catch (error) {
         console.error("Ошибка при добавлении курса:", error);
         alert("Не удалось добавить курс");
+      } finally {
+        setIsLoading(false); // Отключаем состояние загрузки
       }
     }
   };
@@ -81,9 +85,14 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
           <div className="flex">
             <button
               className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
-              onClick={handleButtonClick} // Обрабатываем нажатие на кнопку
+              onClick={handleButtonClick}
+              disabled={isLoading} // Отключаем кнопку во время загрузки
             >
-              {!user ? "Войдите, чтобы добавить курс" : "Добавить курс"}
+              {isLoading
+                ? "Загрузка..."
+                : !user
+                ? "Войдите, чтобы добавить курс"
+                : "Добавить курс"}
             </button>
           </div>
         </div>
