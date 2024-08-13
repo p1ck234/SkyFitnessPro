@@ -28,7 +28,7 @@ const Course: React.FC = () => {
   return (
     <div className="mx-auto mt-14">
       <CoursesBlock course={course} />
-      <CourseDescription />
+      <CourseDescription course={course} />
     </div>
   );
 };

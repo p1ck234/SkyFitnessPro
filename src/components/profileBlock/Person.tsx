@@ -13,11 +13,6 @@ export const Person = () => {
   const { openModal } = useModal();
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
 
-  const openMyProfile = () => {
-    navigate("/select_workouts", {
-      state: { backgroundLocation: location },
-    });
-  };
 
   const handleLogout = async () => {
     try {
@@ -50,8 +45,7 @@ export const Person = () => {
   return (
     <>
       <h1
-        className="text-lg md:text-xl lg:text-4xl font-bold mb-8 cursor-pointer"
-        onClick={openMyProfile}
+        className="text-lg md:text-xl lg:text-4xl font-bold mb-8"
       >
         Профиль
       </h1>
@@ -68,11 +62,11 @@ export const Person = () => {
             {user ? (
               <>
                 <p className="font-bold text-3xl">
-                  {user.displayName || userData?.username || "Сергей"}
+                  {user.displayName || userData?.username || user.email}
                 </p>
                 <div>
                   <span className="text-lg font-medium">
-                    {user.displayName || user.email}
+                    Логин: {user.email}
                   </span>
                   <p className="text-xl">Пароль: *******</p>
                 </div>

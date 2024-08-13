@@ -10,6 +10,9 @@ interface Course {
   imgMobile: string;
   days: number;
   range: string;
+  good_for_you: string[];
+  directions: string[];
+  description: string[];
 }
 
 interface CourseContextType {

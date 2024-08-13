@@ -7,7 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   borderColor?: string;
   variant?: "custom-color" | "custom-achrom";
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

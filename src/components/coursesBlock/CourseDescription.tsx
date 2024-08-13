@@ -1,6 +1,35 @@
-import React from "react";
+import { Course } from "@/types/types";
+import React, { useState } from "react";
+import { useUser } from "@/context/userContext";
+import { useModal } from "@/context/modalContext";
+import { addCourseToUser } from "@/services/firestoreService";
 
-const CourseDescription = () => {
+interface CourseDescriptionProps {
+  course: Course;
+}
+
+const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
+  const { user } = useUser();
+  const { openModal } = useModal();
+  const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
+
+  const handleButtonClick = async () => {
+    if (!user) {
+      openModal("login");
+    } else {
+      try {
+        setIsLoading(true); // Устанавливаем состояние загрузки
+        await addCourseToUser(user.uid, parseInt(course.id));
+        alert("Курс успешно добавлен в ваш профиль");
+      } catch (error) {
+        console.error("Ошибка при добавлении курса:", error);
+        alert("Не удалось добавить курс");
+      } finally {
+        setIsLoading(false); // Отключаем состояние загрузки
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8 md:gap-16">
       {/* Benefits Section */}
@@ -9,72 +38,34 @@ const CourseDescription = () => {
           Подойдет для вас, если:
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 md:mt-10">
-          <div className="bg-gray-800 text-white p-4 md:p-6 rounded-lg flex items-center">
-            <div className="text-4xl md:text-7xl font-bold text-lime-500 mr-2 md:mr-4">
-              1
+          {course.good_for_you.map((benefit, index) => (
+            <div
+              key={index}
+              className="bg-gray-800 text-white p-4 md:p-6 rounded-lg flex items-center"
+            >
+              <div className="text-4xl md:text-7xl font-bold text-lime-500 mr-2 md:mr-4">
+                {index + 1}
+              </div>
+              <p className="text-xl md:text-2xl">{benefit}</p>
             </div>
-            <p className="text-xl md:text-2xl">
-              Давно хотели попробовать йогу, но не решались начать
-            </p>
-          </div>
-          <div className="bg-gray-800 text-white p-4 md:p-6 rounded-lg flex items-center">
-            <div className="text-4xl md:text-7xl font-bold text-lime-500 mr-2 md:mr-4">
-              2
-            </div>
-            <p className="text-xl md:text-2xl">
-              Хотите укрепить позвоночник, избавиться от болей в спине и
-              суставах
-            </p>
-          </div>
-          <div className="bg-gray-800 text-white p-4 md:p-6 rounded-lg flex items-center">
-            <div className="text-4xl md:text-7xl font-bold text-lime-500 mr-2 md:mr-4">
-              3
-            </div>
-            <p className="text-xl md:text-2xl">
-              Ищете активность, полезную для тела и души
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Courses Section */}
+      {/* Directions Section */}
       <section className="mb-6">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Направления</h2>
         <div className="mt-6 md:mt-10 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8 bg-customGreenCurse p-4 md:p-6 rounded-lg">
-          <div className="flex flex-col items-start space-y-2 md:space-y-4">
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">
-                Йога для новичков
-              </p>
+          {course.directions.map((direction, index) => (
+            <div key={index} className="flex items-center space-x-2">
+              <img
+                src="/img/icon/Sparcle.svg"
+                alt=""
+                className="w-6 h-6 md:w-8 md:h-8"
+              />
+              <p className="text-black text-xl md:text-2xl">{direction}</p>
             </div>
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">
-                Классическая йога
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col items-start space-y-2 md:space-y-4">
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">Кундалини-йога</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">Йогатерапия</p>
-            </div>
-          </div>
-          <div className="flex flex-col items-start space-y-2 md:space-y-4">
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">Хатха-йога</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <img src="/img/icon/Sparcle.svg" alt="" className="w-6 h-6 md:w-8 md:h-8" />
-              <p className="text-black text-xl md:text-2xl">Аштанга-йога</p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -86,16 +77,22 @@ const CourseDescription = () => {
             <br /> к новому телу
           </h2>
           <ul className="list-disc pl-5 opacity-60 mb-4 text-lg md:text-xl text-gray-700">
-            <li>проработка всех групп мышц</li>
-            <li>тренировка суставов</li>
-            <li>улучшение циркуляции крови</li>
-            <li>упражнения заряжают бодростью</li>
-            <li>помогают противостоять стрессам</li>
+            {course.description.map((desc, index) => (
+              <li key={index}>{desc}</li>
+            ))}
           </ul>
 
           <div className="flex">
-            <button className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto">
-              Войдите, чтобы добавить курс
+            <button
+              className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
+              onClick={handleButtonClick}
+              disabled={isLoading} // Отключаем кнопку во время загрузки
+            >
+              {isLoading
+                ? "Загрузка..."
+                : !user
+                ? "Войдите, чтобы добавить курс"
+                : "Добавить курс"}
             </button>
           </div>
         </div>

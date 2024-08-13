@@ -15,6 +15,7 @@ import { PopExit } from "./components/pops/PopExit";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import ScrollToTop from "./customHooks/ScrollToTop";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -45,6 +46,7 @@ export const AppRoutes: React.FC = () => {
 
   return (
     <>
+      <ScrollToTop />
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
