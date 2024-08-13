@@ -36,7 +36,7 @@ export const Profile = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loader"></div>;
   }
 
   if (error) {

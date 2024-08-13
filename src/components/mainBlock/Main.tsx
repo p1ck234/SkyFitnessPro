@@ -1,14 +1,12 @@
 import { Heading } from "./Heading/Heading";
-import { Cards } from "./Cards/Cards";
-import { Button } from "../Button";
-import { useCourses } from "@/context/courseContext"; 
-import { Card } from "../mainBlock/Card/Card"; 
+import { useCourses } from "@/context/courseContext";
+import { Card } from "../mainBlock/Card/Card";
 
 export function Main() {
   const { courses, loading, error } = useCourses();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="loader"></div>;
   }
 
   if (error) {
