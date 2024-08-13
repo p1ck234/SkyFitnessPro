@@ -16,9 +16,6 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const { user } = useUser();
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -85,7 +82,11 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
             Мой профиль
           </Button>
           <Button
-            className="bg-white text-lg w-full border border-black py-2 px-4"
+            // className="bg-white text-lg w-full border border-black py-2 px-4"
+            className="w-full"
+            color="white"
+            borderColor="black"
+            variant="custom-achrom"
             onClick={handleLogout}
           >
             Выйти
