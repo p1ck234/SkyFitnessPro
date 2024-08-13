@@ -17,9 +17,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState(""); // Состояние для имени пользователя
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
-  const [error, setError] = useState<string | null>(null); // Состояние для ошибки
+  const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -33,38 +33,28 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Сбрасываем ошибку перед новой попыткой регистрации
+    setError(null); 
 
-    // Проверка на совпадение паролей
     if (password !== confirmPassword) {
       setError("Пароли не совпадают");
       return;
     }
 
-    // Проверка на минимальную длину пароля
     if (password.length < 6) {
       setError("Пароль должен содержать не менее 6 символов");
       return;
     }
 
-    // Простейшая проверка email на соответствие шаблону
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Неверно указана почта");
       return;
     }
 
-    setIsLoading(true); // Начинаем загрузку
+    setIsLoading(true);
 
     try {
       const user = await register(email, password, username);
-      // Сохраняем пользователя с именем пользователя и паролем
-      await saveUser(user.uid, {
-        email: user.email,
-        username, // Сохраняем имя пользователя
-        password, // Сохраняем пароль
-        createdAt: new Date(),
-      });
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error: any) {
@@ -74,7 +64,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
         setError("Регистрация не удалась. Попробуйте еще раз.");
       }
     } finally {
-      setIsLoading(false); // Завершаем загрузку
+      setIsLoading(false);
     }
   };
 
@@ -106,7 +96,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Имя пользователя"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            disabled={isLoading} // Отключаем поле во время загрузки
+            disabled={isLoading}
           />
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
@@ -117,7 +107,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Эл.почта"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={isLoading} // Отключаем поле во время загрузки
+            disabled={isLoading}
           />
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
@@ -128,7 +118,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoading} // Отключаем поле во время загрузки
+            disabled={isLoading}
           />
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-10 ${
@@ -139,7 +129,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             placeholder="Повторите пароль"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            disabled={isLoading} // Отключаем поле во время загрузки
+            disabled={isLoading}
           />
           {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 

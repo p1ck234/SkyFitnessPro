@@ -14,7 +14,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export const register = async (email: string, password: string, username: string) => {
+export const register = async (
+  email: string,
+  password: string,
+  username: string
+) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -23,7 +27,6 @@ export const register = async (email: string, password: string, username: string
     );
     const user = userCredential.user;
 
-    // Сохраняем дополнительные данные пользователя в Firestore
     await setDoc(doc(db, "users", user.uid), {
       username: username,
       email: user.email,
