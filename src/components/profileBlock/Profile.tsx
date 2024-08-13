@@ -5,24 +5,33 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
+import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 
 export const Profile = () => {
   const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
-  const [refreshKey, setRefreshKey] = useState(0);  // Ключ для обновления данных
+  const [refreshKey, setRefreshKey] = useState(0);
   const { userCourses, loading, error } = useUserCourses(refreshKey);
+  const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-  const handleOpenSelectWorkoutModal = () => {
-    openModal("select_workouts");
-    navigate(constRoutes.SELECT_WORKOUTS, {
-      state: { backgroundLocation: location },
-    });
+  const handleOpenSelectWorkoutModal = (course = null) => {
+    if (course) {
+      setSelectedCourse(course); // Сохраняем выбранный курс, если есть
+      setShowSelectWorkouts(true);
+    } else {
+      navigate("/"); // Если нет курсов, перенаправляем на главную страницу
+    }
   };
 
   const handleCourseRemoved = () => {
-    console.log("Обновление профиля после удаления курса");
     setRefreshKey((prevKey) => prevKey + 1);
+  };
+
+  const handleCloseModal = () => {
+    setShowSelectWorkouts(false);
+    setSelectedCourse(null);
   };
 
   if (loading) {
@@ -36,7 +45,9 @@ export const Profile = () => {
   return (
     <div className="bg-gray-200 mt-14">
       <Person />
-      <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">Мои курсы</h1>
+      <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
+        Мои курсы
+      </h1>
       <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
         {userCourses.length > 0 ? (
           userCourses.map((course, index) => (
@@ -44,19 +55,28 @@ export const Profile = () => {
               key={`${course.id}-${index}`}
               course={course}
               isProfile={true}
-              onCourseRemoved={handleCourseRemoved} // Передаем callback для удаления
+              onCourseRemoved={handleCourseRemoved}
+              onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
             />
           ))
         ) : (
-          <p>Вы еще не добавили курсы.</p>
+          <div className="w-full flex justify-center">
+            <button
+              className="bg-customGreen text-black py-2 px-6 rounded-full mt-4"
+              onClick={() => handleOpenSelectWorkoutModal()}
+            >
+              Выбрать тренировки
+            </button>
+          </div>
         )}
       </div>
-      <button
-        className="bg-customGreen text-black py-2 px-6 rounded-full mt-4"
-        onClick={handleOpenSelectWorkoutModal}
-      >
-        Выбрать тренировки
-      </button>
+
+      {showSelectWorkouts && selectedCourse && (
+        <PopSelectWorkouts
+          workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
+          onClose={handleCloseModal} // Закрытие попапа
+        />
+      )}
     </div>
   );
 };

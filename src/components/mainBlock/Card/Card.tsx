@@ -13,13 +13,15 @@ import { Course } from "@/types/types";
 interface CardProps {
   course: Course;
   isProfile?: boolean;
-  onCourseRemoved?: () => void; // Добавляем пропс для обработки удаления курса
+  onCourseRemoved?: () => void;
+  onSelectWorkouts?: () => void; // Добавляем пропс для обработки выбора тренировок
 }
 
 export function Card({
   course,
   isProfile = false,
   onCourseRemoved,
+  onSelectWorkouts,
 }: CardProps) {
   const { user } = useUser();
   const navigate = useNavigate();
@@ -49,7 +51,6 @@ export function Card({
         await removeCourseFromUser(user.uid, parseInt(courseId));
         alert("Курс успешно удален из вашего профиля");
 
-        // Вызовем callback для обновления профиля
         if (onCourseRemoved) {
           onCourseRemoved();
         }
@@ -72,6 +73,15 @@ export function Card({
       handleRemoveCourse(courseId);
     } else {
       handleAddCourse(courseId);
+    }
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onSelectWorkouts) {
+      onSelectWorkouts();
+    } else {
+      handleCardClick(course.id);
     }
   };
 
@@ -127,7 +137,7 @@ export function Card({
               ></div>
             </div>
             <div>
-              <Button width="w-full">
+              <Button width="w-full" onClick={handleButtonClick}>
                 {!course.progress ? "Начать тренировки" : "Продолжить"}
               </Button>
             </div>
