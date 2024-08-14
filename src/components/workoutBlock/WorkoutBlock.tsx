@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useModal } from "@/context/modalContext";
+import { Workout } from "@/types/types";
 
 export const WorkoutBlock = () => {
   const { courseId, workoutId } = useParams();
@@ -15,7 +16,7 @@ export const WorkoutBlock = () => {
   );
 
   const workout = course?.workouts?.find(
-    (workout) => workout.id === parseInt(workoutId || "0")
+    (workout: Workout) => workout.id === parseInt(workoutId || "0")
   );
 
   if (!course || !workout) {

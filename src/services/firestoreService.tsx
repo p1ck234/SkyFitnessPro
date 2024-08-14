@@ -173,7 +173,7 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
           completed: false,
           max_count: exercise.count,
         })),
-        count_progress: 0,
+        completed: false,
       };
     });
 

@@ -1,8 +1,8 @@
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
+import { Button } from "@/components/Button"; // Assuming you have a Button component
 
 const ExersicesProgress = ({
   workout,
@@ -12,32 +12,19 @@ const ExersicesProgress = ({
   courseId: string;
 }) => {
   const { user } = useUser();
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
   const [progress, setProgress] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [progressUpdated, setProgressUpdated] = useState(false);
+  const [hasCompletedExercises, setHasCompletedExercises] = useState(false);
 
   useEffect(() => {
-    console.log("Тренировка для отображения:", workout);
-
-    if (
-      !user ||
-      !courseId ||
-      !workout ||
-      !workout.exercise ||
-      workout.exercise.length === 0
-    ) {
-      console.log("Необходимые данные отсутствуют");
+    if (!user || !courseId || !workout || !workout.exercise) {
       setLoading(false);
       return;
     }
 
     const fetchProgressData = async () => {
-      console.log(
-        `Загрузка прогресса для courseId: ${courseId} и workoutId: ${workout.id}`
-      );
-
       const db = getFirestore();
       const userRef = doc(db, "dataUsers", user.uid);
       const userSnap = await getDoc(userRef);
@@ -53,21 +40,26 @@ const ExersicesProgress = ({
           );
           if (workoutProgress) {
             setProgress(workoutProgress.exercises_progress);
-          } else {
-            console.log("Прогресс тренировки не найден");
+            // Check if there are any completed exercises
+            const hasCompleted = workoutProgress.exercises_progress.some(
+              (ep: any) => ep.completed
+            );
+            setHasCompletedExercises(hasCompleted);
           }
-        } else {
-          console.log("Прогресс курса не найден");
         }
-      } else {
-        console.log("Данные пользователя не найдены");
       }
-
       setLoading(false);
     };
 
     fetchProgressData();
-  }, [courseId, workout, user]);
+  }, [courseId, workout, user, progressUpdated]);
+
+  const handleOpenProgressModal = () => {
+    openModal("progress_update", {
+      workout,
+      onSave: () => setProgressUpdated((prev) => !prev),
+    });
+  };
 
   if (loading) {
     return <div>Загрузка данных...</div>;
@@ -76,12 +68,6 @@ const ExersicesProgress = ({
   if (!workout.exercise || workout.exercise.length === 0) {
     return <div>Данные о тренировке не найдены.</div>;
   }
-
-  const handleOpenProgressModal = () => {
-    console.log("Button clicked, opening modal...");
-    openModal("progress_update", workout);
-    navigate(`${location.pathname}?progress=update`, { replace: true });
-  };
 
   return (
     <div className="border rounded-3xl bg-white p-14 shadow-lg mt-12 mb-12">
@@ -109,12 +95,13 @@ const ExersicesProgress = ({
           </div>
         ))}
       </div>
-      <button
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={handleOpenProgressModal}
-      >
-        Записать/обновить свой прогресс
-      </button>
+      <div>
+        <Button width="w-full" onClick={handleOpenProgressModal}>
+          {hasCompletedExercises
+            ? "Обновить свой прогресс"
+            : "Записать свой прогресс"}
+        </Button>
+      </div>
     </div>
   );
 };
