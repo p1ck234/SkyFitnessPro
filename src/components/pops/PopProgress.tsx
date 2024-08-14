@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useCourses } from "@/context/courseContext";
 import { Button } from "../Button";
 
-// Define the Exercise interface
 interface Exercise {
   id: number;
-  count: number;
+  count: number; 
   name: string;
   count_completed?: number;
   completed?: boolean;
@@ -21,7 +20,7 @@ const PopProgress = () => {
   const { user } = useUser();
   const { courses } = useCourses();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
 
   if (!workout || !workout.exercise) {
     return <div>Данные о тренировке не найдены.</div>;
@@ -67,7 +66,7 @@ const PopProgress = () => {
       return;
     }
 
-    setLoading(true); // Set loading state to true when saving starts
+    setLoading(true);
 
     const db = getFirestore();
     const userRef = doc(db, "dataUsers", user.uid);
@@ -87,7 +86,7 @@ const PopProgress = () => {
       const updatedProgress = workout.exercise.map(
         (exercise: Exercise, index: number) => ({
           id_exercise: exercise.id,
-          count_completed: progress[index],
+          count_completed: Math.min(progress[index], exercise.count),
           max_count: exercise.count,
           completed: progress[index] >= exercise.count,
         })
@@ -154,7 +153,7 @@ const PopProgress = () => {
     } catch (error) {
       console.error("Error saving progress:", error);
     } finally {
-      setLoading(false); // Set loading state to false when saving is done
+      setLoading(false);
     }
 
     closeModal();
@@ -186,9 +185,13 @@ const PopProgress = () => {
               value={progress[index]}
               onChange={(e) => {
                 const newProgress = [...progress];
-                newProgress[index] = parseInt(e.target.value);
+                newProgress[index] = Math.min(
+                  parseInt(e.target.value),
+                  exercise.count
+                );
                 setProgress(newProgress);
               }}
+              max={exercise.count}
             />
           </div>
         ))}

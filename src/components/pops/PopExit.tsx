@@ -14,7 +14,7 @@ interface PopExitProps {
 export const PopExit = ({ closeModal }: PopExitProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, userData } = useUser(); // Достаем user и userData из контекста
+  const { user, userData } = useUser();
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
             buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
         });
 
-        setIsPositioned(true); // Позиция вычислена, можно показывать модальное окно
+        setIsPositioned(true);
       }
     };
 
@@ -81,7 +81,6 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          {/* Отображаем username, если он есть, иначе displayName или email */}
           <p className="font-bold">
             {userData?.username || user?.email}
           </p>

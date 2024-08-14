@@ -14,7 +14,7 @@ export const PopSelectWorkouts = ({
   courseId,
   onClose,
 }: PopSelectWorkoutsProps) => {
-  const { user } = useUser(); // Получаем данные пользователя
+  const { user } = useUser(); 
   const navigate = useNavigate();
   const location = useLocation();
   const [progressData, setProgressData] = useState<any[]>([]);
@@ -110,7 +110,7 @@ export const PopSelectWorkouts = ({
                       checked={isCompleted}
                       onChange={() => toggleCheckbox(workout.id)}
                       className="hidden"
-                      disabled={isCompleted} // Disable checkbox if workout is completed
+                      disabled={isCompleted}
                     />
                     <span
                       className={`inline-block h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${

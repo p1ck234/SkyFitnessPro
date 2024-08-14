@@ -94,7 +94,7 @@ export const AppRoutes: React.FC = () => {
       )}
       {modalState === "select_workouts" && <PopSelectWorkoutPage />}
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
-      {modalState === "progress_update" && <PopProgress />}{" "}
+      {modalState === "progress_update" && <PopProgress />}
     </>
   );
 };
