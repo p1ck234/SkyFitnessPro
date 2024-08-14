@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { constRoutes } from "@/lib/paths";
@@ -9,6 +9,7 @@ import {
   removeCourseFromUser,
 } from "@/services/firestoreService";
 import { Course } from "@/types/types";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 interface CardProps {
   course: Course;
@@ -26,6 +27,34 @@ export function Card({
   const { user } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchUserProgress = async () => {
+      if (user && isProfile) {
+        try {
+          const db = getFirestore();
+          const userRef = doc(db, "dataUsers", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            const courseProgress = userData.courses_progress?.find(
+              (cp: any) => cp.id_course === course.id
+            );
+
+            if (courseProgress) {
+              setProgress(courseProgress.progress || 0);
+            }
+          }
+        } catch (error) {
+          console.error("Ошибка при загрузке прогресса пользователя:", error);
+        }
+      }
+    };
+
+    fetchUserProgress();
+  }, [user, course.id, isProfile]);
 
   const handleAddCourse = async (courseId: string) => {
     if (user) {
@@ -63,6 +92,23 @@ export function Card({
     }
   };
 
+  const handleResetProgress = async (courseId: string) => {
+    if (user) {
+      try {
+        setLoading(true);
+        await removeCourseFromUser(user.uid, parseInt(courseId));
+        await addCourseToUser(user.uid, parseInt(courseId));
+        setProgress(0); // Обновляем прогресс в состоянии
+        alert("Прогресс курса был сброшен");
+      } catch (error) {
+        console.error("Ошибка при сбросе прогресса:", error);
+        alert("Не удалось сбросить прогресс курса");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const handleCardClick = (id: string) => {
     navigate(`${constRoutes.COURSE}/${id}`);
   };
@@ -78,8 +124,14 @@ export function Card({
 
   const handleButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onSelectWorkouts) {
+
+    if (progress === 100) {
+      handleResetProgress(course.id.toString());
+    } else if (onSelectWorkouts) {
       onSelectWorkouts();
+    } else if (course.workouts && course.workouts.length > 0) {
+      const firstWorkoutId = course.workouts[0].id;
+      navigate(`/workouts/${course.id}/${firstWorkoutId}`); // Переход на страницу тренировки с курсом и тренировкой
     } else {
       handleCardClick(course.id);
     }
@@ -95,7 +147,7 @@ export function Card({
         <ImageComponent filePath={course.imgMobile} />
         <button
           className="absolute top-2 right-5 flex items-center group"
-          onClick={(e) => handleCourseAction(e, course.id)}
+          onClick={(e) => handleCourseAction(e, course.id.toString())}
           disabled={loading}
         >
           {loading ? (
@@ -113,16 +165,6 @@ export function Card({
             </div>
           )}
         </button>
-        {/* <button className="absolute top-2 right-5 flex items-center group">
-          <img
-            src="/img/icon/plus.svg"
-            alt="Добавить курс"
-            className="w-6 h-6"
-          />
-          <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
-            Добавить курс
-          </span>
-        </button> */}
       </div>
       <div className="w-80 p-3 flex flex-col">
         <h3 className="font-bold text-2xl py-5 phone:text-3xl">
@@ -144,16 +186,20 @@ export function Card({
         </div>
         {isProfile && (
           <div className="my-4">
-            <p>Прогресс {course.progress || 0}%</p>
+            <p>Прогресс {progress.toFixed(1)}%</p> {/* Округление до десятых */}
             <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
               <div
                 className="h-1 bg-custumBlue"
-                style={{ width: `${course.progress || 0}%` }}
+                style={{ width: `${progress.toFixed(1)}%` }}
               ></div>
             </div>
             <div>
               <Button width="w-full" onClick={handleButtonClick}>
-                {!course.progress ? "Начать тренировки" : "Продолжить"}
+                {progress === 100
+                  ? "Начать заново"
+                  : progress > 0
+                  ? "Продолжить"
+                  : "Начать тренировки"}
               </Button>
             </div>
           </div>

@@ -13,7 +13,6 @@ export const Person = () => {
   const { openModal } = useModal();
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
 
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -33,7 +32,7 @@ export const Person = () => {
 
     try {
       await resetPassword(email); // Вызов функции для восстановления пароля
-      openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
+      openModal("password_reset_confirmation", { email }); // Открываем модальное окно подтверждения и передаем email
     } catch (error) {
       setError(
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
@@ -44,11 +43,7 @@ export const Person = () => {
 
   return (
     <>
-      <h1
-        className="text-lg md:text-xl lg:text-4xl font-bold mb-8"
-      >
-        Профиль
-      </h1>
+      <h1 className="text-lg md:text-xl lg:text-4xl font-bold mb-8">Профиль</h1>
       <div className="border rounded-3xl bg-white p-6 shadow-lg mt-10 mb-12">
         <div className="flex flex-wrap gap-6">
           <div className="flex justify-center items-center mx-auto">

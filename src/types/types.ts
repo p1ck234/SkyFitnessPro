@@ -2,6 +2,8 @@ export type Workout = {
   id: number;
   name: string;
   exercises: any[];
+  url: string;
+  url_desc: string;
 };
 
 export type Course = {
