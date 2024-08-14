@@ -1,19 +1,16 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Импортируем хук useNavigate
+import { useNavigate } from "react-router-dom";
+import { useModal } from "@/context/modalContext"; // Импортируйте useModal
 import { Logo } from "../shared/logo/Logo";
 
-interface PasswordResetConfirmationProps {
-  email: string;
-  onClose: () => void;
-}
+export const PasswordResetConfirmation: React.FC = () => {
+  const navigate = useNavigate();
+  const { modalData, closeModal } = useModal(); // Используем modalData для получения email
 
-export const PasswordResetConfirmation: React.FC<
-  PasswordResetConfirmationProps
-> = ({ email, onClose }) => {
-  const navigate = useNavigate(); // Используем хук для навигации
+  const email = modalData?.email; // Получаем email из modalData
 
   const handleBackgroundClick = () => {
-    onClose(); // Закрываем модальное окно
+    closeModal(); // Закрываем модальное окно
     navigate("/"); // Перенаправляем на главную страницу
   };
 
@@ -24,7 +21,7 @@ export const PasswordResetConfirmation: React.FC<
     >
       <div
         className="bg-white rounded-3xl shadow-lg p-8 max-w-sm w-full text-center"
-        onClick={(e) => e.stopPropagation()} // Предотвращаем закрытие при клике на модальное окно
+        onClick={(e) => e.stopPropagation()}
       >
         <Logo />
         <p className="mt-4 text-lg">

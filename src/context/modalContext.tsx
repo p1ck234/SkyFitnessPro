@@ -31,16 +31,16 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalState, setModalState] = useState<ModalState>(null);
   const [currentPath, setCurrentPath] = useState<string>("/");
   const [email, setEmail] = useState<string | null>(null);
-  const [modalData, setModalData] = useState<any>(null); // State for storing modal data
+  const [modalData, setModalData] = useState<any>(null);
 
   const openModal = (modalType: ModalState, data?: any) => {
     setModalState(modalType);
-    setModalData(data || null); // Save the passed data or null
+    setModalData(data || null);
   };
 
   const closeModal = () => {
     setModalState(null);
-    setModalData(null); // Clear the modal data when closing
+    setModalData(null);
   };
 
   return (
@@ -52,7 +52,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         currentPath,
         setCurrentPath,
         email,
-        modalData, // Pass modalData to the context
+        modalData,
       }}
     >
       {children}
