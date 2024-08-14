@@ -78,8 +78,12 @@ export function Card({
 
   const handleButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+
     if (onSelectWorkouts) {
       onSelectWorkouts();
+    } else if (course.workouts && course.workouts.length > 0) {
+      const firstWorkoutId = course.workouts[0].id;
+      navigate(`/workouts/${course.id}/${firstWorkoutId}`); // Переход на страницу тренировки с курсом и тренировкой
     } else {
       handleCardClick(course.id);
     }
