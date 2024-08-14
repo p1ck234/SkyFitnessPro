@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface PopSelectWorkoutsProps {
-  workouts: any[]; // Обновите тип для работы с тренировками курса
-  onClose: () => void; // Добавьте функцию для закрытия попапа
+  workouts: any[];
+  courseId: number; // Добавляем courseId в пропсы
+  onClose: () => void;
 }
 
 export const PopSelectWorkouts = ({
   workouts,
+  courseId, // Получаем courseId
   onClose,
 }: PopSelectWorkoutsProps) => {
   const navigate = useNavigate();
@@ -23,12 +25,8 @@ export const PopSelectWorkouts = ({
     );
   };
 
-  const openWorkout = () => {
-    if (checkedWorkouts.length > 0) {
-      alert("Страницы еще не реализованы");
-    } else {
-      alert("Выберите тренировку");
-    }
+  const handleWorkoutSelect = (workoutId: number) => {
+    navigate(`/workouts/${courseId}/${workoutId}`); // Переходим с указанием courseId и workoutId
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -39,7 +37,7 @@ export const PopSelectWorkouts = ({
 
   const closeModal = () => {
     setIsModalVisible(false);
-    onClose(); // Закрываем попап
+    onClose();
   };
 
   if (!isModalVisible) return null;
@@ -60,6 +58,7 @@ export const PopSelectWorkouts = ({
               <li
                 key={workout.id}
                 className="flex items-center mb-2 border-b border-gray-400"
+                onClick={() => handleWorkoutSelect(workout.id)}
               >
                 <label className="flex items-center cursor-pointer">
                   <input

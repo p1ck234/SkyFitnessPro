@@ -1,99 +1,104 @@
-import { useCourses } from "@/context/courseContext";
+import React, { useEffect, useState } from "react";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { useUser } from "@/context/userContext";
 
-const ExersicesProgress = () => {
-  const { progress } = useCourses();
+const ExersicesProgress = ({
+  workout,
+  courseId,
+}: {
+  workout: any;
+  courseId: string;
+}) => {
+  const { user } = useUser();
+  const [progress, setProgress] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("Тренировка для отображения:", workout);
+
+    if (
+      !user ||
+      !courseId ||
+      !workout ||
+      !workout.exercise ||
+      workout.exercise.length === 0
+    ) {
+      console.log("Необходимые данные отсутствуют");
+      setLoading(false);
+      return;
+    }
+
+    const fetchProgressData = async () => {
+      console.log(
+        `Загрузка прогресса для courseId: ${courseId} и workoutId: ${workout.id}`
+      );
+
+      const db = getFirestore();
+      const userRef = doc(db, "dataUsers", user.uid);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data();
+
+      if (userData && userData.courses_progress) {
+        const courseProgress = userData.courses_progress.find(
+          (cp: any) => cp.id_course === parseInt(courseId)
+        );
+        if (courseProgress) {
+          const workoutProgress = courseProgress.workouts_progress.find(
+            (wp: any) => wp.id_workout === workout.id
+          );
+          if (workoutProgress) {
+            setProgress(workoutProgress.exercises_progress);
+          } else {
+            console.log("Прогресс тренировки не найден");
+          }
+        } else {
+          console.log("Прогресс курса не найден");
+        }
+      } else {
+        console.log("Данные пользователя не найдены");
+      }
+
+      setLoading(false);
+    };
+
+    fetchProgressData();
+  }, [courseId, workout, user]);
+
+  if (loading) {
+    return <div>Загрузка данных...</div>;
+  }
+
+  if (!workout.exercise || workout.exercise.length === 0) {
+    return <div>Данные о тренировке не найдены.</div>;
+  }
+
   return (
-    <>
-        <div className="border rounded-3xl bg-white p-14 shadow-lg mt-12 mb-12">
-          <h1 className="font-medium mb-3 text-3xl">Упражнения тренировки 2</h1>
-          <div className="grid grid-cols-3 gap-5 text-lg"> 
-            <div>
-              <p>Наклоны вперед {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Наклоны вперед {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Наклоны вперед {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Наклоны назад {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Наклоны назад {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Наклоны назад {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Поднятие ног, согнутых в коленях {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Поднятие ног, согнутых в коленях {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-            <div>
-              <p>Поднятие ног, согнутых в коленях {progress}%</p>
-              <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
-                <div
-                  className="h-1 bg-custumBlue"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
+    <div className="border rounded-3xl bg-white p-14 shadow-lg mt-12 mb-12">
+      <h1 className="font-medium mb-3 text-3xl">
+        Упражнения тренировки {workout.id}
+      </h1>
+      <div className="grid grid-cols-3 gap-5 text-lg">
+        {workout.exercise.map((exercise: any, index: number) => (
+          <div key={exercise.id}>
+            <p>
+              {exercise.name} - Прогресс:{" "}
+              {progress[index]?.count_completed || 0}/{exercise.count}
+            </p>
+            <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
+              <div
+                className="h-1 bg-custumBlue"
+                style={{
+                  width: `${
+                    ((progress[index]?.count_completed || 0) / exercise.count) *
+                    100
+                  }%`,
+                }}
+              ></div>
             </div>
           </div>
-          <button className="bg-customGreenCurse font-medium text-black text-lg py-2 px-4 rounded-3xl w-80 h-14 mt-10">
-            Заполнить свой прогресс
-          </button>
-        </div>
-    </>
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCourses } from "@/services/firestoreService";
+import { Workout } from "@/types/types";
 
 interface Course {
   id: string;
@@ -13,6 +14,7 @@ interface Course {
   good_for_you: string[];
   directions: string[];
   description: string[];
+  workouts?: Workout[];
 }
 
 interface CourseContextType {

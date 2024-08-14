@@ -7,6 +7,7 @@ type ModalState =
   | "register"
   | "password_reset_confirmation"
   | "password_reset_form"
+  | "progress_update"
   | "otherState"
   | null;
 
