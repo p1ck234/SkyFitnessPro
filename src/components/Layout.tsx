@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Header from "./header/Header";
 import { PopExit } from "./pops/PopExit";
-import { LogInPage } from "./auth/loginPage/LogInPage";
 import { RegistrationPage } from "./auth/registrationPage/RegistrationPage";
 import { useModal } from "@/context/modalContext";
 import { PasswordResetConfirmation } from "./auth/PasswordResetConfirmation";
+import { LogInPage } from "./auth/loginPage/LogInPage";
 
 export const Layout = () => {
   const { modalState, openModal, closeModal, email } = useModal(); // Получаем email из контекста

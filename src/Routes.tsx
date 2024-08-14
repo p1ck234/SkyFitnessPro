@@ -50,23 +50,10 @@ export const AppRoutes: React.FC = () => {
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path={constRoutes.PROFILE} element={<Profile />} />
-
           <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Routes>
-                  <Route
-                    path={constRoutes.SELECT_WORKOUTS}
-                    element={<PopSelectWorkoutPage />}
-                  />
-                  <Route path={constRoutes.EXIT} element={<Exit />} />
-                </Routes>
-              </ProtectedRoute>
-            }
-          />
+          <Route path={constRoutes.PROFILE} element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path={constRoutes.SELECT_WORKOUTS} element={<ProtectedRoute><PopSelectWorkoutPage /></ProtectedRoute>} />
+          <Route path={constRoutes.EXIT} element={<ProtectedRoute><Exit /></ProtectedRoute>} />
         </Route>
       </Routes>
 

@@ -1,11 +1,14 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
+import { useUser } from "./context/userContext";
 
 interface ProtectedRouteProps {
-    children: ReactElement;
-    isAuthenticated: boolean; 
+  children: ReactElement;
 }
 
-export const ProtectedRoute =({ children, isAuthenticated }: ProtectedRouteProps) => {
-return isAuthenticated? <>{children}</> : <Navigate to="/" replace />
-}
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const { user } = useUser();
+  const isAuthenticated = Boolean(user);
+
+  return isAuthenticated ? children : <Navigate to="/" replace />;
+};

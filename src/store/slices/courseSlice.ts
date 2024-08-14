@@ -1,7 +1,6 @@
-import { getCourses } from "@/services/firestoreService";
+import { addCourseToUser, getCourses } from "@/services/firestoreService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -9,15 +8,10 @@ import {
   getDocs,
   getFirestore,
   query,
-  updateDoc,
   where,
 } from "firebase/firestore";
-import { RootState } from "../store";
 import { Course } from "@/types/types";
-
-// Функция для проверки авторизации пользователя
-const selectIsAuthenticated = (state: RootState) =>
-  state.auth.user && state.auth.user.uid;
+import { useUser } from "@/context/userContext";
 
 export const fetchCourses = createAsyncThunk<Course[]>(
   "course/fetchCourses",
@@ -35,9 +29,8 @@ export const fetchUserCourses = createAsyncThunk<
   Course[],
   void,
   { rejectValue: string }
->("course/fetchUserCourses", async (_, { getState, rejectWithValue }) => {
-  const { user } = (getState() as RootState).auth;
-
+>("course/fetchUserCourses", async (_, { rejectWithValue }) => {
+  const { user } = useUser();
   if (!user || !user.uid) {
     return rejectWithValue("User not authenticated or UID is missing");
   }
@@ -64,8 +57,8 @@ export const fetchRemoveCourse = createAsyncThunk<
   string, // Тип возвращаемого значения (ID курса)
   string, // Тип аргумента (ID курса)
   { rejectValue: string }
->("course/removeCourse", async (courseId, { getState, rejectWithValue }) => {
-  const { user } = (getState() as RootState).auth;
+>("course/removeCourse", async (courseId, { rejectWithValue }) => {
+  const { user } = useUser();
   if (!user || !user.uid) {
     return rejectWithValue("User not authenticated or UID is missing");
   }
@@ -86,32 +79,20 @@ export const fetchRemoveCourse = createAsyncThunk<
 });
 
 export const fetchAddCourse = createAsyncThunk<
-  Course, // Тип возвращаемого значения (данные курса)
-  string, // Тип аргумента (ID курса)
-  { rejectValue: string } // Тип ошибки
->("course/addCourse", async (courseId, { getState, rejectWithValue }) => {
-  const state = getState() as RootState;
-  const { user } = state.auth;
-
-  if (!user || !user.uid) {
-    return rejectWithValue("User not authenticated");
-  }
-
+  Course,
+  { courseId: string; userId: string }, // Аргумент содержит courseId и userId
+  { rejectValue: string }
+>("course/addCourse", async ({ courseId, userId }, { rejectWithValue }) => {
   try {
     const db = getFirestore();
-    const courseRef = doc(db, "courses", courseId);
-    const courseSnap = await getDoc(courseRef);
-
-    if (!courseSnap.exists()) {
+    const coursesRef = collection(db, "courses");
+    await addCourseToUser(userId, parseInt(courseId));
+    const course = await getDoc(doc(getFirestore(), "courses", courseId));
+    if (course.exists()) {
+      return { id: course.id, ...(course.data() as Omit<Course, "id">) };
+    } else {
       return rejectWithValue("Course not found");
     }
-
-    const courseData = courseSnap.data() as Course;
-    await updateDoc(doc(db, "users", user.uid), {
-      userCourses: arrayUnion(courseId),
-    });
-
-    return courseData; // Верните полный объект курса
   } catch (error) {
     console.error("Error adding course:", error);
     return rejectWithValue("Failed to add course");
