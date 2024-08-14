@@ -17,6 +17,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -30,17 +33,38 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); 
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      setError("Пароли не совпадают");
       return;
     }
+
+    if (password.length < 6) {
+      setError("Пароль должен содержать не менее 6 символов");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Неверно указана почта");
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      const user = await register(email, password);
-      await saveUser(user.uid, { email: user.email, createdAt: new Date() });
+      const user = await register(email, password, username);
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
-    } catch (error) {
-      console.error("Registration failed:", error);
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        setError("Данная почта уже используется. Попробуйте войти.");
+      } else {
+        setError("Регистрация не удалась. Попробуйте еще раз.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,38 +85,67 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleRegister}
       >
-        <Logo />
+        <Logo showTagline={false} />
         <div className="mt-10 w-full">
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
+            name="username"
+            type="text"
+            placeholder="Имя пользователя"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            disabled={isLoading}
+          />
+          <input
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="email"
             type="text"
             placeholder="Эл.почта"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-4"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="password"
             type="password"
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
           />
           <input
-            className="rounded-lg border text-base w-full py-4 px-4 mb-10"
+            className={`rounded-lg border text-base w-full py-4 px-4 mb-10 ${
+              error ? "border-red-500 text-red-500" : ""
+            }`}
             name="confirmPassword"
             type="password"
             placeholder="Повторите пароль"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={isLoading}
           />
-          <Button className="w-full  py-4 px-4 mb-4" type="submit">
-            Зарегистрироваться
+          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+
+          <Button
+            color="bg-customGreen"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full text-xl"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Загрузка..." : "Зарегистрироваться"}
           </Button>
           <Button
-            className="bg-white w-full py-4 px-4 border border-black"
-            variant="custom-achrom"
+            color="bg-white"
+            width="w-full"
+            className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToLogin}
           >
             Войти

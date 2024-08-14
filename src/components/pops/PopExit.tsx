@@ -10,11 +10,13 @@ import { login } from "@/store/slices/authSlice";
 interface PopExitProps {
   closeModal: () => void;
 }
+
 export const PopExit = ({ closeModal }: PopExitProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
+  const { user, userData } = useUser(); // Достаем user и userData из контекста
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -26,8 +28,11 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
-          left: buttonPosition.left + buttonPosition.width / 2 - modalWidth / 2,
+          left:
+            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
         });
+
+        setIsPositioned(true); // Позиция вычислена, можно показывать модальное окно
       }
     };
 
@@ -65,28 +70,29 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       onClick={handleBackgroundClick}
     >
       <div
-        className="fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6"
+        className={`fixed bg-white rounded-3xl shadow-xl p-4 w-auto flex flex-col gap-6 ${
+          isPositioned ? "" : "invisible"
+        }`}
         onClick={(e) => e.stopPropagation()}
         ref={modalRef}
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          <p className="font-bold">{user?.displayName || user?.email}</p>
+          {/* Отображаем username, если он есть, иначе displayName или email */}
+          <p className="font-bold">
+            {userData?.username || user?.email}
+          </p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-lg w-full py-2 px-4"
+            className="bg-customGreen text-sm sm:text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
           </Button>
           <Button
-            // className="bg-white text-lg w-full border border-black py-2 px-4"
-            className="w-full"
-            color="white"
-            borderColor="black"
-            variant="custom-achrom"
+            className="bg-white text-lg w-full border border-black py-2 px-4"
             onClick={handleLogout}
           >
             Выйти

@@ -6,6 +6,7 @@ module.exports = {
         customGreen: "#BCEC30",
         customYellow: "#FFC700",
         customGreenCurse: "#BCEC30",
+        custumBlue:"#00C1FF",
       },
       cursor: {
         custom: "url(/img/customCursor.png), auto", // Ensure the image path is correct

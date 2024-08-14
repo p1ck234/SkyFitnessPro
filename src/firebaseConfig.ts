@@ -1,8 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD9Dmb_NQ2UnUrP5xJrdT5fAhIojhVdmm0",
   authDomain: "skyprofitness-38202.firebaseapp.com",
@@ -13,8 +12,8 @@ const firebaseConfig = {
   measurementId: "G-6C3P5XX8WQ",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const storage = getStorage(app); 
 
-export { firebaseConfig }; // Добавляем экспорт
+export { firebaseConfig, storage }; 

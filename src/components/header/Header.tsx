@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { openModal, setCurrentPath } = useModal();
-  const { user } = useUser();
+  const { user, userData } = useUser(); // Достаем user и userData из контекста
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenProfileModal = () => {
@@ -37,7 +37,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex justify-between items-center">
-      <div className="flex flex-col items-start gap-4 flex-shrink-0">
+      <div className="flex flex-col items-start">
         <Logo />
       </div>
       {user ? (
@@ -47,12 +47,12 @@ const Header: React.FC = () => {
           onClick={handleOpenProfileModal}
         >
           <img
-            src={user.photoURL || "./img/icon/user.svg"}
+            src={user.photoURL || "/img/icon/user.svg"}
             alt="avatar"
-            className="w-10 h-10 rounded-full"
+            className="w-10 mr-1 h-10 rounded-full"
           />
-          <span className="ml-2 text-lg font-medium">
-            {user.displayName || user.email}
+          <span className="ml-2 text-lg font-medium hidden sm:inline">
+            {userData?.username || user.email}
           </span>
           <svg
             className="ml-2 w-4 h-4"
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
           ref={profileButtonRef}
           color="bg-customGreen"
           width="w-auto"
-          className="text-black py-2 px-6 rounded-full"
+          className="text-black px-6 rounded-full text-xl"
           onClick={handleOpenLoginModal}
         >
           Войти

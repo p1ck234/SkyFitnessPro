@@ -1,18 +1,33 @@
 import { Heading } from "./Heading/Heading";
-import { Cards } from "./Cards/Cards";
+import { useCourses } from "@/context/courseContext";
+import { Card } from "../mainBlock/Card/Card";
 
 export function Main() {
+  const { courses, loading, error } = useCourses();
+
+  if (loading) {
+    return <div className="loader"></div>;
+  }
+
+  if (error) {
+    return <div>Error loading courses: {error}</div>;
+  }
+
   return (
-    <div>
-      <p className="text-gray-450">Онлайн-тренировки для занятий дома</p>
-      <div className="bg-gray-200 mt-14">
-        <Heading />
-        <Cards />
-        <div className="flex  justify-center">
-          <button className=" font-normal text-lg grid rounded-3xl bg-customGreen px-4 py-3">
-            Наверх ↑
-          </button>
-        </div>
+    <div className="mx-auto">
+      <Heading />
+      <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+        {courses.map((course) => (
+          <Card key={course.id} course={course} />
+        ))}
+      </div>
+      <div className="flex justify-center">
+        <a
+          href="#heading-section"
+          className="font-normal text-lg grid rounded-3xl bg-customGreen px-4 py-3"
+        >
+          Наверх ↑
+        </a>
       </div>
     </div>
   );

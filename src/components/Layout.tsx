@@ -4,12 +4,13 @@ import { PopExit } from "./pops/PopExit";
 import { LogInPage } from "./auth/loginPage/LogInPage";
 import { RegistrationPage } from "./auth/registrationPage/RegistrationPage";
 import { useModal } from "@/context/modalContext";
+import { PasswordResetConfirmation } from "./auth/PasswordResetConfirmation";
 
 export const Layout = () => {
-  const { modalState, closeModal, openModal } = useModal();
+  const { modalState, openModal, closeModal, email } = useModal(); // Получаем email из контекста
 
   return (
-    <div className="container mx-auto py-10 px-4 lg:py-12 lg:px-36 font-sans cursor-custom max-w-phone lg:max-w-laptop">
+    <div className="container mx-auto py-10 px-4 lg:py-12 lg:px-36 font-sans cursor-custom max-w-full overflow-auto">
       <Header />
       <main>
         <Outlet />
@@ -20,6 +21,9 @@ export const Layout = () => {
       )}
       {modalState === "register" && (
         <RegistrationPage switchToLogin={() => openModal("login")} />
+      )}
+      {modalState === "password_reset_confirmation" && (
+        <PasswordResetConfirmation email={email || ""} onClose={closeModal} />
       )}
     </div>
   );
