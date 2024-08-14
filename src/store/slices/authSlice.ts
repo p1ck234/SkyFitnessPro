@@ -51,22 +51,9 @@ const authSlice = createSlice({
     setProfileState(state, action: PayloadAction<boolean>) {
       state.isProfile = action.payload;
     },
-    setAuthenticated(state, action: PayloadAction<boolean>) {
-      state.isAuthenticated = action.payload;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isAuthenticated = true;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.isAuthenticated = false; // Optional: Update state if needed on failure
-      });
   },
 });
 
-export const { login, logout, setProfileState, setAuthenticated } =
+export const { login, logout, setProfileState } =
   authSlice.actions;
 export default authSlice.reducer;

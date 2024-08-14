@@ -125,7 +125,6 @@ interface CourseState {
   error: string | null;
   progress: number | null;
   isProfile: boolean;
-  isAuthenticated: boolean; // Поле для отслеживания авторизации
 }
 
 const initialState: CourseState = {
@@ -135,7 +134,6 @@ const initialState: CourseState = {
   error: null,
   progress: 25, // Example initial progress
   isProfile: false,
-  isAuthenticated: false, // Изначально не авторизован
 };
 
 const courseSlice = createSlice({
@@ -144,9 +142,6 @@ const courseSlice = createSlice({
   reducers: {
     setProgress(state, action: PayloadAction<number>) {
       state.progress = action.payload;
-    },
-    setAuthenticated(state, action: PayloadAction<boolean>) {
-      state.isAuthenticated = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -186,5 +181,5 @@ const courseSlice = createSlice({
   },
 });
 
-export const { setProgress, setAuthenticated } = courseSlice.actions;
+export const { setProgress } = courseSlice.actions;
 export default courseSlice.reducer;
