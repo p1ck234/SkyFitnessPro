@@ -1,83 +1,70 @@
-import React, { useState } from "react";
+import CoursesBlock from "../coursesBlock/CoursesBlock";
+import Header from "../header/Header";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
-import { useUserCourses } from "@/customHooks/useUserCourses";
-import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
-import { Course } from "@/types/types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useEffect } from "react";
+import {
+  fetchRemoveCourse,
+  fetchUserCourses,
+} from "@/store/slices/courseSlice";
+import { setProfileState } from "@/store/slices/authSlice";
 
 export const Profile = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { userCourses, loading, error } = useUserCourses(refreshKey);
-  const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
+  const dispatch = useDispatch<AppDispatch>();
+  const { isProfile } = useSelector((state: RootState) => state.auth);
 
-  const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
-    if (course) {
-      setSelectedCourse(course); // Сохраняем выбранный курс, если есть
-      setShowSelectWorkouts(true);
+  const { userCourses, loading, error } = useSelector(
+    (state: RootState) => state.course
+  );
+  useEffect(() => {
+    if (location.pathname === "/profile") {
+      dispatch(setProfileState(true));
     } else {
-      navigate("/"); // Если нет курсов, перенаправляем на главную страницу
+      dispatch(setProfileState(false));
     }
-  };
+  }, [location.pathname, dispatch]);
 
-  const handleCourseRemoved = () => {
-    setRefreshKey((prevKey) => prevKey + 1);
-  };
-
-  const handleCloseModal = () => {
-    setShowSelectWorkouts(false);
-    setSelectedCourse(null);
-  };
+  // useEffect(() => {
+  //   // Диспатч асинхронного действия для получения курсов пользователя
+  //   dispatch(fetchUserCourses());
+  // }, [dispatch]);
 
   if (loading) {
-    return <div className="loader"></div>;
+    return <div>Загрузка...</div>;
   }
 
   if (error) {
-    return <div>Error loading courses: {error}</div>;
+    return <div>Ошибка: {error}</div>;
   }
 
   return (
     <div className="bg-gray-200 mt-14">
-      <Person />
-      <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
-        Мои курсы
-      </h1>
-      <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
-        {userCourses.length > 0 ? (
-          userCourses.map((course, index) => (
-            <Card
-              key={`${course.id}-${index}`}
-              course={course}
-              isProfile={true}
-              onCourseRemoved={handleCourseRemoved}
-              onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
-            />
-          ))
-        ) : (
-          <div className="w-full flex justify-center">
-            <button
-              className="bg-customGreen text-black py-2 px-6 rounded-full mt-4"
-              onClick={() => handleOpenSelectWorkoutModal(null)}
-            >
-              Выбрать тренировки
-            </button>
-          </div>
-        )}
+      <div>
+        <Person />
+        <h1 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-bold my-8">
+          Мои курсы
+        </h1>
+        <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+          {userCourses.length > 0 ? (
+            userCourses.map((course) => (
+              <Card
+                key={course.id} // Используем только course.id в качестве ключа
+                course={course}
+                // onCourseRemoved={handleCourseRemoved}
+              />
+            ))
+          ) : (
+            <div className="w-full flex justify-center">У вас нет курсов</div> // Добавлено сообщение, если нет курсов
+          )}
+        </div>
       </div>
-
-      {showSelectWorkouts && selectedCourse && (
-        <PopSelectWorkouts
-          workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
-          onClose={handleCloseModal} // Закрытие попапа
-        />
-      )}
     </div>
   );
 };

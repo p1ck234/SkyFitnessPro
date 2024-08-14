@@ -4,7 +4,6 @@ import Course from "./components/coursesBlock/Course";
 import { PopSelectWorkoutPage } from "./pages/popSelectWorkout";
 import { Exit } from "./pages/exit";
 import { PageLayout } from "./pages/pageLayout";
-import { Workouts } from "./pages/workouts";
 import { useModal } from "./context/modalContext";
 import { constRoutes } from "./lib/paths";
 import { LogInPage } from "./components/auth/loginPage/LogInPage";
@@ -16,6 +15,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
+import { Profile } from "./components/profileBlock/Profile";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -50,13 +50,14 @@ export const AppRoutes: React.FC = () => {
       <Routes location={state?.backgroundLocation || location}>
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path={constRoutes.PROFILE} element={<Profile />} />
+
           <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
           <Route
             path="/*"
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Routes>
-                  <Route path={constRoutes.PROFILE} element={<ProfilePage />} />
                   <Route
                     path={constRoutes.SELECT_WORKOUTS}
                     element={<PopSelectWorkoutPage />}

@@ -1,65 +1,48 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "@/components/Button";
-import {
-  addCourseToUser,
-  removeCourseFromUser,
-} from "@/services/firestoreService";
 import { Course } from "@/types/types";
+import { useModal } from "@/context/modalContext";
+import { useDispatch } from "@/services/useDispatch";
+import { fetchAddCourse, fetchRemoveCourse } from "@/store/slices/courseSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface CardProps {
   course: Course;
-  isProfile?: boolean;
-  onCourseRemoved?: () => void;
-  onSelectWorkouts?: () => void; // Добавляем пропс для обработки выбора тренировок
 }
 
-export function Card({
-  course,
-  isProfile = false,
-  onCourseRemoved,
-  onSelectWorkouts,
-}: CardProps) {
+export function Card({ course }: CardProps) {
   const { user } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { openModal } = useModal();
+  const dispatch = useDispatch();
+  const [isProfile, setIsProfile] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsProfile(location.pathname === "/profile");
+  }, [location]);
 
   const handleAddCourse = async (courseId: string) => {
-    if (user) {
-      try {
-        setLoading(true);
-        await addCourseToUser(user.uid, parseInt(courseId));
-        alert("Курс успешно добавлен в ваш профиль");
-      } catch (error) {
-        console.error("Ошибка при добавлении курса:", error);
-        alert("Не удалось добавить курс");
-      } finally {
-        setLoading(false);
-      }
+    if (!user) {
+      alert("Please log in to add a course.");
+      return;
     } else {
-      alert("Для добавления курса нужно войти в систему");
+      dispatch(fetchAddCourse(courseId));
     }
   };
 
   const handleRemoveCourse = async (courseId: string) => {
-    if (user) {
-      try {
-        setLoading(true);
-        await removeCourseFromUser(user.uid, parseInt(courseId));
-        alert("Курс успешно удален из вашего профиля");
-
-        if (onCourseRemoved) {
-          onCourseRemoved();
-        }
-      } catch (error) {
-        console.error("Ошибка при удалении курса:", error);
-        alert("Не удалось удалить курс");
-      } finally {
-        setLoading(false);
-      }
+    if (!user) {
+      alert("Please log in to add a course.");
+      return;
+    } else {
+      dispatch(fetchRemoveCourse(courseId));
     }
   };
 
@@ -67,22 +50,21 @@ export function Card({
     navigate(`${constRoutes.COURSE}/${id}`);
   };
 
-  const handleCourseAction = (e: React.MouseEvent, courseId: string) => {
+  const handleCourseAction = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isProfile) {
-      handleRemoveCourse(courseId);
+      handleRemoveCourse(course.id);
     } else {
-      handleAddCourse(courseId);
+      handleAddCourse(course.id);
     }
   };
 
-  const handleButtonClick = (e: React.MouseEvent) => {
+  const handleOpenSelectWorkoutModal = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onSelectWorkouts) {
-      onSelectWorkouts();
-    } else {
-      handleCardClick(course.id);
-    }
+    openModal("select_workouts");
+    navigate(constRoutes.SELECT_WORKOUTS, {
+      state: { backgroundLocation: location },
+    });
   };
 
   return (
@@ -95,18 +77,18 @@ export function Card({
         <ImageComponent filePath={course.imgMobile} />
         <button
           className="absolute top-2 right-5 flex items-center group"
-          onClick={(e) => handleCourseAction(e, course.id)}
           disabled={loading}
+          onClick={handleCourseAction}
         >
-          {loading ? (
+          {/* {loading ? (
             <div className="loader"></div> // Замените это на ваш компонент или стили лоадера
-          ) : (
-            <img
-              src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
-              alt={isProfile ? "Удалить курс" : "Добавить курс"}
-              className="w-6 h-6"
-            />
-          )}
+          ) : ( */}
+          <img
+            src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
+            alt={isProfile ? "Удалить курс" : "Добавить курс"}
+            className="w-6 h-6"
+          />
+          {/* )} */}
         </button>
       </div>
       <div className="w-80 p-3 flex flex-col">
@@ -127,7 +109,7 @@ export function Card({
             <p className="text-base">Сложность</p>
           </div>
         </div>
-        {isProfile && (
+        {!isProfile && (
           <div className="my-4">
             <p>Прогресс {course.progress || 0}%</p>
             <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
@@ -137,7 +119,7 @@ export function Card({
               ></div>
             </div>
             <div>
-              <Button width="w-full" onClick={handleButtonClick}>
+              <Button width="w-full" onClick={handleOpenSelectWorkoutModal}>
                 {!course.progress ? "Начать тренировки" : "Продолжить"}
               </Button>
             </div>

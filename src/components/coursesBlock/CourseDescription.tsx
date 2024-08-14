@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
 import { addCourseToUser } from "@/services/firestoreService";
+import { useNavigate } from "react-router-dom";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -12,6 +13,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
   const { user } = useUser();
   const { openModal } = useModal();
   const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
+  const navigate = useNavigate();
 
   const handleButtonClick = async () => {
     if (!user) {
@@ -21,6 +23,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
         setIsLoading(true); // Устанавливаем состояние загрузки
         await addCourseToUser(user.uid, parseInt(course.id));
         alert("Курс успешно добавлен в ваш профиль");
+        navigate("/profile");
       } catch (error) {
         console.error("Ошибка при добавлении курса:", error);
         alert("Не удалось добавить курс");

@@ -6,6 +6,7 @@ import { logout } from "@/services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { login } from "@/store/slices/authSlice";
+import { constRoutes } from "@/lib/paths";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -43,9 +44,11 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   }, [location.state]);
 
   const toggleMyProfile = () => {
-    closeModal();
-    dispatch(login(user?.email || ""));
-    setTimeout(() => navigate("/profile"), 0);
+    if (user && user.email) {
+      closeModal();
+      // dispatch(login({ uid: user.uid, email: user.email! })); // Передается объект User
+      navigate(constRoutes.PROFILE, { replace: true });
+    }
   };
 
   const handleLogout = async () => {
@@ -79,9 +82,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       >
         <div className="flex flex-col items-center">
           {/* Отображаем username, если он есть, иначе displayName или email */}
-          <p className="font-bold">
-            {userData?.username || user?.email}
-          </p>
+          <p className="font-bold">{userData?.username || user?.email}</p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
@@ -92,7 +93,10 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
             Мой профиль
           </Button>
           <Button
-            className="bg-white text-lg w-full border border-black py-2 px-4"
+            className="text-lg w-full py-2 px-4"
+            color="white"
+            borderColor="black"
+            variant="custom-achrom"
             onClick={handleLogout}
           >
             Выйти

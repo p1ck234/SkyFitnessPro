@@ -63,7 +63,6 @@ export const logout = async () => {
   }
 };
 
-// Функция для восстановления пароля
 export const resetPassword = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -74,7 +73,6 @@ export const resetPassword = async (email: string) => {
   }
 };
 
-// Функция для получения данных пользователя из Firestore
 export const getUserData = async (uid: string) => {
   try {
     const userDoc = await getDoc(doc(db, "users", uid));

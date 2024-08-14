@@ -17,6 +17,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { firebaseConfig } from "../firebaseConfig";
+import { Course } from "@/types/types";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -33,6 +34,7 @@ const db = getFirestore(app);
 // };
 
 // Get User
+
 export const getUser = async (uid: string) => {
   try {
     const docRef = doc(db, "users", uid);
@@ -50,12 +52,14 @@ export const getUser = async (uid: string) => {
 };
 
 // Get Courses
-export const getCourses = async () => {
+export const getCourses = async (): Promise<Course[]> => {
   try {
     const querySnapshot = await getDocs(collection(db, "courses"));
     const courses: any[] = [];
     querySnapshot.forEach((doc) => {
-      courses.push({ id: doc.id, ...doc.data() });
+      const data = doc.data() as Course;
+      // Используем id из документа и создаем новый объект, чтобы избежать дублирования
+      courses.push({ ...data, id: doc.id });
     });
     return courses;
   } catch (error) {
@@ -69,13 +73,14 @@ export const queryCourses = async (
   field: string,
   operator: any,
   value: any
-) => {
+): Promise<Course[]> => {
   try {
     const q = query(collection(db, "courses"), where(field, operator, value));
     const querySnapshot = await getDocs(q);
-    const courses: any[] = [];
+    const courses: Course[] = [];
     querySnapshot.forEach((doc) => {
-      courses.push({ id: doc.id, ...doc.data() });
+      const data = doc.data() as Course;
+      courses.push({ ...data, id: doc.id });
     });
     return courses;
   } catch (error) {
@@ -110,7 +115,7 @@ export const initializeUserProgress = async (uid: string) => {
 // Function to add a course to user's profile
 export const addCourseToUser = async (uid: string, courseId: number) => {
   try {
-    const db = getFirestore();
+    // const db = getFirestore();
     const userProgressRef = doc(db, "dataUsers", uid);
     const userProgressDoc = await getDoc(userProgressRef);
 
@@ -203,7 +208,7 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
 // Function to remove a course from user's profile
 export const removeCourseFromUser = async (uid: string, courseId: number) => {
   try {
-    const db = getFirestore();
+    // const db = getFirestore();
     const coursesRef = collection(db, "courses");
 
     // Запрос на курс по его уникальному ID

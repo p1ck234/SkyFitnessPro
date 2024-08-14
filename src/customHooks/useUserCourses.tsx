@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { useUser } from "@/context/userContext";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getCourses } from "@/services/firestoreService";
 
 export const useUserCourses = (refreshKey: number) => {
   const [userCourses, setUserCourses] = useState<any[]>([]);
@@ -16,10 +24,13 @@ export const useUserCourses = (refreshKey: number) => {
           const coursesRef = collection(db, "courses");
 
           // Запрос на все курсы, где user.uid есть в массиве users
-          const q = query(coursesRef, where("users", "array-contains", user.uid));
+          const q = query(
+            coursesRef,
+            where("users", "array-contains", user.uid)
+          );
           const querySnapshot = await getDocs(q);
 
-          const courses = querySnapshot.docs.map(doc => ({
+          const courses = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
@@ -43,3 +54,15 @@ export const useUserCourses = (refreshKey: number) => {
 
   return { userCourses, loading, error };
 };
+
+export const fetchCourses = createAsyncThunk(
+  "course/fetchCourses",
+  async (_, thunkAPI) => {
+    try {
+      const courses = await getCourses();
+      return courses;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Failed to load courses");
+    }
+  }
+);

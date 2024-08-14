@@ -1,9 +1,20 @@
 import { Heading } from "./Heading/Heading";
-import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchCourses } from "@/store/slices/courseSlice";
+import { useDispatch } from "@/services/useDispatch";
 
 export function Main() {
-  const { courses, loading, error } = useCourses();
+  const dispatch = useDispatch();
+  const { courses, loading, error } = useSelector(
+    (state: RootState) => state.course
+  );
+
+  useEffect(() => {
+    dispatch(fetchCourses());
+  }, [dispatch]);
 
   if (loading) {
     return <div className="loader"></div>;
