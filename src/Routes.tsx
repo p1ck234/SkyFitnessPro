@@ -51,6 +51,7 @@ export const AppRoutes: React.FC = () => {
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
+          <Route path={constRoutes.WORKOUTS} element={<Workouts />} />
           <Route
             path="/*"
             element={

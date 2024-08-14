@@ -11,4 +11,5 @@ export const constRoutes = {
   PRUF: "/popPruf",
   SELECT_WORKOUTS: "/select_workouts",
   PROFILE: "/profile",
+  WORKOUTS: "/workouts"
 };
