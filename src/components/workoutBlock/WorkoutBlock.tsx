@@ -26,8 +26,11 @@ export const WorkoutBlock = () => {
   return (
     <>
       <h1 className="text-sm sm:text-lg md:text-xl lg:text-6xl font-medium mb-8 mt-10">
-        {workout.url_desc}
+        {course.name}
       </h1>
+      <h2 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-medium mb-8 mt-10 flex underline">
+        {workout.url_desc}
+      </h2>
 
       <iframe
         className="mt-10 rounded-3xl"
