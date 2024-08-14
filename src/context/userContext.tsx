@@ -1,24 +1,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { auth, getUserData } from "../services/authService"; // Убедитесь, что вы экспортируете auth и getUserData из authService.ts
+import { auth, getUserData } from "../services/authService"; // Убедитесь, что экспортируете auth и getUserData из authService.ts
 
 interface UserContextType {
   user: FirebaseUser | null;
-  userData: UserData | null; // Дополнительные данные пользователя
+  userData: UserData | null;
 }
 
 interface UserData {
   username: string;
   email: string;
   createdAt: Date;
-  // Добавьте любые другие поля, которые вам нужны
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
 
@@ -27,9 +24,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(currentUser);
 
       if (currentUser) {
-        // Получаем дополнительные данные пользователя из Firestore
-        const data = await getUserData(currentUser.uid);
-        setUserData(data as UserData);
+        try {
+          const data = await getUserData(currentUser.uid);
+          setUserData(data as UserData);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setUserData(null);
+        }
       } else {
         setUserData(null);
       }
