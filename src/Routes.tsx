@@ -16,6 +16,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
+import PopProgress from "./components/pops/PopProgress"; // Import PopProgress
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
           <Route
-            path={`${constRoutes.WORKOUTS}/:courseId/:workoutId`} // Ожидаем оба параметра
+            path={`${constRoutes.WORKOUTS}/:courseId/:workoutId`}
             element={<Workouts />}
           />
 
@@ -73,7 +74,6 @@ export const AppRoutes: React.FC = () => {
           />
         </Route>
       </Routes>
-
       {modalState === "login" && (
         <LogInPage
           switchToRegister={() =>
@@ -94,6 +94,7 @@ export const AppRoutes: React.FC = () => {
       )}
       {modalState === "select_workouts" && <PopSelectWorkoutPage />}
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
+      {modalState === "progress_update" && <PopProgress />}{" "}
     </>
   );
 };

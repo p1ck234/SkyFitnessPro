@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
+import { useModal } from "@/context/modalContext";
 
 const ExersicesProgress = ({
   workout,
@@ -10,6 +11,7 @@ const ExersicesProgress = ({
   courseId: string;
 }) => {
   const { user } = useUser();
+  const { openModal } = useModal();
   const [progress, setProgress] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -72,6 +74,11 @@ const ExersicesProgress = ({
     return <div>Данные о тренировке не найдены.</div>;
   }
 
+  const handleOpenProgressModal = () => {
+    console.log("Button clicked, opening modal...");
+    openModal("progress_update", workout);
+  };
+
   return (
     <div className="border rounded-3xl bg-white p-14 shadow-lg mt-12 mb-12">
       <h1 className="font-medium mb-3 text-3xl">
@@ -98,6 +105,12 @@ const ExersicesProgress = ({
           </div>
         ))}
       </div>
+      <button
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={handleOpenProgressModal}
+      >
+        Записать/обновить свой прогресс
+      </button>
     </div>
   );
 };

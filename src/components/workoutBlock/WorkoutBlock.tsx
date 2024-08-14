@@ -1,30 +1,24 @@
-import { useParams } from "react-router-dom";
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
+import { useModal } from "@/context/modalContext";
 
 export const WorkoutBlock = () => {
   const { courseId, workoutId } = useParams();
   const { userCourses } = useUserCourses(0);
-
-  console.log(`Загрузка данных для courseId: ${courseId}`);
+  const { openModal } = useModal();
+  const navigate = useNavigate();
 
   const course = userCourses.find(
     (course) => course.id === parseInt(courseId || "0")
   );
 
-  console.log("Найденный курс:", course);
-
-  if (!course || !course.workouts) {
-    return <div>Курс или тренировка не найдены</div>;
-  }
-
-  const workout = course.workouts.find(
+  const workout = course?.workouts?.find(
     (workout) => workout.id === parseInt(workoutId || "0")
   );
 
-  console.log("Найдена тренировка:", workout);
-
-  if (!workout) {
+  if (!course || !workout) {
     return <div>Курс или тренировка не найдены</div>;
   }
 
@@ -41,12 +35,12 @@ export const WorkoutBlock = () => {
         src={`https://www.youtube.com/embed/${getYouTubeID(workout.url)}`}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       ></iframe>
-      <ExersicesProgress workout={workout} courseId={courseId as string} />
+
+      <ExersicesProgress workout={workout} courseId={courseId || ""} />
     </>
   );
 };
 
-// Функция для извлечения ID видео из URL YouTube
 const getYouTubeID = (url: string) => {
   const regExp =
     /^.*(youtu\.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;

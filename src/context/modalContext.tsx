@@ -13,11 +13,12 @@ type ModalState =
 
 interface ModalContextType {
   modalState: ModalState;
-  openModal: (modalType: ModalState, email?: string) => void;
+  openModal: (modalType: ModalState, data?: any) => void;
   closeModal: () => void;
   currentPath: string;
   setCurrentPath: (path: string) => void;
-  email: string | null; // Добавляем email в контекст
+  email: string | null;
+  modalData: any; // Add modalData for storing additional data
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -29,18 +30,17 @@ interface ModalProviderProps {
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalState, setModalState] = useState<ModalState>(null);
   const [currentPath, setCurrentPath] = useState<string>("/");
-  const [email, setEmail] = useState<string | null>(null); // Состояние для email
+  const [email, setEmail] = useState<string | null>(null);
+  const [modalData, setModalData] = useState<any>(null); // State for storing modal data
 
-  const openModal = (modalType: ModalState, email?: string) => {
+  const openModal = (modalType: ModalState, data?: any) => {
     setModalState(modalType);
-    if (email) {
-      setEmail(email); // Обновляем email, если он передан
-    }
+    setModalData(data || null); // Save the passed data or null
   };
 
   const closeModal = () => {
     setModalState(null);
-    setEmail(null); // Сбрасываем email при закрытии модального окна
+    setModalData(null); // Clear the modal data when closing
   };
 
   return (
@@ -51,7 +51,8 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
         closeModal,
         currentPath,
         setCurrentPath,
-        email, // Передаем email в контекст
+        email,
+        modalData, // Pass modalData to the context
       }}
     >
       {children}
