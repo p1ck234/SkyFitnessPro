@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
@@ -11,9 +12,11 @@ const ExersicesProgress = ({
   courseId: string;
 }) => {
   const { user } = useUser();
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const [progress, setProgress] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     console.log("Тренировка для отображения:", workout);
@@ -77,6 +80,7 @@ const ExersicesProgress = ({
   const handleOpenProgressModal = () => {
     console.log("Button clicked, opening modal...");
     openModal("progress_update", workout);
+    navigate(`${location.pathname}?progress=update`, { replace: true });
   };
 
   return (

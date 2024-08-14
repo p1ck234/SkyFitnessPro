@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useModal } from "@/context/modalContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const PopProgress = () => {
   const { closeModal, modalData } = useModal();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const workout = modalData;
 
   if (!workout || !workout.exercise) {
@@ -16,11 +20,13 @@ const PopProgress = () => {
   const handleSave = () => {
     // Logic to save the progress to the database
     closeModal();
+    navigate(location.pathname, { replace: true }); // Revert URL
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       closeModal();
+      navigate(location.pathname, { replace: true }); // Revert URL
     }
   };
 
