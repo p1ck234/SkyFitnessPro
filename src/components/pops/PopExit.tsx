@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { login } from "@/store/slices/authSlice";
 import { constRoutes } from "@/lib/paths";
+import { useAppDispatch } from "@/services/useDispatch";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -19,7 +19,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const updatePosition = () => {

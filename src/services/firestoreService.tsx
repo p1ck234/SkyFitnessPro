@@ -115,18 +115,17 @@ export const initializeUserProgress = async (uid: string) => {
 // Function to add a course to user's profile
 export const addCourseToUser = async (uid: string, courseId: number) => {
   try {
-    // const db = getFirestore();
+    console.log('addCourseToUser called with:', { uid, courseId }); // Логируем
+    const db = getFirestore();
     const userProgressRef = doc(db, "dataUsers", uid);
     const userProgressDoc = await getDoc(userProgressRef);
 
-    // Если документ не существует, создаем его
     if (!userProgressDoc.exists()) {
       await setDoc(userProgressRef, {
         courses_progress: [],
       });
     }
 
-    // Проверяем, есть ли уже этот курс в прогрессе пользователя
     const userProgressData = userProgressDoc.data() || { courses_progress: [] };
     const existingCourses = userProgressData.courses_progress;
 
@@ -135,10 +134,8 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     );
 
     if (courseAlreadyAdded) {
-      console.log(
-        `Course with ID ${courseId} is already added for user ${uid}.`
-      );
-      return; // Если курс уже добавлен, выходим из функции
+      console.log(`Course with ID ${courseId} is already added for user ${uid}.`);
+      return;
     }
 
     const coursesRef = collection(db, "courses");
@@ -154,7 +151,6 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     const courseRef = courseDoc.ref;
     const courseData = courseDoc.data();
 
-    // Проверка наличия workout
     if (!courseData.workouts) {
       console.error("No workouts found for this course.");
       throw new Error("No workouts found for this course.");
@@ -182,7 +178,6 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
       };
     });
 
-    // Добавляем курс в прогресс пользователя
     await updateDoc(userProgressRef, {
       courses_progress: arrayUnion({
         id_course: courseId,
@@ -191,14 +186,11 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
       }),
     });
 
-    // Добавляем UID пользователя в массив users этого курса
     await updateDoc(courseRef, {
       users: arrayUnion(uid),
     });
 
-    console.log(
-      `Course with ID ${courseId} successfully added to user ${uid}.`
-    );
+    console.log(`Course with ID ${courseId} successfully added to user ${uid}.`);
   } catch (error) {
     console.error("Error adding course to user:", error);
     throw error;

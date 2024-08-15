@@ -10,9 +10,21 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Course } from "@/types/types";
+import { Course, CourseState, Workout } from "@/types/types";
 import { useUser } from "@/context/userContext";
 
+const initialState: CourseState = {
+  courses: [],
+  userCourses: [],
+  loading: true,
+  error: null,
+  progress: 25,
+  isProfile: false,
+  selectedWorkout: [],
+  workouts: [],
+};
+
+// Fetch all courses
 export const fetchCourses = createAsyncThunk<Course[]>(
   "course/fetchCourses",
   async (_, thunkAPI) => {
@@ -25,23 +37,19 @@ export const fetchCourses = createAsyncThunk<Course[]>(
   }
 );
 
+// Fetch user courses
 export const fetchUserCourses = createAsyncThunk<
   Course[],
-  void,
+  string, // Аргумент теперь - UID пользователя
   { rejectValue: string }
->("course/fetchUserCourses", async (_, { rejectWithValue }) => {
-  const { user } = useUser();
-  if (!user || !user.uid) {
-    return rejectWithValue("User not authenticated or UID is missing");
-  }
-
+>("course/fetchUserCourses", async (userId, { rejectWithValue }) => {
   try {
     const db = getFirestore();
     const coursesRef = collection(db, "courses");
-    const q = query(coursesRef, where("users", "array-contains", user.uid));
+    const q = query(coursesRef, where("users", "array-contains", userId));
     const querySnapshot = await getDocs(q);
 
-    const courses = querySnapshot.docs.map((doc) => ({
+    const courses: Course[] = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as Omit<Course, "id">),
     }));
@@ -54,24 +62,27 @@ export const fetchUserCourses = createAsyncThunk<
 });
 
 export const fetchRemoveCourse = createAsyncThunk<
-  string, // Тип возвращаемого значения (ID курса)
-  string, // Тип аргумента (ID курса)
+  string,
+  string,
   { rejectValue: string }
->("course/removeCourse", async (courseId, { rejectWithValue }) => {
-  const { user } = useUser();
-  if (!user || !user.uid) {
+>("course/removeCourse", async (courseId, { rejectWithValue, getState }) => {
+  const state = getState() as { user: { uid: string } };
+  const userId = state.user.uid;
+
+  if (!userId) {
     return rejectWithValue("User not authenticated or UID is missing");
   }
 
   try {
+    console.log("Removing course:", { courseId, userId });
     const db = getFirestore();
-    const userCoursesRef = collection(db, "users", user.uid, "courses");
+    const userCoursesRef = collection(db, "users", userId, "courses");
     const courseRef = doc(userCoursesRef, courseId);
 
-    // Удаление курса из профиля пользователя
     await deleteDoc(courseRef);
+    console.log("Course removed:", courseId);
 
-    return courseId; // Возвращаем ID удаленного курса
+    return courseId;
   } catch (error) {
     console.error("Error removing course:", error);
     return rejectWithValue("Failed to remove course");
@@ -80,16 +91,21 @@ export const fetchRemoveCourse = createAsyncThunk<
 
 export const fetchAddCourse = createAsyncThunk<
   Course,
-  { courseId: string; userId: string }, // Аргумент содержит courseId и userId
+  { courseId: string; userId: string },
   { rejectValue: string }
 >("course/addCourse", async ({ courseId, userId }, { rejectWithValue }) => {
+  console.log("fetchAddCourse called with:", { courseId, userId }); // Логируем
   try {
     const db = getFirestore();
-    const coursesRef = collection(db, "courses");
-    await addCourseToUser(userId, parseInt(courseId));
-    const course = await getDoc(doc(getFirestore(), "courses", courseId));
-    if (course.exists()) {
-      return { id: course.id, ...(course.data() as Omit<Course, "id">) };
+    const parsedCourseId = parseInt(courseId, 10);
+    if (isNaN(parsedCourseId)) {
+      return rejectWithValue("Invalid course ID");
+    }
+    await addCourseToUser(userId, parsedCourseId); // Передаем как число
+    const courseDoc = await getDoc(doc(db, "courses", courseId));
+
+    if (courseDoc.exists()) {
+      return { id: courseDoc.id, ...(courseDoc.data() as Omit<Course, "id">) };
     } else {
       return rejectWithValue("Course not found");
     }
@@ -99,30 +115,18 @@ export const fetchAddCourse = createAsyncThunk<
   }
 });
 
-interface CourseState {
-  courses: Course[];
-  userCourses: Course[]; // Добавляем поле для курсов пользователя
-  loading: boolean;
-  error: string | null;
-  progress: number | null;
-  isProfile: boolean;
-}
-
-const initialState: CourseState = {
-  courses: [],
-  userCourses: [],
-  loading: true,
-  error: null,
-  progress: 25, // Example initial progress
-  isProfile: false,
-};
-
 const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {
     setProgress(state, action: PayloadAction<number>) {
       state.progress = action.payload;
+    },
+    setSelectedWorkout(state, action: PayloadAction<Workout[]>) {
+      state.selectedWorkout = action.payload;
+    },
+    setUserCourses(state, action: PayloadAction<Course[]>) {
+      state.userCourses = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -153,14 +157,15 @@ const courseSlice = createSlice({
       })
       .addCase(fetchRemoveCourse.fulfilled, (state, action) => {
         state.userCourses = state.userCourses.filter(
-          (course) => course.id !== action.payload // Удаление по ID
+          (course) => course.id !== action.payload // Удаление курса по ID
         );
       })
       .addCase(fetchAddCourse.fulfilled, (state, action) => {
-        state.userCourses.push(action.payload); // Добавляем полный объект курса
+        state.userCourses.push(action.payload); // Добавление курса
       });
   },
 });
 
-export const { setProgress } = courseSlice.actions;
+export const { setProgress, setSelectedWorkout, setUserCourses } =
+  courseSlice.actions;
 export default courseSlice.reducer;

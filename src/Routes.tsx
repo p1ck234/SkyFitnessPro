@@ -23,9 +23,9 @@ export const AppRoutes: React.FC = () => {
   const state = location.state as { backgroundLocation?: Location };
   const { modalState, openModal, closeModal, setCurrentPath, currentPath } =
     useModal();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
+  // const isAuthenticated = useSelector(
+  //   (state: RootState) => state.auth.isAuthenticated
+  // );
 
   useEffect(() => {
     if (location.pathname !== currentPath) {
@@ -51,9 +51,30 @@ export const AppRoutes: React.FC = () => {
         <Route element={<PageLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path={constRoutes.COURSE + "/:id"} element={<Course />} />
-          <Route path={constRoutes.PROFILE} element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path={constRoutes.SELECT_WORKOUTS} element={<ProtectedRoute><PopSelectWorkoutPage /></ProtectedRoute>} />
-          <Route path={constRoutes.EXIT} element={<ProtectedRoute><Exit /></ProtectedRoute>} />
+          <Route
+            path={constRoutes.PROFILE}
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={constRoutes.SELECT_WORKOUTS}
+            element={
+              <ProtectedRoute>
+                <PopSelectWorkoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={constRoutes.EXIT}
+            element={
+              <ProtectedRoute>
+                <Exit />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
 

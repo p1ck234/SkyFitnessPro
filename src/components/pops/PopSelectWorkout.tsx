@@ -1,4 +1,3 @@
-import { workouts } from "@/utils/workouts";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -10,14 +9,13 @@ export const PopSelectWorkouts = () => {
   const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(true);
   const progress = useSelector((state: RootState) => state.course.progress);
+  const workouts = useSelector(
+    (state: RootState) => state.course.selectedWorkout
+  );
 
-  // const toggleCheckbox = (id: number) => {
-  //   setCheckedWorkouts((prevChecked) =>
-  //     prevChecked.includes(id)
-  //       ? prevChecked.filter((workoutid) => workoutid !== id)
-  //       : [...prevChecked, id]
-  //   );
-  // };
+  if (!workouts) {
+    return null;
+  }
 
   useEffect(() => {
     if (progress === 100) {
@@ -53,31 +51,31 @@ export const PopSelectWorkouts = () => {
       >
         <div
           className="relative bg-white rounded-3xl shadow-xl p-4 w-100 p-8"
-          onClick={(e) => e.stopPropagation} //Останавливаем распространение клика внутри модального окна
+          onClick={(e) => e.stopPropagation()} //Останавливаем распространение клика внутри модального окна
         >
           <form className="flex flex-col items-center w-full rounded-xl">
             <h1 className="text-center text-3xl mb-6">Выберите тренировку</h1>
             <ul className="w-full flex flex-col overflow-y-auto max-h-[60vh] scrollbar-thin">
-              {workouts.map((work) => (
+              {workouts.map((workout) => (
                 <li
-                  key={work.id}
+                  key={workout.id}
                   className={"flex items-center mb-2 border-b border-gray-400"}
                 >
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={checkedWorkouts.includes(work.id)}
+                      checked={checkedWorkouts.includes(workout.id)}
                       className="hidden"
                       onClick={openWorkout}
                     />
                     <span
                       className={`inline-block h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${
-                        checkedWorkouts.includes(work.id)
+                        checkedWorkouts.includes(workout.id)
                           ? "bg-customGreen border-none"
                           : "bg-white"
                       }`}
                     >
-                      {checkedWorkouts.includes(work.id) && (
+                      {checkedWorkouts.includes(workout.id) && (
                         <svg
                           className="w-4 h-4 text-white"
                           fill="none"
@@ -95,8 +93,8 @@ export const PopSelectWorkouts = () => {
                       )}
                     </span>
                     <div>
-                      <span className="text-xl">{work.title}</span>
-                      <p className="text-sm mb-2">{work.description}</p>
+                      <span className="text-xl">{workout.name}</span>
+                      <p className="text-sm mb-2">{workout.url_desc}</p>
                     </div>
                   </label>
                 </li>

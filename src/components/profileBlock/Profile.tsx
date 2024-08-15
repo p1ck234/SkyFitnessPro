@@ -5,7 +5,6 @@ import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
-import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect } from "react";
 import {
@@ -13,11 +12,13 @@ import {
   fetchUserCourses,
 } from "@/store/slices/courseSlice";
 import { setProfileState } from "@/store/slices/authSlice";
+import { useAppDispatch } from "@/services/useDispatch";
+import { useSelector } from "react-redux";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { isProfile } = useSelector((state: RootState) => state.auth);
 
   const { userCourses, loading, error } = useSelector(

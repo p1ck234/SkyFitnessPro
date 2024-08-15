@@ -6,10 +6,8 @@ import { useUser } from "@/context/userContext";
 import { Button } from "@/components/Button";
 import { Course } from "@/types/types";
 import { useModal } from "@/context/modalContext";
-import { useDispatch } from "@/services/useDispatch";
 import { fetchAddCourse, fetchRemoveCourse } from "@/store/slices/courseSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useAppDispatch } from "@/services/useDispatch";
 
 interface CardProps {
   course: Course;
@@ -20,7 +18,7 @@ export function Card({ course }: CardProps) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { openModal } = useModal();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isProfile, setIsProfile] = useState(false);
   const location = useLocation();
 
@@ -32,17 +30,55 @@ export function Card({ course }: CardProps) {
     if (!user) {
       alert("Please log in to add a course.");
       return;
-    } else {
-      dispatch(fetchAddCourse(courseId));
+    }
+    if (!courseId || typeof courseId !== 'string') {
+      console.error("Invalid courseId:", courseId);
+      alert("Invalid course ID. Please try again.");
+      return;
+    }
+    const parsedCourseId = parseInt(courseId, 10);
+    if (isNaN(parsedCourseId)) {
+      console.error("Invalid courseId:", courseId);
+      alert("Invalid course ID. Please try again.");
+      return;
+    }
+    setLoading(true);
+    try {
+      // Передайте оба параметра: courseId и userId
+      await dispatch(fetchAddCourse({ courseId, userId: user.uid })).unwrap();
+    } catch (error) {
+      console.error("Error adding course:", error);
+      alert("Failed to add course. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRemoveCourse = async (courseId: string) => {
     if (!user) {
-      alert("Please log in to add a course.");
+      alert("Please log in to remove a course.");
       return;
-    } else {
-      dispatch(fetchRemoveCourse(courseId));
+    }
+    if (!courseId || typeof courseId !== 'string') {
+      console.error("Invalid courseId:", courseId);
+      alert("Invalid course ID. Please try again.");
+      return;
+    }
+  
+    const parsedCourseId = parseInt(courseId, 10);
+    if (isNaN(parsedCourseId)) {
+      console.error("Invalid courseId:", courseId);
+      alert("Invalid course ID. Please try again.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await dispatch(fetchRemoveCourse(courseId)).unwrap();
+    } catch (error) {
+      console.error("Error removing course:", error);
+      alert("Failed to remove course. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +97,7 @@ export function Card({ course }: CardProps) {
 
   const handleOpenSelectWorkoutModal = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log("Open Select Workout Modal clicked");
     openModal("select_workouts");
     navigate(constRoutes.SELECT_WORKOUTS, {
       state: { backgroundLocation: location },

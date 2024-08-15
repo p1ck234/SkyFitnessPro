@@ -2,6 +2,8 @@ export type Workout = {
   id: number;
   name: string;
   exercises: any[];
+  url: string;
+  url_desc: string;
 };
 
 export type Course = {
@@ -24,4 +26,7 @@ export type CourseState = {
   loading: boolean;
   error: string | null;
   progress: number | null;
+  isProfile: boolean;
+  selectedWorkout: Workout[];
+  workouts: Workout[];
 }

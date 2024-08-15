@@ -4,10 +4,10 @@ import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchCourses } from "@/store/slices/courseSlice";
-import { useDispatch } from "@/services/useDispatch";
+import { useAppDispatch } from "@/services/useDispatch";
 
 export function Main() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { courses, loading, error } = useSelector(
     (state: RootState) => state.course
   );
