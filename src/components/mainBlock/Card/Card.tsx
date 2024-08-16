@@ -56,11 +56,11 @@ export function Card({
     fetchUserProgress();
   }, [user, course.id, isProfile]);
 
-  const handleAddCourse = async (courseId: string) => {
+  const handleAddCourse = async (courseId: number) => {
     if (user) {
       try {
         setLoading(true);
-        await addCourseToUser(user.uid, parseInt(courseId));
+        await addCourseToUser(user.uid, courseId);
         alert("Курс успешно добавлен в ваш профиль");
       } catch (error) {
         console.error("Ошибка при добавлении курса:", error);
@@ -73,11 +73,11 @@ export function Card({
     }
   };
 
-  const handleRemoveCourse = async (courseId: string) => {
+  const handleRemoveCourse = async (courseId: number) => {
     if (user) {
       try {
         setLoading(true);
-        await removeCourseFromUser(user.uid, parseInt(courseId));
+        await removeCourseFromUser(user.uid, courseId);
         alert("Курс успешно удален из вашего профиля");
 
         if (onCourseRemoved) {
@@ -92,12 +92,12 @@ export function Card({
     }
   };
 
-  const handleResetProgress = async (courseId: string) => {
+  const handleResetProgress = async (courseId: number) => {
     if (user) {
       try {
         setLoading(true);
-        await removeCourseFromUser(user.uid, parseInt(courseId));
-        await addCourseToUser(user.uid, parseInt(courseId));
+        await removeCourseFromUser(user.uid, courseId);
+        await addCourseToUser(user.uid, courseId);
         setProgress(0); // Обновляем прогресс в состоянии
         alert("Прогресс курса был сброшен");
       } catch (error) {
@@ -113,7 +113,7 @@ export function Card({
     navigate(`${constRoutes.COURSE}/${id}`);
   };
 
-  const handleCourseAction = (e: React.MouseEvent, courseId: string) => {
+  const handleCourseAction = (e: React.MouseEvent, courseId: number) => {
     e.stopPropagation();
     if (isProfile) {
       handleRemoveCourse(courseId);
@@ -126,7 +126,7 @@ export function Card({
     e.stopPropagation();
 
     if (progress === 100) {
-      handleResetProgress(course.id.toString());
+      handleResetProgress(course.id);
     } else if (onSelectWorkouts) {
       onSelectWorkouts();
     } else if (course.workouts && course.workouts.length > 0) {
@@ -147,7 +147,7 @@ export function Card({
         <ImageComponent filePath={course.imgMobile} />
         <button
           className="absolute top-2 right-5 flex items-center group"
-          onClick={(e) => handleCourseAction(e, course.id.toString())}
+          onClick={(e) => handleCourseAction(e, course.id)}
           disabled={loading}
         >
           {loading ? (
