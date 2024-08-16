@@ -1,8 +1,10 @@
 import { Course } from "@/types/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
 import { addCourseToUser } from "@/services/firestoreService";
+import { useUserCourses } from "@/customHooks/useUserCourses";
+import { useParams } from "react-router-dom";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -10,9 +12,20 @@ interface CourseDescriptionProps {
 
 const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
   const { user } = useUser();
+  const {userCourses} = useUserCourses(0);
   const { openModal } = useModal();
+  const currentId=useParams();
   const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
+  const [isHaveCourse, setIsHaveCourse]=useState(false);
 
+  useEffect(()=>{
+    userCourses.forEach(element => {
+      if (element.id==currentId.id) {
+        setIsHaveCourse(true)
+      }
+    });
+  },[userCourses, isHaveCourse])
+ 
   const handleButtonClick = async () => {
     if (!user) {
       openModal("login");
@@ -86,13 +99,14 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
             <button
               className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
               onClick={handleButtonClick}
-              disabled={isLoading} // Отключаем кнопку во время загрузки
+              disabled={isLoading || isHaveCourse} // Отключаем кнопку во время загрузки
             >
-              {isLoading
+              {
+              isLoading
                 ? "Загрузка..."
                 : !user
                 ? "Войдите, чтобы добавить курс"
-                : "Добавить курс"}
+                :  isHaveCourse ? "Уже добавлен" : "Добавить курс"}
             </button>
           </div>
         </div>
