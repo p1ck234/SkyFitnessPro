@@ -19,3 +19,15 @@ export type Course = {
   progress?: number;
   workouts?: Workout[];
 };
+
+export type CourseState = {
+  courses: Course[],
+  userCourses: Course[],
+  loading: boolean,
+  error: string | null,
+  progress: number | null,
+  isProfile: boolean,
+  selectedWorkout: Workout[],
+  workouts: Workout[],
+  course: Course,
+}

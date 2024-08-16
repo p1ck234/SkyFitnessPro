@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "@/components/Button";
@@ -8,64 +7,86 @@ import {
   addCourseToUser,
   removeCourseFromUser,
 } from "@/services/firestoreService";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import {
+  setIsProfile,
+  setLoading,
+  setProgress,
+  setUserCourses,
+} from "@/store/slices/courseSlice";
+import { UserProgress } from "@/customHooks/userProgress";
+import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { Course } from "@/types/types";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { useAppDispatch } from "@/services/useDispatch";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 
 interface CardProps {
-  course: Course;
-  isProfile?: boolean;
   onCourseRemoved?: () => void;
   onSelectWorkouts?: () => void;
+  course: Course;
 }
 
-export function Card({
-  course,
-  isProfile = false,
-  onCourseRemoved,
-  onSelectWorkouts,
-}: CardProps) {
-  const { user } = useUser();
+export function Card({ onCourseRemoved, onSelectWorkouts, course }: CardProps) {
+  console.log("Card component rendered");
+
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState<number>(0);
+  const progress =
+    useSelector((state: RootState) => state.course.progress) ?? 0;
+  const loading = useSelector((state: RootState) => state.course.loading);
+  const isProfile = useSelector((state: RootState) => state.course.isProfile);
+  const dispatch = useAppDispatch();
+  const { user } = useUser();
+  const userCourses = useSelector(
+    (state: RootState) => state.course.userCourses
+  );
+
+  UserProgress();
 
   useEffect(() => {
-    const fetchUserProgress = async () => {
-      if (user && isProfile) {
-        try {
-          const db = getFirestore();
-          const userRef = doc(db, "dataUsers", user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            const courseProgress = userData.courses_progress?.find(
-              (cp: any) => cp.id_course === course.id
-            );
-
-            if (courseProgress) {
-              setProgress(courseProgress.progress || 0);
-            }
-          }
-        } catch (error) {
-          console.error("Ошибка при загрузке прогресса пользователя:", error);
-        }
-      }
-    };
-
-    fetchUserProgress();
-  }, [user, course.id, isProfile]);
+    dispatch(setIsProfile(location.pathname === constRoutes.PROFILE));
+  }, [location.pathname, dispatch]);
 
   const handleAddCourse = async (courseId: string) => {
     if (user) {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
+        const courseExists = userCourses.some(
+          (course) => course.id.toString() === courseId
+        );
+        if (courseExists) {
+          alert("Этот курс уже есть в вашем профиле");
+          return;
+        }
         await addCourseToUser(user.uid, parseInt(courseId));
         alert("Курс успешно добавлен в ваш профиль");
-      } catch (error) {
-        console.error("Ошибка при добавлении курса:", error);
-        alert("Не удалось добавить курс");
+        const db = getFirestore();
+        const coursesRef = collection(db, "courses");
+        const q = query(coursesRef, where("id", "==", courseId));
+        const querySnapshot = await getDocs(q);
+
+        // Убедимся, что мы получили полный объект курса
+        const newCourse = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as Course; // Приведение к типу Course
+          return {
+            ...data,
+            id: doc.id,
+          };
+        })[0]; // Предполагаем, что курс найден
+
+        if (!newCourse) {
+          throw new Error("Курс не найден");
+        }
+
+        dispatch(setUserCourses([...userCourses, newCourse])); // Обновляем состояние Redux
       } finally {
+        navigate(constRoutes.PROFILE);
         setLoading(false);
       }
     } else {
@@ -76,7 +97,7 @@ export function Card({
   const handleRemoveCourse = async (courseId: string) => {
     if (user) {
       try {
-        setLoading(true);
+        setLoading(false);
         await removeCourseFromUser(user.uid, parseInt(courseId));
         alert("Курс успешно удален из вашего профиля");
 
@@ -113,12 +134,14 @@ export function Card({
     navigate(`${constRoutes.COURSE}/${id}`);
   };
 
-  const handleCourseAction = (e: React.MouseEvent, courseId: string) => {
+  const handleCourseAction: React.MouseEventHandler<HTMLButtonElement> = (
+    e
+  ) => {
     e.stopPropagation();
     if (isProfile) {
-      handleRemoveCourse(courseId);
+      handleRemoveCourse(course.id.toString());
     } else {
-      handleAddCourse(courseId);
+      handleAddCourse(course.id.toString());
     }
   };
 
@@ -126,10 +149,10 @@ export function Card({
     e.stopPropagation();
 
     if (progress === 100) {
-      handleResetProgress(course.id.toString());
+      handleResetProgress(course?.id?.toString());
     } else if (onSelectWorkouts) {
       onSelectWorkouts();
-    } else if (course.workouts && course.workouts.length > 0) {
+    } else if (course?.workouts && course.workouts.length > 0) {
       const firstWorkoutId = course.workouts[0].id;
       navigate(`/workouts/${course.id}/${firstWorkoutId}`); // Переход на страницу тренировки с курсом и тренировкой
     } else {
@@ -147,10 +170,9 @@ export function Card({
         <ImageComponent filePath={course.imgMobile} />
         <button
           className="absolute top-2 right-5 flex items-center group"
-          onClick={(e) => handleCourseAction(e, course.id.toString())}
-          disabled={loading}
+          onClick={handleCourseAction}
         >
-          {loading ? (
+          {!loading ? (
             <div className="loader"></div>
           ) : (
             <div>

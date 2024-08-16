@@ -2,20 +2,19 @@ import React, { useState } from "react";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
 
 export const Profile = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
   const { userCourses, loading, error } = useUserCourses(refreshKey);
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
+  
 
   const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
     if (course) {
@@ -55,7 +54,6 @@ export const Profile = () => {
             <Card
               key={`${course.id}-${index}`}
               course={course}
-              isProfile={true}
               onCourseRemoved={handleCourseRemoved}
               onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
             />

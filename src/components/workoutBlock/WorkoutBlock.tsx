@@ -33,9 +33,7 @@ export const WorkoutBlock = () => {
       </h2>
 
       <iframe
-        className="mt-10 rounded-3xl"
-        width="1150"
-        height="639"
+        className="mt-10 rounded-3xl flex w-full aspect-video"
         src={`https://www.youtube.com/embed/${getYouTubeID(workout.url)}`}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       ></iframe>

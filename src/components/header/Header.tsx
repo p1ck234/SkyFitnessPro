@@ -5,6 +5,8 @@ import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "../Button";
 import { useModal } from "@/context/modalContext";
+import { useAppDispatch } from "@/services/useDispatch";
+import { setIsProfile } from "@/store/slices/courseSlice";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const Header: React.FC = () => {
   const { openModal, setCurrentPath } = useModal();
   const { user, userData } = useUser(); // Достаем user и userData из контекста
   const profileButtonRef = useRef<HTMLButtonElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleOpenProfileModal = () => {
     if (profileButtonRef.current) {
@@ -25,6 +28,7 @@ const Header: React.FC = () => {
 
   const handleOpenLoginModal = () => {
     if (profileButtonRef.current) {
+      dispatch(setIsProfile(false));
       const buttonPosition = profileButtonRef.current.getBoundingClientRect();
       navigate(location.pathname, {
         state: { ...location.state, buttonPosition },
@@ -51,7 +55,7 @@ const Header: React.FC = () => {
             alt="avatar"
             className="w-10 mr-1 h-10 rounded-full"
           />
-          <span className="ml-2 text-lg font-medium hidden sm:inline">
+          <span className="ml-2 text-2xl font-medium hidden sm:inline">
             {userData?.username || user.email}
           </span>
           <svg

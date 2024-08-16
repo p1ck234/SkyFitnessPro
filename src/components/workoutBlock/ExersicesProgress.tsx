@@ -95,8 +95,8 @@ const ExersicesProgress = ({
           </div>
         ))}
       </div>
-      <div>
-        <Button width="w-full" onClick={handleOpenProgressModal}>
+      <div className="flex ">
+        <Button className="flex-1 max-w-80 min-w-60" onClick={handleOpenProgressModal}>
           {hasCompletedExercises
             ? "Обновить свой прогресс"
             : "Записать свой прогресс"}
