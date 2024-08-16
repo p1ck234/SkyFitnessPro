@@ -40,7 +40,10 @@ export const WorkoutBlock = () => {
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       ></iframe>
 
-      <ExersicesProgress workout={workout} courseId={courseId || ""} />
+      <ExersicesProgress
+        workout={workout}
+        courseId={parseInt(courseId || "")}
+      />
     </>
   );
 };

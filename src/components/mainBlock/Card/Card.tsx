@@ -126,7 +126,7 @@ export function Card({
     e.stopPropagation();
 
     if (progress === 100) {
-      handleResetProgress(course.id);
+      handleResetProgress(parseInt(course.id));
     } else if (onSelectWorkouts) {
       onSelectWorkouts();
     } else if (course.workouts && course.workouts.length > 0) {
@@ -147,7 +147,7 @@ export function Card({
         <ImageComponent filePath={course.imgMobile} />
         <button
           className="absolute top-2 right-5 flex items-center group"
-          onClick={(e) => handleCourseAction(e, course.id)}
+          onClick={(e) => handleCourseAction(e, parseInt(course.id))}
           disabled={loading}
         >
           {loading ? (

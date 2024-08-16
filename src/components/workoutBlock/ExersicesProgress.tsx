@@ -9,7 +9,7 @@ const ExersicesProgress = ({
   courseId,
 }: {
   workout: any;
-  courseId: string;
+  courseId: number;
 }) => {
   const { user } = useUser();
   const { openModal } = useModal();
@@ -32,7 +32,7 @@ const ExersicesProgress = ({
 
       if (userData && userData.courses_progress) {
         const courseProgress = userData.courses_progress.find(
-          (cp: any) => cp.id_course === parseInt(courseId)
+          (cp: any) => cp.id_course === courseId
         );
         if (courseProgress) {
           const workoutProgress = courseProgress.workouts_progress.find(
