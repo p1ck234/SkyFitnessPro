@@ -18,6 +18,7 @@ module.exports = {
         laptop: "1440px",
         phone: "376px",
         wide: "1920px",
+        tablet: "792px"
       },
       spacing: {
         "50px": "50px",
