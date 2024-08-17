@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
+import { Button } from "../Button";
 
 export const Profile = () => {
   const { openModal } = useModal();
@@ -49,13 +49,12 @@ export const Profile = () => {
       <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
         Мои курсы
       </h1>
-      <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+      <div className="flex gap-x-4 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
         {userCourses.length > 0 ? (
           userCourses.map((course, index) => (
             <Card
               key={`${course.id}-${index}`}
               course={course}
-              isProfile={true}
               onCourseRemoved={handleCourseRemoved}
               onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
             />
@@ -79,6 +78,11 @@ export const Profile = () => {
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}
+      <div className="flex justify-center">
+        <Button className="h-12 w-32">
+          <a href="#heading-section">Наверх ↑</a>
+        </Button>
+      </div>
     </div>
   );
 };

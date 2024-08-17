@@ -4,6 +4,8 @@ import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useModal } from "@/context/modalContext";
 import { Workout } from "@/types/types";
+import { Button } from "../Button";
+import { constRoutes } from "@/lib/paths";
 
 export const WorkoutBlock = () => {
   const { courseId, workoutId } = useParams();
@@ -33,14 +35,22 @@ export const WorkoutBlock = () => {
       </h2>
 
       <iframe
-        className="mt-10 rounded-3xl"
-        width="1150"
-        height="639"
+        className="mt-10 rounded-3xl flex w-full aspect-video"
         src={`https://www.youtube.com/embed/${getYouTubeID(workout.url)}`}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       ></iframe>
 
       <ExersicesProgress workout={workout} courseId={courseId || ""} />
+      <div className="flex justify-center">
+        <Button
+          className="h-12 w-32"
+          onClick={() => {
+            navigate(constRoutes.PROFILE);
+          }}
+        >
+          Назад
+        </Button>
+      </div>
     </>
   );
 };

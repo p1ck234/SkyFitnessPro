@@ -87,7 +87,7 @@ export const PopSelectWorkouts = ({
       onClick={handleBackgroundClick}
     >
       <div
-        className="relative bg-white rounded-3xl shadow-xl p-4 w-100 p-8"
+        className="relative bg-white rounded-3xl shadow-xl p-4 w-80 p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <form className="flex flex-col items-center w-full rounded-xl">

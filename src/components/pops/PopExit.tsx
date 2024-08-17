@@ -6,6 +6,7 @@ import { logout } from "@/services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { login } from "@/store/slices/authSlice";
+import { setIsProfile } from "@/store/slices/courseSlice";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -18,9 +19,6 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.isAuthenticated
-  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,8 +44,10 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   }, [location.state]);
 
   const toggleMyProfile = () => {
+    dispatch(setIsProfile(false));
     closeModal();
     dispatch(login(user?.email || ""));
+    dispatch(setIsProfile(true));
     setTimeout(() => navigate("/profile"), 0);
   };
 
@@ -81,9 +81,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         style={{ position: "absolute", top: position.top, left: position.left }}
       >
         <div className="flex flex-col items-center">
-          <p className="font-bold">
-            {userData?.username || user?.email}
-          </p>
+          <p className="font-bold">{userData?.username || user?.email}</p>
           <p className="text-gray-500">{user?.email}</p>
         </div>
         <div className="flex flex-col items-center gap-2">
@@ -94,7 +92,10 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
             Мой профиль
           </Button>
           <Button
-            className="bg-white text-sm sm:text-lg w-full border border-black text-black py-2 px-4 rounded-full"
+            className="text-lg w-full py-2 px-4"
+            color="white"
+            borderColor="black"
+            variant="custom-achrom"
             onClick={handleLogout}
           >
             Выйти

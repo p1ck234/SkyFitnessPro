@@ -1,8 +1,13 @@
 import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
+import { Course } from "@/types/types";
+import { Button } from "../Button";
 
-export function Main() {
+type MainProps = {
+  course: Course;
+};
+export function Main({ course }: MainProps) {
   const { courses, loading, error } = useCourses();
 
   if (loading) {
@@ -16,18 +21,15 @@ export function Main() {
   return (
     <div className="mx-auto">
       <Heading />
-      <div className="flex gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+      <div className="flex gap-x-4 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
         {courses.map((course) => (
           <Card key={course.id} course={course} />
         ))}
       </div>
       <div className="flex justify-center">
-        <a
-          href="#heading-section"
-          className="font-normal text-lg grid rounded-3xl bg-customGreen px-4 py-3"
-        >
-          Наверх ↑
-        </a>
+        <Button className="h-12 w-32">
+          <a href="#heading-section">Наверх ↑</a>
+        </Button>
       </div>
     </div>
   );

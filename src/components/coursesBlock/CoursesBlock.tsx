@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ImageComponent } from "../imageComponent/ImageComponent";
 import { Course } from "@/types/types";
+import { Button } from "../Button";
 
 interface CoursesBlockProps {
   course: Course;
@@ -22,7 +23,7 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
 
   return (
     <div>
-      <section className="flex p-0 sm:p-8 mb-6 items-center">
+      <section className="flex p-0 mt-12 items-center w-full">
         <h1 className="absolute text-3xl md:text-6xl font-bold text-white z-10 hidden phone:block p-6">
           {course.name}
         </h1>
@@ -42,6 +43,7 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
           onError={() => setIsImageLoading(false)} // Убираем лоадер если произошла ошибка при загрузке
         />
       </section>
+      
     </div>
   );
 };

@@ -94,6 +94,29 @@ export const saveUser = async (uid: string, data: any) => {
   }
 };
 
+export const checkCourseExists = async (
+  uid: string,
+  courseId: number
+): Promise<boolean> => {
+  try {
+    const userProgressRef = doc(db, "dataUsers", uid);
+    const userProgressDoc = await getDoc(userProgressRef);
+
+    if (!userProgressDoc.exists()) {
+      return false; // If user progress document doesn't exist, course isn't there
+    }
+
+    const userProgressData = userProgressDoc.data() || { courses_progress: [] };
+    const existingCourses = userProgressData.courses_progress;
+
+    // Check if the course is already in the user's progress
+    return existingCourses.some((course: any) => course.id_course === courseId);
+  } catch (error) {
+    console.error("Error checking course existence:", error);
+    throw error;
+  }
+};
+
 export const initializeUserProgress = async (uid: string) => {
   try {
     const userProgressRef = doc(db, "dataUsers", uid);

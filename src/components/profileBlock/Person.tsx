@@ -60,10 +60,10 @@ export const Person = () => {
                   {user.displayName || userData?.username || user.email}
                 </p>
                 <div>
-                  <span className="text-lg font-medium">
-                    Логин: {user.email}
+                  <span className="text-xl font-medium">
+                  Логин: {user.email}
                   </span>
-                  <p className="text-xl">Пароль: *******</p>
+                  <p className="text-xl font-medium">Пароль: *******</p>
                 </div>
               </>
             ) : (

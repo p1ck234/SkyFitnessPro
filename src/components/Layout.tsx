@@ -6,11 +6,14 @@ import { RegistrationPage } from "./auth/registrationPage/RegistrationPage";
 import { useModal } from "@/context/modalContext";
 import { PasswordResetConfirmation } from "./auth/PasswordResetConfirmation";
 
+interface ModalData {
+  email?: string; // email может быть строкой или undefined
+}
 export const Layout = () => {
   const { modalState, openModal, closeModal, email } = useModal(); // Получаем email из контекста
 
   return (
-    <div className="container mx-auto py-10 px-4 lg:py-12 lg:px-36 font-sans cursor-custom max-w-full overflow-auto">
+    <div className="container mx-auto py-10 px-4 lg:py-12 lg:px-36 wide:px-72 font-sans cursor-custom max-w-full overflow-auto">
       <Header />
       <main>
         <Outlet />
