@@ -42,7 +42,9 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
       )}
       {imageUrl && (
         <img
-          className={`rounded-3xl ${isLoading ? "opacity-0" : "opacity-100"}`}
+          className={`w-full rounded-3xl ${
+            isLoading ? "opacity-0" : "opacity-100"
+          }`}
           src={imageUrl}
           alt={altText}
           onLoad={() => {

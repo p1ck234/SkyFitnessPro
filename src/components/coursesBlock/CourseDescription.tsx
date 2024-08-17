@@ -65,7 +65,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
               <img
                 src="/img/icon/Sparcle.svg"
                 alt=""
-                className="w-6 h-6 md:w-8 md:h-8"
+                className="flex w-6 h-6 md:w-8 md:h-8"
               />
               <p className="text-black text-xl md:text-2xl">{direction}</p>
             </div>

@@ -21,13 +21,14 @@ export type Course = {
 };
 
 export type CourseState = {
-  courses: Course[],
-  userCourses: Course[],
-  loading: boolean,
-  error: string | null,
-  progress: number | null,
-  isProfile: boolean,
-  selectedWorkout: Workout[],
-  workouts: Workout[],
-  course: Course,
-}
+  courses: Course[];
+  userCourses: Course[];
+  loading: boolean;
+  error: string | null;
+  progress: { [courseId: string]: number }; // Прогресс для каждого курса
+  isProfile: boolean;
+  selectedWorkout: Workout[];
+  workouts: Workout[];
+  course: Course;
+  refreshKey: number;
+};

@@ -8,6 +8,7 @@ import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
 
 export const Profile = () => {
+  const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
