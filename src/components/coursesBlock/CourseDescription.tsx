@@ -1,11 +1,12 @@
 import { Course } from "@/types/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
 import { addCourseToUser } from "@/services/firestoreService";
-import { Navigate, useNavigate } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
+import { useUserCourses } from "@/customHooks/useUserCourses";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../Button";
+import { constRoutes } from "@/lib/paths";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -13,9 +14,20 @@ interface CourseDescriptionProps {
 
 const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
   const { user } = useUser();
+  const { userCourses } = useUserCourses(0);
   const { openModal } = useModal();
-  const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
+  const currentId = useParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Состояние для отслеживания загрузки
+  const [isHaveCourse, setIsHaveCourse] = useState(false);
+
+  useEffect(() => {
+    userCourses.forEach((element) => {
+      if (element.id == currentId.id) {
+        setIsHaveCourse(true);
+      }
+    });
+  }, [userCourses, isHaveCourse]);
 
   const handleButtonClick = async () => {
     if (!user) {
@@ -91,12 +103,14 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
             <Button
               className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
               onClick={handleButtonClick}
-              disabled={isLoading} // Отключаем кнопку во время загрузки
+              disabled={isLoading || isHaveCourse} // Отключаем кнопку во время загрузки
             >
               {isLoading
                 ? "Загрузка..."
                 : !user
                 ? "Войдите, чтобы добавить курс"
+                : isHaveCourse
+                ? "Уже добавлен"
                 : "Добавить курс"}
             </Button>
           </div>

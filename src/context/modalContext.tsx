@@ -9,6 +9,8 @@ type ModalState =
   | "password_reset_form"
   | "progress_update"
   | "otherState"
+  | "add_course"
+  | "delete_course"
   | null;
 
 interface ModalContextType {
