@@ -5,6 +5,7 @@ import { useModal } from "@/context/modalContext";
 import { addCourseToUser } from "@/services/firestoreService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
+import { Button } from "../Button";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -87,7 +88,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
           </ul>
 
           <div className="flex">
-            <button
+            <Button
               className="bg-customGreenCurse text-black py-2 px-4 rounded-lg w-full md:w-auto"
               onClick={handleButtonClick}
               disabled={isLoading} // Отключаем кнопку во время загрузки
@@ -97,7 +98,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
                 : !user
                 ? "Войдите, чтобы добавить курс"
                 : "Добавить курс"}
-            </button>
+            </Button>
           </div>
         </div>
         <div className="relative w-full md:w-1/2 flex justify-center md:justify-end">

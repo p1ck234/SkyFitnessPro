@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "@/components/Button";
-import {
-  addCourseToUser,
-  removeCourseFromUser,
-} from "@/services/firestoreService";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {
@@ -15,8 +11,6 @@ import {
   fetchResetProgress,
   fetchUserProgress,
   setIsProfile,
-  setLoading,
-  setProgress,
   setRemoveCourse,
 } from "@/store/slices/courseSlice";
 import { UserProgress } from "@/customHooks/userProgress";
@@ -51,6 +45,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   ) ?? { value: 0 };
   const progressValue = progressObj.value; // Извлечение числового значения
   const formattedProgress = typeof progress === 'number' ? progress.toFixed(1) : '0.0';
+  const [isLoading, setIsLoading] = useState(false);
+
 
 
   UserProgress();
@@ -68,7 +64,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   }, [location.pathname, dispatch]);
 
   const handleAddCourse = () => {
-    dispatch(setLoading(true));
+    setIsLoading(true);
     if (user && course) {
       const uid = user.uid;
       const courseId = course.id.toString();
@@ -79,13 +75,13 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         })
         .catch((error) => {
           console.error("Ошибка при добавлении курса:", error);
-          dispatch(setLoading(false));
+          setIsLoading(false);
         });
     }
   };
 
   const handleRemoveCourse = () => {
-    dispatch(setLoading(true));
+    setIsLoading(true);
     if (user && course) {
       const uid = user.uid;
       const courseId = course.id.toString();
@@ -103,7 +99,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
           console.error("Ошибка при удалении курса:", error);
         })
         .finally(() => {
-          dispatch(setLoading(false));
+          setIsLoading(false);
         });
     }
   };
@@ -172,7 +168,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
           className="absolute top-2 right-5 flex items-center group"
           onClick={handleCourseAction}
         >
-          {loading ? (
+          {isLoading ? (
             <div className="loader"></div>
           ) : (
             <div>

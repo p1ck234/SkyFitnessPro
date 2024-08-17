@@ -6,6 +6,7 @@ import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
+import { Button } from "../Button";
 
 export const Profile = () => {
   const { openModal } = useModal();
@@ -15,7 +16,6 @@ export const Profile = () => {
   const { userCourses, loading, error } = useUserCourses(refreshKey);
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
-  
 
   const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
     if (course) {
@@ -78,6 +78,11 @@ export const Profile = () => {
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}
+      <div className="flex justify-center">
+        <Button className="h-12 w-32">
+          <a href="#heading-section">Наверх ↑</a>
+        </Button>
+      </div>
     </div>
   );
 };

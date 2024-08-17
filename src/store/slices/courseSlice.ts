@@ -106,7 +106,7 @@ export const fetchResetProgress = createAsyncThunk<
     const courseIdNum = parseInt(courseId);
     await removeCourseFromUser(uid, courseIdNum);
     await addCourseToUser(uid, courseIdNum);
-    thunkAPI.dispatch(setProgress(0)); // Обновляем прогресс в состоянии
+    thunkAPI.dispatch(setProgress({ courseId: courseId, progress: 0 }));
   } catch (error) {
     return thunkAPI.rejectWithValue("Не удалось сбросить прогресс курса");
   }

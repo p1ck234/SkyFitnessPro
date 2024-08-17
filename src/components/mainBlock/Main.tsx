@@ -2,6 +2,7 @@ import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
 import { Course } from "@/types/types";
+import { Button } from "../Button";
 
 type MainProps = {
   course: Course;
@@ -26,12 +27,9 @@ export function Main({ course }: MainProps) {
         ))}
       </div>
       <div className="flex justify-center">
-        <a
-          href="#heading-section"
-          className="font-normal text-lg grid rounded-3xl bg-customGreen px-4 py-3"
-        >
-          Наверх ↑
-        </a>
+        <Button className="h-12 w-32">
+          <a href="#heading-section">Наверх ↑</a>
+        </Button>
       </div>
     </div>
   );
