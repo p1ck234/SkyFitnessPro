@@ -25,7 +25,11 @@ export const showAlert = ({
   confirmButtonText = "OK",
   cancelButtonText,
   showCancelButton = false,
-  customClass,
+  customClass = {
+    confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black", // Классы из вашего Button компонента
+    cancelButton:
+      "py-2 px-4 rounded-full bg-white text-black border border-black", // Добавлен класс для рамки
+  },
 }: AlertOptions) => {
   return MySwal.fire({
     title,
