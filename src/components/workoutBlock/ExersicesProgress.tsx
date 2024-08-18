@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
-import { Button } from "@/components/Button"; // Assuming you have a Button component
+import { Button } from "@/components/shared/Button"; // Assuming you have a Button component
 
 const ExersicesProgress = ({
   workout,

@@ -4,7 +4,7 @@ import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useModal } from "@/context/modalContext";
 import { Workout } from "@/types/types";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { constRoutes } from "@/lib/paths";
 
 export const WorkoutBlock = () => {

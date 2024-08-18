@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ImageComponent } from "../imageComponent/ImageComponent";
 import { Course } from "@/types/types";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 interface CoursesBlockProps {
   course: Course;
@@ -43,7 +43,6 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
           onError={() => setIsImageLoading(false)} // Убираем лоадер если произошла ошибка при загрузке
         />
       </section>
-      
     </div>
   );
 };

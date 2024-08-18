@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
 import { useDispatch } from "react-redux";
@@ -61,11 +61,6 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         confirmButtonText: "Выйти",
         cancelButtonText: "Отмена",
         showCancelButton: true,
-        customClass: {
-          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black", // Классы из вашего Button компонента
-          cancelButton:
-            "py-2 px-4 rounded-full bg-white text-black border border-black", // Добавлен класс для рамки
-        },
       });
 
       if (result.isConfirmed) {

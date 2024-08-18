@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { logout, resetPassword } from "@/services/authService";

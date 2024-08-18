@@ -5,7 +5,7 @@ import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
 import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context/modalContext";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/shared/Button";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -33,7 +33,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
 
     if (password !== confirmPassword) {
       setError("Пароли не совпадают");

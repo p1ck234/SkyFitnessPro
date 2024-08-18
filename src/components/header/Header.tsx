@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Logo } from "../shared/logo/Logo";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { useModal } from "@/context/modalContext";
 import { useAppDispatch } from "@/services/useDispatch";
 import { setIsProfile } from "@/store/slices/courseSlice";

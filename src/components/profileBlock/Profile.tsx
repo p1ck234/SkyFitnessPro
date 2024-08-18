@@ -6,7 +6,7 @@ import { useModal } from "@/context/modalContext";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 export const Profile = () => {
   const { openModal } = useModal();
