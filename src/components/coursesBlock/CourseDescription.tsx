@@ -5,7 +5,7 @@ import { useModal } from "@/context/modalContext";
 import { addCourseToUser } from "@/services/firestoreService";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { constRoutes } from "@/lib/paths";
 import { showAlert } from "@/utils/sweetalert";
 
@@ -38,6 +38,7 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
         setIsLoading(true); // Устанавливаем состояние загрузки
         await addCourseToUser(user.uid, parseInt(course.id));
         // alert("Курс успешно добавлен в ваш профиль");
+        navigate(constRoutes.PROFILE);
         showAlert({
           title: "Успешно!",
           text: "Курс успешно добавлен в ваш профиль",
