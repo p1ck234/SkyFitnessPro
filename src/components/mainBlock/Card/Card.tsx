@@ -25,6 +25,7 @@ interface CardProps {
   onCourseRemoved?: () => void;
   onSelectWorkouts?: () => void;
 }
+
 export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   console.log("Card component rendered");
 
@@ -48,6 +49,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   const formattedProgress =
     typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
+  const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние для кнопки
 
   UserProgress();
 
@@ -105,23 +107,6 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     }
   };
 
-  // const handleResetProgress = async (courseId: string) => {
-  //   if (user) {
-  //     try {
-  //       dispatch(setLoading(true));
-  //       await removeCourseFromUser(user.uid, parseInt(courseId));
-  //       await addCourseToUser(user.uid, parseInt(courseId));
-  //       dispatch(setProgress(0)); // Обновляем прогресс в состоянии
-  //       alert("Прогресс курса был сброшен");
-  //     } catch (error) {
-  //       console.error("Ошибка при сбросе прогресса:", error);
-  //       alert("Не удалось сбросить прогресс курса");
-  //     } finally {
-  //       dispatch(setLoading(false));
-  //     }
-  //   }
-  // };
-
   const handleCardClick = (id: string) => {
     navigate(`${constRoutes.COURSE}/${id}`);
   };
@@ -137,6 +122,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
 
   const handleButtonClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsButtonLoading(true); // Начало загрузки при нажатии
 
     if (progress === 100) {
       try {
@@ -146,14 +132,12 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
             courseId: course.id.toString(),
           })
         ).unwrap();
-        // alert("Прогресс сброшен");
         showAlert({
           title: "Успешно!",
           text: "Прогресс сброшен",
           icon: "success",
         });
       } catch (error) {
-        // alert("Не удалось сбросить прогресс");
         showAlert({
           title: "Ошибка!",
           text: "Не удалось сбросить прогресс.",
@@ -168,6 +152,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     } else {
       handleCardClick(course.id);
     }
+
+    setIsButtonLoading(false); // Остановка загрузки после завершения
   };
 
   return (
@@ -229,8 +215,14 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
               ></div>
             </div>
             <div>
-              <Button width="w-full" onClick={handleButtonClick}>
-                {progress === 100
+              <Button
+                width="w-full"
+                onClick={handleButtonClick}
+                disabled={isButtonLoading}
+              >
+                {isButtonLoading
+                  ? "Загрузка..."
+                  : progress === 100
                   ? "Начать заново"
                   : progress > 0
                   ? "Продолжить"
