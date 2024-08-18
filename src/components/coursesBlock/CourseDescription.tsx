@@ -7,6 +7,7 @@ import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../Button";
 import { constRoutes } from "@/lib/paths";
+import { showAlert } from "@/utils/sweetalert";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -36,10 +37,20 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
       try {
         setIsLoading(true); // Устанавливаем состояние загрузки
         await addCourseToUser(user.uid, parseInt(course.id));
-        alert("Курс успешно добавлен в ваш профиль");
+        // alert("Курс успешно добавлен в ваш профиль");
+        showAlert({
+          title: "Успешно!",
+          text: "Курс успешно добавлен в ваш профиль",
+          icon: "success",
+        });
       } catch (error) {
         console.error("Ошибка при добавлении курса:", error);
-        alert("Не удалось добавить курс");
+        // alert("Не удалось добавить курс");
+        showAlert({
+          title: "Ошибка!",
+          text: "Не удалось добавить курс.",
+          icon: "error",
+        });
       } finally {
         setIsLoading(false); // Отключаем состояние загрузки
         navigate(constRoutes.PROFILE);

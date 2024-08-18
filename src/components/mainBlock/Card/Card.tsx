@@ -17,6 +17,7 @@ import { UserProgress } from "@/customHooks/userProgress";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { Course } from "@/types/types";
 import { useAppDispatch } from "@/services/useDispatch";
+import { showAlert } from "@/utils/sweetalert";
 
 interface CardProps {
   course: Course;
@@ -44,10 +45,9 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     (state: RootState) => state.course.progress
   ) ?? { value: 0 };
   const progressValue = progressObj.value; // Извлечение числового значения
-  const formattedProgress = typeof progress === 'number' ? progress.toFixed(1) : '0.0';
+  const formattedProgress =
+    typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
-
-
 
   UserProgress();
 
@@ -75,6 +75,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         })
         .catch((error) => {
           console.error("Ошибка при добавлении курса:", error);
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     }
@@ -85,21 +87,20 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     if (user && course) {
       const uid = user.uid;
       const courseId = course.id.toString();
+
       dispatch(fetchRemoveCourse({ uid, courseId }))
         .unwrap()
         .then(() => {
           dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
-        })
-        .then(() => {
           if (onCourseRemoved) {
-            onCourseRemoved();
+            onCourseRemoved(); // Дополнительные действия после удаления курса
           }
         })
         .catch((error) => {
           console.error("Ошибка при удалении курса:", error);
         })
         .finally(() => {
-          setIsLoading(false);
+          setIsLoading(false); // Остановка загрузки после завершения
         });
     }
   };
@@ -140,11 +141,24 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     if (progress === 100) {
       try {
         await dispatch(
-          fetchResetProgress({ uid: user?.uid || '', courseId: course.id.toString() })
+          fetchResetProgress({
+            uid: user?.uid || "",
+            courseId: course.id.toString(),
+          })
         ).unwrap();
-        alert("Прогресс сброшен");
+        // alert("Прогресс сброшен");
+        showAlert({
+          title: "Успешно!",
+          text: "Прогресс сброшен",
+          icon: "success",
+        });
       } catch (error) {
-        alert("Не удалось сбросить прогресс");
+        // alert("Не удалось сбросить прогресс");
+        showAlert({
+          title: "Ошибка!",
+          text: "Не удалось сбросить прогресс.",
+          icon: "error",
+        });
       }
     } else if (onSelectWorkouts) {
       onSelectWorkouts();
