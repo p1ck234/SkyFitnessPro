@@ -24,7 +24,7 @@ export const Person = () => {
 
   const handlePasswordReset = async () => {
     const email = user?.email;
-
+ 
     if (!email) {
       setError("Email пользователя не найден.");
       return;
@@ -75,7 +75,7 @@ export const Person = () => {
                 className="flex-1 text-xl max-w-60 min-w-60"
                 onClick={handlePasswordReset}
               >
-                Изменить пароль
+               Сбросить пароль
               </Button>
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60 border"

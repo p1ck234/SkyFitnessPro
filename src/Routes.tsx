@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
 import PopProgress from "./components/pops/PopProgress"; // Import PopProgress
+import { PopProgressConfirm } from "./components/pops/PopProgressConfirm";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -39,7 +40,7 @@ export const AppRoutes: React.FC = () => {
         openModal("select_workouts");
       } else if (location.pathname === constRoutes.EXIT) {
         openModal("exit");
-      } else {
+      } else  { 
         closeModal();
       }
     }
@@ -95,6 +96,7 @@ export const AppRoutes: React.FC = () => {
       {modalState === "select_workouts" && <PopSelectWorkoutPage />}
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
       {modalState === "progress_update" && <PopProgress />}
+      {modalState === "progress_success" && <PopProgressConfirm />}
     </>
   );
 };
