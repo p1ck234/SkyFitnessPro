@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
 import { useUser } from "@/context/userContext";
-import { logout } from "@/services/authService";
 import { setIsProfile } from "@/store/slices/courseSlice";
 import { showAlert } from "@/utils/sweetalert";
 import { fetchLogin } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/services/useDispatch";
 import { constRoutes } from "@/lib/paths";
+import { logout } from "@/services/authService";
 
 interface PopExitProps {
   closeModal: () => void;

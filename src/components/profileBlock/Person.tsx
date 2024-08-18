@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
 import { useUser } from "@/context/userContext";
-import { logout, resetPassword } from "@/services/authService";
 import { useState } from "react";
 import { useModal } from "@/context/modalContext";
 import { showAlert } from "@/utils/sweetalert";
 import { constRoutes } from "@/lib/paths";
+import { fetchResetPassword, logout } from "@/store/slices/authSlice";
 
 export const Person = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export const Person = () => {
 
     try {
       setIsButtonLoading(true); // Включаем загрузку
-      await resetPassword(email); // Вызов функции для восстановления пароля
+      await fetchResetPassword(email); // Вызов функции для восстановления пароля
       openModal("password_reset_confirmation", { email }); // Открываем модальное окно подтверждения и передаем email
     } catch (error) {
       setError(

@@ -14,51 +14,39 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export const register = async (
-  email: string,
-  password: string,
-  username: string
-) => {
+export const register = async (email: string, password: string, username: string): Promise<{ user: { uid: string }; token: string }> => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    function validateEmail(email: string): boolean {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    }
+    
+    if (!validateEmail(email)) {
+      throw new Error("Invalid email format");
+    }
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
     await setDoc(doc(db, "users", user.uid), {
-      username: username,
+      username,
       email: user.email,
       createdAt: new Date(),
     });
-
-    return user;
-  } catch (error) {
+    const token = await user.getIdToken();
+    return { user: { uid: user.uid }, token }; // Убедитесь, что возвращается объект с user.uid
+  } catch (error: any) {
     console.error("Error during registration:", error);
     throw error;
   }
 };
 
-export const login = async (email: string, password: string) => {
+export const login = async (email: string, password: string): Promise<{ token: string; userId: string }> => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    return userCredential.user;
-  } catch (error) {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    const token = await user.getIdToken();
+    return { token, userId: user.uid }; // Изменено на возвращение userId
+  } catch (error: any) {
     console.error("Error during login:", error);
-    throw error;
-  }
-};
-
-export const logout = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error("Error during logout:", error);
     throw error;
   }
 };
@@ -73,6 +61,16 @@ export const resetPassword = async (email: string) => {
     throw error;
   }
 };
+
+export const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error during logout:", error);
+    throw error;
+  }
+};
+
 
 // Функция для получения данных пользователя из Firestore
 export const getUserData = async (uid: string) => {

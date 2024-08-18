@@ -6,7 +6,7 @@ import { Button } from "@/components/shared/Button";
 import { useAppDispatch } from "@/services/useDispatch";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { fetchLogin, fetchResetPassword } from "@/store/slices/authSlice";
+import { fetchLogin, fetchResetPassword, setEmail, setPassword } from "@/store/slices/authSlice";
 import { constRoutes } from "@/lib/paths";
 
 interface LogInPageProps {
@@ -14,13 +14,13 @@ interface LogInPageProps {
 }
 
 export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
-  const [email, setEmail] = useState(""); // Email пользователя
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal, openModal } = useModal();
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, email, password } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const handleSwitchToRegister = () => {
     switchToRegister();
@@ -77,7 +77,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             type="text"
             placeholder="Логин"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => dispatch(setEmail(e.target.value))}
             disabled={isLoading} //
           />
           <input
@@ -88,7 +88,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             type="password"
             placeholder="Пароль"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => dispatch(setPassword(e.target.value))}
             disabled={isLoading}
           />
           {error && (

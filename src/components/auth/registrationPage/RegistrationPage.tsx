@@ -37,9 +37,19 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     });
   };
 
+  const handleChange =
+    (setter: (value: string) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setError(null)); // Сброс ошибки при изменении поля
+      setter(e.target.value);
+    };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    dispatch(setError(null));
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
     if (password !== confirmPassword) {
       dispatch(setError("Пароли не совпадают"));
       return;
@@ -57,7 +67,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     }
 
     try {
-      await dispatch(fetchRegisterUser({ email, password, username })).unwrap();
+      await dispatch(
+        fetchRegisterUser({ email, password, username, confirmPassword })
+      ).unwrap();
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {}
@@ -112,7 +124,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="password"
             placeholder="Пароль"
             value={password}
-            onChange={(e) => dispatch(setPassword(e.target.value))}
+            onChange={handleChange((value) => dispatch(setPassword(value)))}
             disabled={isLoading}
           />
           <input
@@ -123,7 +135,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="password"
             placeholder="Повторите пароль"
             value={confirmPassword}
-            onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
+            onChange={handleChange((value) =>
+              dispatch(setConfirmPassword(value))
+            )}
             disabled={isLoading}
           />
           {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
