@@ -5,6 +5,7 @@ import { useUser } from "@/context/userContext";
 import { logout, resetPassword } from "@/services/authService";
 import { useState } from "react";
 import { useModal } from "@/context/modalContext";
+import { showAlert } from "@/utils/sweetalert";
 
 export const Person = () => {
   const navigate = useNavigate();
@@ -16,8 +17,25 @@ export const Person = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate("/"); // Перенаправление на главную страницу после выхода
+      // Пример вызова showAlert с использованием кастомных классов от компонента Button
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите выйти из системы?",
+        icon: "warning",
+        confirmButtonText: "Выйти",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black", // Классы из вашего Button компонента
+          cancelButton:
+            "py-2 px-4 rounded-full bg-white text-black border border-black", // Добавлен класс для рамки
+        },
+      });
+
+      if (result.isConfirmed) {
+        await logout();
+        navigate("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }

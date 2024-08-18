@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch } from "react-redux";
 import { login } from "@/store/slices/authSlice";
 import { setIsProfile } from "@/store/slices/courseSlice";
+import { showAlert } from "@/utils/sweetalert";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -53,9 +53,26 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      closeModal();
-      navigate("/");
+      // Пример вызова showAlert с использованием кастомных классов от компонента Button
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите выйти из системы?",
+        icon: "warning",
+        confirmButtonText: "Выйти",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black", // Классы из вашего Button компонента
+          cancelButton:
+            "py-2 px-4 rounded-full bg-white text-black border border-black", // Добавлен класс для рамки
+        },
+      });
+
+      if (result.isConfirmed) {
+        await logout();
+        closeModal();
+        navigate("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }
