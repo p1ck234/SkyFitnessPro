@@ -72,7 +72,9 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
       ).unwrap();
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
-    } catch (error) {}
+    } catch (error) {
+      dispatch(setError("Ошибка регистрации"));
+    }
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -140,7 +142,11 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             )}
             disabled={isLoading}
           />
-          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+          {error ? (
+            error && <div className="text-red-500 text-sm mb-4">{error}</div>
+          ) : (
+            <div className="font-red mb-5">Введите данные для регистрации</div>
+          )}
 
           <Button
             color="bg-customGreen"
@@ -156,6 +162,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             width="w-full"
             className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToLogin}
+            variant="custom-achrom"
           >
             Войти
           </Button>

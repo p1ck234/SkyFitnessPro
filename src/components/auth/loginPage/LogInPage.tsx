@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useModal } from "@/context/modalContext";
@@ -6,7 +6,12 @@ import { Button } from "@/components/shared/Button";
 import { useAppDispatch } from "@/services/useDispatch";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { fetchLogin, fetchResetPassword, setEmail, setPassword } from "@/store/slices/authSlice";
+import {
+  fetchLogin,
+  fetchResetPassword,
+  setEmail,
+  setPassword,
+} from "@/store/slices/authSlice";
 import { constRoutes } from "@/lib/paths";
 
 interface LogInPageProps {
@@ -21,6 +26,14 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   const { isLoading, error, email, password } = useSelector(
     (state: RootState) => state.auth
   );
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+
+    if (savedEmail) dispatch(setEmail(savedEmail));
+    if (savedPassword) dispatch(setPassword(savedPassword));
+  }, [dispatch]);
 
   const handleSwitchToRegister = () => {
     switchToRegister();

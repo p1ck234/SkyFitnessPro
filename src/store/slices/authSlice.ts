@@ -100,9 +100,11 @@ const authSlice = createSlice({
     },
     setEmail(state, action: PayloadAction<string>) {
       state.email = action.payload;
+      localStorage.setItem('email', action.payload); // Сохранение email в localStorage
     },
     setPassword(state, action: PayloadAction<string>) {
       state.password = action.payload;
+      localStorage.setItem('password', action.payload); // Сохранение password в localStorage
     },
     setConfirmPassword(state, action: PayloadAction<string>) {
       state.confirmPassword = action.payload;
