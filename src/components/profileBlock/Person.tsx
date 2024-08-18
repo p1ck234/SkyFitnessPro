@@ -12,6 +12,7 @@ export const Person = () => {
   const { user, userData } = useUser(); // Достаем user и userData из контекста
   const { openModal } = useModal();
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
+  const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние загрузки кнопки
 
   const handleLogout = async () => {
     try {
@@ -31,6 +32,7 @@ export const Person = () => {
     }
 
     try {
+      setIsButtonLoading(true); // Включаем загрузку
       await resetPassword(email); // Вызов функции для восстановления пароля
       openModal("password_reset_confirmation", { email }); // Открываем модальное окно подтверждения и передаем email
     } catch (error) {
@@ -38,6 +40,8 @@ export const Person = () => {
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
       );
       console.error("Password reset failed:", error);
+    } finally {
+      setIsButtonLoading(false); // Выключаем загрузку после завершения
     }
   };
 
@@ -61,7 +65,7 @@ export const Person = () => {
                 </p>
                 <div>
                   <span className="text-xl font-medium">
-                  Логин: {user.email}
+                    Логин: {user.email}
                   </span>
                   <p className="text-xl font-medium">Пароль: *******</p>
                 </div>
@@ -74,8 +78,9 @@ export const Person = () => {
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60"
                 onClick={handlePasswordReset}
+                disabled={isButtonLoading} // Отключаем кнопку во время загрузки
               >
-                Изменить пароль
+                {isButtonLoading ? "Загрузка..." : "Изменить пароль"}
               </Button>
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60 border"
