@@ -1,5 +1,4 @@
 // courseContext.tsx
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCourses } from "@/services/firestoreService";
 import { Workout } from "@/types/types";

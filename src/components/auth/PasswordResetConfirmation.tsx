@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "@/context/modalContext"; // Импортируйте useModal
 import { Logo } from "../shared/logo/Logo";
+import { constRoutes } from "@/lib/paths";
 
 export const PasswordResetConfirmation: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export const PasswordResetConfirmation: React.FC = () => {
 
   const handleBackgroundClick = () => {
     closeModal(); // Закрываем модальное окно
-    navigate("/"); // Перенаправляем на главную страницу
+    navigate(constRoutes.HOME); // Перенаправляем на главную страницу
   };
 
   return (

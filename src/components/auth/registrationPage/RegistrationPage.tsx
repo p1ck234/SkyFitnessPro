@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
-import { register } from "@/services/authService";
-import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context/modalContext";
 import { Button } from "@/components/shared/Button";
+import { useAppDispatch } from "@/services/useDispatch";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
+import {
+  fetchRegisterUser,
+  setConfirmPassword,
+  setEmail,
+  setError,
+  setPassword,
+  setUsername,
+} from "@/store/slices/authSlice";
+import { constRoutes } from "@/lib/paths";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -14,12 +23,9 @@ interface RegistrationPageProps {
 export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   switchToLogin,
 }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const { email, password, confirmPassword, username, isLoading, error } =
+    useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal } = useModal();
@@ -33,39 +39,28 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     if (password !== confirmPassword) {
-      setError("Пароли не совпадают");
+      dispatch(setError("Пароли не совпадают"));
       return;
     }
 
     if (password.length < 6) {
-      setError("Пароль должен содержать не менее 6 символов");
+      dispatch(setError("Пароль должен содержать не менее 6 символов"));
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError("Неверно указана почта");
+      dispatch(setError("Неверно указана почта"));
       return;
     }
 
-    setIsLoading(true);
-
     try {
-      const user = await register(email, password, username);
+      await dispatch(fetchRegisterUser({ email, password, username })).unwrap();
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
-    } catch (error: any) {
-      if (error.code === "auth/email-already-in-use") {
-        setError("Данная почта уже используется. Попробуйте войти.");
-      } else {
-        setError("Регистрация не удалась. Попробуйте еще раз.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    } catch (error) {}
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -95,7 +90,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="text"
             placeholder="Имя пользователя"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => dispatch(setUsername(e.target.value))}
             disabled={isLoading}
           />
           <input
@@ -106,7 +101,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="text"
             placeholder="Эл.почта"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => dispatch(setEmail(e.target.value))}
             disabled={isLoading}
           />
           <input
@@ -117,7 +112,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="password"
             placeholder="Пароль"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => dispatch(setPassword(e.target.value))}
             disabled={isLoading}
           />
           <input
@@ -128,7 +123,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             type="password"
             placeholder="Повторите пароль"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
             disabled={isLoading}
           />
           {error && <div className="text-red-500 text-sm mb-4">{error}</div>}

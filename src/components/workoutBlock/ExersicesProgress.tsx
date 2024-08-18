@@ -96,7 +96,7 @@ const ExersicesProgress = ({
         ))}
       </div>
 
-      <div className="flex">
+      <div className="flex flex-col justify-center">
         <Button
           className="flex-1 max-w-80 min-w-60 mt-8"
           onClick={handleOpenProgressModal}

@@ -1,13 +1,9 @@
 import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
-import { Course } from "@/types/types";
 import { Button } from "../shared/Button";
 
-type MainProps = {
-  course: Course;
-};
-export function Main({ course }: MainProps) {
+export function Main() {
   const { courses, loading, error } = useCourses();
 
   if (loading) {

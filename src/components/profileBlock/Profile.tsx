@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useModal } from "@/context/modalContext";
+import { useNavigate } from "react-router-dom";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { PopSelectWorkouts } from "../pops/PopSelectWorkout";
 import { Course } from "@/types/types";
 import { Button } from "../shared/Button";
+import { constRoutes } from "@/lib/paths";
 
 export const Profile = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
-  const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
   const { userCourses, loading, error } = useUserCourses(refreshKey);
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
@@ -22,7 +20,7 @@ export const Profile = () => {
       setSelectedCourse(course); // Сохраняем выбранный курс, если есть
       setShowSelectWorkouts(true);
     } else {
-      navigate("/"); // Если нет курсов, перенаправляем на главную страницу
+      navigate(constRoutes.HOME); // Если нет курсов, перенаправляем на главную страницу
     }
   };
 
@@ -80,7 +78,7 @@ export const Profile = () => {
       {showSelectWorkouts && selectedCourse && (
         <PopSelectWorkouts
           workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
-          courseId={Number(selectedCourse.id)}          // Передаем идентификатор курса
+          courseId={Number(selectedCourse.id)} // Передаем идентификатор курса
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}

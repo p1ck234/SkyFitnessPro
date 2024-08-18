@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/userContext";
 
 interface PopSelectWorkoutsProps {
@@ -14,11 +14,10 @@ export const PopSelectWorkouts = ({
   courseId,
   onClose,
 }: PopSelectWorkoutsProps) => {
-  const { user } = useUser(); 
+  const { user } = useUser();
   const navigate = useNavigate();
-  const location = useLocation();
   const [progressData, setProgressData] = useState<any[]>([]);
-  const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
+  const [, setCheckedWorkouts] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(true);
 
   useEffect(() => {
@@ -30,13 +29,9 @@ export const PopSelectWorkouts = ({
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          console.log("User data from Firestore:", userData);
-
           const courseProgress = userData.courses_progress.find(
             (course: any) => course.id_course === courseId
           );
-          console.log("Course progress:", courseProgress);
-
           if (courseProgress) {
             setProgressData(courseProgress.workouts_progress);
           }
@@ -93,7 +88,7 @@ export const PopSelectWorkouts = ({
         <form className="flex flex-col items-center w-full rounded-xl">
           <h1 className="text-center text-3xl mb-6">Выберите тренировку</h1>
           <ul className="w-full flex flex-col overflow-y-auto max-h-[60vh] scrollbar-thin">
-            {workouts.map((workout, index) => {
+            {workouts.map((workout) => {
               const isCompleted = isWorkoutCompleted(workout.id);
 
               return (

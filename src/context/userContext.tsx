@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { auth, getUserData } from "../services/authService"; // Убедитесь, что вы экспортируете auth и getUserData из authService.ts
+import { auth, getUserData } from "../services/authService"; 
 
 interface UserContextType {
   user: FirebaseUser | null;
@@ -11,7 +11,6 @@ interface UserData {
   username: string;
   email: string;
   createdAt: Date;
-  // Добавьте любые другие поля, которые вам нужны
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);

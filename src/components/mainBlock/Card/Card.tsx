@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { Button } from "@/components/shared/Button";
 import { useSelector } from "react-redux";
@@ -18,6 +17,7 @@ import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { Course } from "@/types/types";
 import { useAppDispatch } from "@/services/useDispatch";
 import { showAlert } from "@/utils/sweetalert";
+import { constRoutes } from "@/lib/paths";
 
 interface CardProps {
   course: Course;
@@ -37,15 +37,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   const progress = useSelector(
     (state: RootState) => state.course.progress[course.id.toString()] ?? 0
   );
-  const loading = useSelector((state: RootState) => state.course.loading);
   const isProfile = useSelector((state: RootState) => state.course.isProfile);
-  const handleCourseRemoved = useSelector(
-    (state: RootState) => state.course.refreshKey
-  );
-  const progressObj = useSelector(
-    (state: RootState) => state.course.progress
-  ) ?? { value: 0 };
-  const progressValue = progressObj.value; // Извлечение числового значения
   const formattedProgress =
     typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
@@ -243,10 +235,10 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
                 {isButtonLoading
                   ? "Загрузка..."
                   : progress === 100
-                  ? "Начать заново"
-                  : progress > 0
-                  ? "Продолжить"
-                  : "Начать тренировки"}
+                    ? "Начать заново"
+                    : progress > 0
+                      ? "Продолжить"
+                      : "Начать тренировки"}
               </Button>
             </div>
           </div>

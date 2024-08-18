@@ -6,8 +6,8 @@ import { addCourseToUser } from "@/services/firestoreService";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../shared/Button";
-import { constRoutes } from "@/lib/paths";
 import { showAlert } from "@/utils/sweetalert";
+import { constRoutes } from "@/lib/paths";
 
 interface CourseDescriptionProps {
   course: Course;
@@ -120,10 +120,10 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
               {isLoading
                 ? "Загрузка..."
                 : !user
-                ? "Войдите, чтобы добавить курс"
-                : isHaveCourse
-                ? "Уже добавлен"
-                : "Добавить курс"}
+                  ? "Войдите, чтобы добавить курс"
+                  : isHaveCourse
+                    ? "Уже добавлен"
+                    : "Добавить курс"}
             </Button>
           </div>
         </div>

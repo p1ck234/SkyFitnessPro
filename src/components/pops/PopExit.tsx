@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
-import { useDispatch } from "react-redux";
-import { login } from "@/store/slices/authSlice";
 import { setIsProfile } from "@/store/slices/courseSlice";
 import { showAlert } from "@/utils/sweetalert";
+import { fetchLogin } from "@/store/slices/authSlice";
+import { useAppDispatch } from "@/services/useDispatch";
+import { constRoutes } from "@/lib/paths";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -19,7 +20,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const updatePosition = () => {
@@ -46,14 +47,17 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
   const toggleMyProfile = () => {
     dispatch(setIsProfile(false));
     closeModal();
-    dispatch(login(user?.email || ""));
+    if (user?.email) {
+      // Пароль должен быть введен пользователем или получен из другого источника
+      const password = "your-password";
+      dispatch(fetchLogin({ email: user.email, password }));
+    }
     dispatch(setIsProfile(true));
-    setTimeout(() => navigate("/profile"), 0);
+    setTimeout(() => navigate(constRoutes.PROFILE), 0);
   };
 
   const handleLogout = async () => {
     try {
-      // Пример вызова showAlert с использованием кастомных классов от компонента Button
       const result = await showAlert({
         title: "Вы уверены?",
         text: "Вы действительно хотите выйти из системы?",
@@ -66,7 +70,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
       if (result.isConfirmed) {
         await logout();
         closeModal();
-        navigate("/");
+        navigate(constRoutes.HOME);
       }
     } catch (error) {
       console.error("Logout failed:", error);

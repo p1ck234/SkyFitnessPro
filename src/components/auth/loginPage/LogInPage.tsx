@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
-import { login, resetPassword } from "@/services/authService";
 import { Button } from "@/components/shared/Button";
+import { useAppDispatch } from "@/services/useDispatch";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { fetchLogin, fetchResetPassword } from "@/store/slices/authSlice";
+import { constRoutes } from "@/lib/paths";
 
 interface LogInPageProps {
   switchToRegister: () => void;
@@ -13,11 +16,11 @@ interface LogInPageProps {
 export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   const [email, setEmail] = useState(""); // Email пользователя
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
-  const [error, setError] = useState<string | null>(null); // Состояние ошибки
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal, openModal } = useModal();
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
 
   const handleSwitchToRegister = () => {
     switchToRegister();
@@ -28,35 +31,23 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true); // Начинаем загрузку
-    setError(null); // Сбрасываем ошибку
-
-    try {
-      await login(email, password);
-      closeModal();
-      navigate(location.state?.backgroundLocation || "/", { replace: true });
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("Пароль введен неверно, попробуйте еще раз."); // Устанавливаем сообщение об ошибке
-    } finally {
-      setIsLoading(false); // Завершаем загрузку
-    }
+    dispatch(fetchLogin({ email, password })).then((result) => {
+      if (fetchLogin.fulfilled.match(result)) {
+        closeModal();
+        navigate(location.state?.backgroundLocation || "/", { replace: true });
+      }
+    });
   };
 
   const handlePasswordReset = async () => {
     if (!email) {
-      setError("Введите email и оставьте поле пароль пустым"); // Устанавливаем сообщение об ошибке, если email пустой
       return;
     }
-    try {
-      await resetPassword(email); // Вызов функции для восстановления пароля
-      openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
-    } catch (error) {
-      setError(
-        "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
-      );
-      console.error("Password reset failed:", error);
-    }
+    dispatch(fetchResetPassword(email)).then((result) => {
+      if (fetchResetPassword.fulfilled.match(result)) {
+        openModal("password_reset_confirmation", email);
+      }
+    });
   };
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -86,8 +77,8 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             type="text"
             placeholder="Логин"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Обновляем состояние email
-            disabled={isLoading} // Отключаем поле во время загрузки
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading} //
           />
           <input
             className={`rounded-lg border text-base w-full py-4 px-4 mb-4 ${
@@ -98,11 +89,10 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoading} // Отключаем поле во время загрузки
+            disabled={isLoading}
           />
           {error && (
             <div className="text-red-500 text-sm mb-4 text-center">
-              {error}
               <br />
               <button
                 type="button"
@@ -118,7 +108,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             width="w-full"
             className="text-black py-2 px-6 rounded-full text-xl"
             type="submit"
-            disabled={isLoading} // Отключаем кнопку во время загрузки
+            disabled={isLoading}
           >
             {isLoading ? "Загрузка..." : "Войти"}
           </Button>
@@ -127,6 +117,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
             width="w-full"
             className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToRegister}
+            variant="custom-achrom"
           >
             Зарегистрироваться
           </Button>
