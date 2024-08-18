@@ -1,3 +1,5 @@
+import tailwindScrollbar from "tailwind-scrollbar";
+
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
@@ -18,7 +20,7 @@ module.exports = {
         laptop: "1440px",
         phone: "376px",
         wide: "1920px",
-        tablet: "792px"
+        tablet: "792px",
       },
       spacing: {
         "50px": "50px",
@@ -29,7 +31,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwind-scrollbar"),
+    tailwindScrollbar,
     function ({ addComponents }) {
       addComponents({
         ".btn-custom-color": {

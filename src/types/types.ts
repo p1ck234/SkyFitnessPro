@@ -32,3 +32,4 @@ export type CourseState = {
   course: Course;
   refreshKey: number;
 };
+

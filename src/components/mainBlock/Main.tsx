@@ -2,7 +2,7 @@ import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
 import { Course } from "@/types/types";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 type MainProps = {
   course: Course;

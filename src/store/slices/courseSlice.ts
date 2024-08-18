@@ -14,6 +14,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { showAlert } from "@/utils/sweetalert";
 
 export const fetchUserCourses = createAsyncThunk<
   Course[],
@@ -44,16 +45,27 @@ export const fetchAddCourse = createAsyncThunk<
 >("course/fetchAddCourse", async ({ uid, courseId }, thunkAPI) => {
   try {
     const courseIdNum = parseInt(courseId);
-    // Проверка, существует ли курс в профиле пользователя
     const exists = await checkCourseExists(uid, courseIdNum);
     if (exists) {
-      alert("Этот курс уже есть в вашем профиле");
+      showAlert({
+        title: "Внимание!",
+        text: "Этот курс уже есть в вашем профиле",
+        icon: "warning",
+      });
       return thunkAPI.rejectWithValue("Курс уже добавлен в профиль");
     }
     await addCourseToUser(uid, parseInt(courseId));
-    alert("Курс успешно добавлен в ваш профиль");
+    showAlert({
+      title: "Успешно!",
+      text: "Курс успешно добавлен в ваш профиль",
+      icon: "success",
+    });
   } catch (error) {
-    alert("Курс не удалось добавить в профиль");
+    showAlert({
+      title: "Ошибка!",
+      text: "Курс не удалось добавить в профиль.",
+      icon: "error",
+    });
     return thunkAPI.rejectWithValue("Не удалось добавить курс");
   }
 });
@@ -77,7 +89,9 @@ export const fetchUserProgress = createAsyncThunk<
     }
     return { courseId, progress: 0 };
   } catch (error) {
-    return thunkAPI.rejectWithValue("Ошибка при загрузке прогресса пользователя");
+    return thunkAPI.rejectWithValue(
+      "Ошибка при загрузке прогресса пользователя"
+    );
   }
 });
 
@@ -89,10 +103,17 @@ export const fetchRemoveCourse = createAsyncThunk<
   try {
     const courseIdNum = parseInt(courseId);
     await removeCourseFromUser(uid, courseIdNum);
-    alert("Курс успешно удален из вашего профиля");
-    
+    showAlert({
+      title: "Успешно!",
+      text: "Курс успешно удален из вашего профиля",
+      icon: "success",
+    });
   } catch (error) {
-    alert("Курс не удалось удалить из профиля");
+    showAlert({
+      title: "Ошибка!",
+      text: "Курс не удалось удалить из профиля.",
+      icon: "error",
+    });
     return thunkAPI.rejectWithValue("Не удалось удалить курс");
   }
 });
@@ -139,7 +160,10 @@ const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {
-    setProgress(state, action: PayloadAction<{ courseId: string; progress: number }>) {
+    setProgress(
+      state,
+      action: PayloadAction<{ courseId: string; progress: number }>
+    ) {
       const { courseId, progress } = action.payload;
       state.progress[courseId] = progress;
     },
@@ -202,11 +226,17 @@ const courseSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUserProgress.fulfilled, (state, action: PayloadAction<{ courseId: string; progress: number }>) => {
-        state.loading = false;
-        const { courseId, progress } = action.payload;
-        state.progress[courseId] = progress;
-      })
+      .addCase(
+        fetchUserProgress.fulfilled,
+        (
+          state,
+          action: PayloadAction<{ courseId: string; progress: number }>
+        ) => {
+          state.loading = false;
+          const { courseId, progress } = action.payload;
+          state.progress[courseId] = progress;
+        }
+      )
       .addCase(fetchUserProgress.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
