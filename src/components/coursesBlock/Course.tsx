@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import CoursesBlock from "./CoursesBlock";
 import CourseDescription from "./CourseDescription";
 import { useCourses } from "@/context/courseContext";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 const Course: React.FC = () => {
   const { id } = useParams<{ id: string }>();

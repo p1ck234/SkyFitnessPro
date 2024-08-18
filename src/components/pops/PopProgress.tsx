@@ -4,11 +4,11 @@ import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
 import { useNavigate } from "react-router-dom";
 import { useCourses } from "@/context/courseContext";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 interface Exercise {
   id: number;
-  count: number; 
+  count: number;
   name: string;
   count_completed?: number;
   completed?: boolean;
