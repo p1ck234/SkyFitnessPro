@@ -7,10 +7,10 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
 Проект онлайн тренировок для занятий дома.
 Технологии:
- 1 Язык TypeScript
- 2 Фреймворк React.js
- 3 Стилизация с библиотекой Tailwind CSS
- 4 База данных Google Firebase
+- Язык TypeScript
+- Фреймворк React.js
+- Стилизация с библиотекой Tailwind CSS
+- База данных Google Firebase
 
 Есть главная страница курсов, страница авторизации/регистрации, страница отдельного курса, страница профиля, страница тренировки.
 
