@@ -80,7 +80,7 @@ export const Profile = () => {
       {showSelectWorkouts && selectedCourse && (
         <PopSelectWorkouts
           workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
-          courseId={selectedCourse.id} // Передаем идентификатор курса
+          courseId={Number(selectedCourse.id)}          // Передаем идентификатор курса
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}
