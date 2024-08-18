@@ -51,26 +51,32 @@ export const Profile = () => {
       </h1>
       <div className="flex gap-x-4 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
         {userCourses.length > 0 ? (
-          userCourses.map((course, index) => (
-            <Card
-              key={`${course.id}-${index}`}
-              course={course}
-              onCourseRemoved={handleCourseRemoved}
-              onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
-            />
-          ))
+          <>
+            {userCourses.map((course, index) => (
+              <Card
+                key={`${course.id}-${index}`}
+                course={course}
+                onCourseRemoved={handleCourseRemoved}
+                onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
+              />
+            ))}
+            <div className="w-full flex justify-center mt-8">
+              <Button className="h-12 w-32">
+                <a href="#heading-section">Наверх ↑</a>
+              </Button>
+            </div>
+          </>
         ) : (
           <div className="w-full flex justify-center">
-            <button
+            <Button
               className="bg-customGreen text-black py-2 px-6 rounded-full mt-4"
               onClick={() => handleOpenSelectWorkoutModal(null)}
             >
               Выбрать тренировки
-            </button>
+            </Button>
           </div>
         )}
       </div>
-
       {showSelectWorkouts && selectedCourse && (
         <PopSelectWorkouts
           workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
@@ -78,11 +84,6 @@ export const Profile = () => {
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}
-      <div className="flex justify-center">
-        <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
-        </Button>
-      </div>
     </div>
   );
 };
