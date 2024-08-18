@@ -30,7 +30,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
           left:
-            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
+            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.2,
         });
 
         setIsPositioned(true);
@@ -103,7 +103,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-sm sm:text-lg w-full text-black py-2 px-4 rounded-full"
+            className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль
