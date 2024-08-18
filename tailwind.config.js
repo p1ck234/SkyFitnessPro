@@ -21,6 +21,7 @@ module.exports = {
         phone: "376px",
         wide: "1920px",
         tablet: "792px",
+        tabletL: "1026px",
       },
       spacing: {
         "50px": "50px",

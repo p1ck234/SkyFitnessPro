@@ -47,7 +47,7 @@ export const Profile = () => {
       <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
         Мои курсы
       </h1>
-      <div className="flex gap-x-4 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+      <div className="flex gap-x-4 tabletL:gap-x-8 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
         {userCourses.length > 0 ? (
           <>
             {userCourses.map((course, index) => (

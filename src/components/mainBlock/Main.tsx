@@ -17,7 +17,7 @@ export function Main() {
   return (
     <div className="mx-auto">
       <Heading />
-      <div className="flex gap-x-4 tablet:gap-x-8 gap-y-5 mt-12 flex-row flex-wrap content-start">
+      <div className="flex gap-x-4 tabletL:gap-x-8 tablet:gap-x-8  gap-y-5 mt-12 flex-row flex-wrap content-start">
         {courses.map((course) => (
           <Card key={course.id} course={course} />
         ))}
