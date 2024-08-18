@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/shared/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {
@@ -84,26 +84,46 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     }
   };
 
-  const handleRemoveCourse = () => {
-    setIsLoading(true);
-    if (user && course) {
-      const uid = user.uid;
-      const courseId = course.id.toString();
+  const handleRemoveCourse = async () => {
+    try {
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите удалить этот курс?",
+        icon: "warning",
+        confirmButtonText: "Удалить",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black",
+          cancelButton:
+            "py-2 px-4 rounded-full bg-white text-black border border-black",
+        },
+      });
 
-      dispatch(fetchRemoveCourse({ uid, courseId }))
-        .unwrap()
-        .then(() => {
-          dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
-          if (onCourseRemoved) {
-            onCourseRemoved(); // Дополнительные действия после удаления курса
-          }
-        })
-        .catch((error) => {
-          console.error("Ошибка при удалении курса:", error);
-        })
-        .finally(() => {
-          setIsLoading(false); // Остановка загрузки после завершения
-        });
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        if (user && course) {
+          const uid = user.uid;
+          const courseId = course.id.toString();
+
+          dispatch(fetchRemoveCourse({ uid, courseId }))
+            .unwrap()
+            .then(() => {
+              dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
+              if (onCourseRemoved) {
+                onCourseRemoved(); // Дополнительные действия после удаления курса
+              }
+            })
+            .catch((error) => {
+              console.error("Ошибка при удалении курса:", error);
+            })
+            .finally(() => {
+              setIsLoading(false); // Остановка загрузки после завершения
+            });
+        }
+      }
+    } catch (error) {
+      console.error("Error during course removal:", error);
     }
   };
 
