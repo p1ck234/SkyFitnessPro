@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
@@ -21,14 +21,62 @@ const PopProgress = () => {
   const { courses } = useCourses();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Добавляем состояние для отслеживания загрузки данных
+  const [progress, setProgress] = useState<number[]>([]); // Состояние для прогресса
+
+  useEffect(() => {
+    if (user && workout) {
+      const fetchProgressData = async () => {
+        const db = getFirestore();
+        const userRef = doc(db, "dataUsers", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          const courseId = parseInt(location.pathname.split("/")[2]);
+
+          const courseProgress = userData.courses_progress.find(
+            (course: any) => course.id_course === courseId
+          );
+
+          if (courseProgress) {
+            const workoutProgress = courseProgress.workouts_progress.find(
+              (wp: any) => wp.id_workout === workout.id
+            );
+
+            if (workoutProgress) {
+              setProgress(
+                workout.exercise.map((exercise: Exercise) => {
+                  const exerciseProgress =
+                    workoutProgress.exercises_progress.find(
+                      (ep: any) => ep.id_exercise === exercise.id
+                    );
+                  return exerciseProgress?.count_completed || 0;
+                })
+              );
+            } else {
+              setProgress(workout.exercise.map(() => 0));
+            }
+          }
+        }
+        setIsLoading(false); // Устанавливаем isLoading в false после завершения загрузки данных
+      };
+
+      fetchProgressData();
+    }
+  }, [user, workout]);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-20 flex justify-center items-center z-50">
+        <div className="loader"></div> {/* Ваш лоадер */}
+      </div>
+    );
+  }
 
   if (!workout || !workout.exercise) {
     return <div>Данные о тренировке не найдены.</div>;
   }
-
-  const [progress, setProgress] = useState(
-    workout.exercise.map((exercise: Exercise) => exercise.count_completed || 0)
-  );
 
   const calculateTotalExercisesInCourse = (course: any): number => {
     return course.workouts.reduce((totalExercises: number, workout: any) => {
@@ -93,7 +141,7 @@ const PopProgress = () => {
       );
 
       const workoutCompleted = updatedProgress.every(
-        (exercise: Exercise) => exercise.completed
+        (exercise: any) => exercise.completed
       );
 
       const workoutProgress = {
