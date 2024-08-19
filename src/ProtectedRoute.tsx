@@ -4,6 +4,7 @@ import { useUser } from "./context/userContext";
 
 interface ProtectedRouteProps {
   children: ReactElement;
+  isAuthenticated: boolean;
 }
 
 export const ProtectedRoute = ({
