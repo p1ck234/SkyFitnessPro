@@ -9,6 +9,10 @@ const Course: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { courses, loading } = useCourses();
 
+  const moveUp=()=>{
+    window.location.href='#heading-section';
+}
+
   console.log("URL ID:", id);
   console.log("Loaded courses:", courses);
 
@@ -31,8 +35,8 @@ const Course: React.FC = () => {
       <CoursesBlock course={course} />
       <CourseDescription course={course} />
       <div className="flex justify-center">
-        <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
+        <Button className="h-12 w-32" onClick={moveUp}>
+        Наверх ↑
         </Button>
       </div>
     </div>

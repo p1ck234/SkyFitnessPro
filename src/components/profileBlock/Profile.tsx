@@ -16,6 +16,9 @@ export const Profile = () => {
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
 
+  const moveUp=()=>{
+    window.location.href='#heading-section';
+}
   const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
     if (course) {
       setSelectedCourse(course); // Сохраняем выбранный курс, если есть
@@ -78,8 +81,8 @@ export const Profile = () => {
         />
       )}
       <div className="flex justify-center">
-        <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
+        <Button className="h-12 w-32" onClick={moveUp}>
+    Наверх ↑
         </Button>
       </div>
     </div>

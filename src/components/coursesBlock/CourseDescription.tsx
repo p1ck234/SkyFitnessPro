@@ -87,9 +87,9 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
       </section>
 
       {/* Course Description Section */}
-      <section className="flex flex-col md:flex-row bg-white rounded-3xl shadow-custom p-4 md:p-6 mb-6 rounded-3xl shadow-boxShadow">
+      <section className="flex flex-col md:flex-row bg-white rounded-3xl shadow-custom p-4 md:p-6 mb-6 shadow-boxShadow">
         <div className="flex flex-col justify-between h-full gap-4 md:gap-8 mb-4 md:mb-0 md:pr-6 w-full md:w-1/2">
-          <h2 className="text-3xl md:text-5xl font-medium mb-4 font-bold">
+          <h2 className="text-3xl md:text-5xl font-medium mb-4">
             Начните путь
             <br /> к новому телу
           </h2>

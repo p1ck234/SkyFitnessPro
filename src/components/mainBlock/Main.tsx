@@ -10,9 +10,8 @@ type MainProps = {
 };
 export function Main({ course }: MainProps) {
   const { courses, loading, error } = useCourses();
-  const navigate=useNavigate()
   const moveUp=()=>{
-    navigate('#heading-section')
+      window.location.href='#heading-section';
   }
 
   if (loading) {
@@ -32,8 +31,8 @@ export function Main({ course }: MainProps) {
         ))}
       </div>
       <div className="flex justify-center">
-        <Button className="h-12 w-32">
-        <a href="#heading-section">Наверх ↑</a>
+        <Button className="h-12 w-32" onClick={moveUp}>
+          Наверх ↑
         </Button>
       </div>
     </div>
