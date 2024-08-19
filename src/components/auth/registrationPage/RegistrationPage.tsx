@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
 import { useModal } from "@/context/modalContext";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/shared/Button";
 
 interface RegistrationPageProps {
   switchToLogin: () => void;
@@ -32,7 +32,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
 
     if (password !== confirmPassword) {
       setError("Пароли не совпадают");
@@ -70,7 +70,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       closeModal();
-      navigate(location.state?.backgroundLocation || "/", { replace: true });
+      navigate(location.state?.backgroundLocation, { replace: true });
     }
   };
 

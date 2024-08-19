@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/slices/authSlice";
 import { setIsProfile } from "@/store/slices/courseSlice";
+import { showAlert } from "@/utils/sweetalert";
 
 interface PopExitProps {
   closeModal: () => void;
@@ -29,7 +30,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         setPosition({
           top: buttonPosition.top + buttonPosition.height + 10,
           left:
-            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.5,
+            buttonPosition.left + buttonPosition.width / 2 - modalWidth / 1.2,
         });
 
         setIsPositioned(true);
@@ -52,9 +53,21 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      closeModal();
-      navigate("/");
+      // Пример вызова showAlert с использованием кастомных классов от компонента Button
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите выйти из системы?",
+        icon: "warning",
+        confirmButtonText: "Выйти",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+      });
+
+      if (result.isConfirmed) {
+        await logout();
+        closeModal();
+        navigate("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -85,7 +98,7 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         </div>
         <div className="flex flex-col items-center gap-2">
           <Button
-            className="bg-customGreen text-sm sm:text-lg w-full text-black py-2 px-4 rounded-full"
+            className="bg-customGreen text-lg w-full text-black py-2 px-4 rounded-full"
             onClick={toggleMyProfile}
           >
             Мой профиль

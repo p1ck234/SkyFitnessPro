@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { login, resetPassword } from "@/services/authService";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/shared/Button";
 
 interface LogInPageProps {
   switchToRegister: () => void;
@@ -21,9 +21,9 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, {
-      state: { backgroundLocation: location.state?.backgroundLocation },
-    });
+    // navigate(constRoutes.REGISTRATION, {
+    //   state: { backgroundLocation: location.state?.backgroundLocation },
+    // });
   };
 
   const handleLogin = async (e: React.FormEvent) => {

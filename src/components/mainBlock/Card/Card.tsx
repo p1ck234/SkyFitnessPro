@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/shared/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {
@@ -17,6 +17,8 @@ import { UserProgress } from "@/customHooks/userProgress";
 import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { Course } from "@/types/types";
 import { useAppDispatch } from "@/services/useDispatch";
+import { showAlert } from "@/utils/sweetalert";
+import { useUserCourses } from "@/customHooks/useUserCourses";
 
 interface CardProps {
   course: Course;
@@ -24,6 +26,7 @@ interface CardProps {
   onCourseRemoved?: () => void;
   onSelectWorkouts?: () => void;
 }
+
 export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   console.log("Card component rendered");
 
@@ -44,10 +47,12 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     (state: RootState) => state.course.progress
   ) ?? { value: 0 };
   const progressValue = progressObj.value; // Извлечение числового значения
-  const formattedProgress = typeof progress === 'number' ? progress.toFixed(1) : '0.0';
+  const formattedProgress =
+    typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
-
-
+  const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние для кнопки
+  const { userCourses } = useUserCourses(0); // Получаем курсы пользователя
+  const [isHaveCourse, setIsHaveCourse] = useState(false); // Состояние наличия курса
 
   UserProgress();
 
@@ -60,12 +65,31 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   }, [dispatch, user, course.id]);
 
   useEffect(() => {
+    if (userCourses && userCourses.some((c) => c.id === course.id)) {
+      setIsHaveCourse(true);
+    }
+  }, [userCourses, course.id]);
+
+  useEffect(() => {
     dispatch(setIsProfile(location.pathname === constRoutes.PROFILE));
   }, [location.pathname, dispatch]);
 
   const handleAddCourse = () => {
     setIsLoading(true);
-    if (user && course) {
+
+    // Проверяем, есть ли пользователь
+    if (!user) {
+      showAlert({
+        title: "Ошибка!",
+        text: "Необходимо авторизоваться!",
+        icon: "error",
+      });
+      console.error("Пользователь не авторизован");
+      setIsLoading(false);
+      return;
+    }
+
+    if (course) {
       const uid = user.uid;
       const courseId = course.id.toString();
       dispatch(fetchAddCourse({ uid, courseId }))
@@ -75,51 +99,58 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         })
         .catch((error) => {
           console.error("Ошибка при добавлении курса:", error);
-          setIsLoading(false);
-        });
-    }
-  };
-
-  const handleRemoveCourse = () => {
-    setIsLoading(true);
-    if (user && course) {
-      const uid = user.uid;
-      const courseId = course.id.toString();
-      dispatch(fetchRemoveCourse({ uid, courseId }))
-        .unwrap()
-        .then(() => {
-          dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
-        })
-        .then(() => {
-          if (onCourseRemoved) {
-            onCourseRemoved();
-          }
-        })
-        .catch((error) => {
-          console.error("Ошибка при удалении курса:", error);
         })
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      console.error("Курс не выбран");
+      setIsLoading(false);
     }
   };
 
-  // const handleResetProgress = async (courseId: string) => {
-  //   if (user) {
-  //     try {
-  //       dispatch(setLoading(true));
-  //       await removeCourseFromUser(user.uid, parseInt(courseId));
-  //       await addCourseToUser(user.uid, parseInt(courseId));
-  //       dispatch(setProgress(0)); // Обновляем прогресс в состоянии
-  //       alert("Прогресс курса был сброшен");
-  //     } catch (error) {
-  //       console.error("Ошибка при сбросе прогресса:", error);
-  //       alert("Не удалось сбросить прогресс курса");
-  //     } finally {
-  //       dispatch(setLoading(false));
-  //     }
-  //   }
-  // };
+  const handleRemoveCourse = async () => {
+    try {
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите удалить этот курс?",
+        icon: "warning",
+        confirmButtonText: "Удалить",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black",
+          cancelButton:
+            "py-2 px-4 rounded-full bg-white text-black border border-black",
+        },
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        if (user && course) {
+          const uid = user.uid;
+          const courseId = course.id.toString();
+
+          dispatch(fetchRemoveCourse({ uid, courseId }))
+            .unwrap()
+            .then(() => {
+              dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
+              if (onCourseRemoved) {
+                onCourseRemoved(); // Дополнительные действия после удаления курса
+              }
+            })
+            .catch((error) => {
+              console.error("Ошибка при удалении курса:", error);
+            })
+            .finally(() => {
+              setIsLoading(false); // Остановка загрузки после завершения
+            });
+        }
+      }
+    } catch (error) {
+      console.error("Error during course removal:", error);
+    }
+  };
 
   const handleCardClick = (id: string) => {
     navigate(`${constRoutes.COURSE}/${id}`);
@@ -136,15 +167,27 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
 
   const handleButtonClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsButtonLoading(true); // Начало загрузки при нажатии
 
     if (progress === 100) {
       try {
         await dispatch(
-          fetchResetProgress({ uid: user?.uid || '', courseId: course.id.toString() })
+          fetchResetProgress({
+            uid: user?.uid || "",
+            courseId: course.id.toString(),
+          })
         ).unwrap();
-        alert("Прогресс сброшен");
+        showAlert({
+          title: "Успешно!",
+          text: "Прогресс сброшен",
+          icon: "success",
+        });
       } catch (error) {
-        alert("Не удалось сбросить прогресс");
+        showAlert({
+          title: "Ошибка!",
+          text: "Не удалось сбросить прогресс.",
+          icon: "error",
+        });
       }
     } else if (onSelectWorkouts) {
       onSelectWorkouts();
@@ -154,6 +197,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     } else {
       handleCardClick(course.id);
     }
+
+    setIsButtonLoading(false); // Остановка загрузки после завершения
   };
 
   return (
@@ -170,17 +215,42 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         >
           {isLoading ? (
             <div className="loader"></div>
-          ) : (
-            <div>
+          ) : isProfile ? (
+            <button
+              className="flex items-center"
+              onClick={(e) => {
+                e.stopPropagation(); // предотвращаем выполнение клика по карточке
+                handleRemoveCourse();
+              }}
+            >
               <img
-                src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
-                alt={isProfile ? "Удалить курс" : "Добавить курс"}
+                src="/img/icon/minus.svg"
+                alt="Удалить курс"
                 className="w-6 h-6"
               />
               <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
-                {isProfile ? "Удалить курс" : "Добавить курс"}
+                Удалить курс
               </span>
-            </div>
+            </button>
+          ) : (
+            !isHaveCourse && (
+              <button
+                className="flex items-center"
+                onClick={(e) => {
+                  e.stopPropagation(); // предотвращаем выполнение клика по карточке
+                  handleAddCourse();
+                }}
+              >
+                <img
+                  src="/img/icon/plus.svg"
+                  alt="Добавить курс"
+                  className="w-6 h-6"
+                />
+                <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+                  Добавить курс
+                </span>
+              </button>
+            )
           )}
         </button>
       </div>
@@ -215,12 +285,18 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
               ></div>
             </div>
             <div>
-              <Button width="w-full" onClick={handleButtonClick}>
-                {progress === 100
-                  ? "Начать заново"
-                  : progress > 0
-                  ? "Продолжить"
-                  : "Начать тренировки"}
+              <Button
+                width="w-full"
+                onClick={handleButtonClick}
+                disabled={isButtonLoading}
+              >
+                {isButtonLoading
+                  ? "Загрузка..."
+                  : progress === 100
+                    ? "Начать заново"
+                    : progress > 0
+                      ? "Продолжить"
+                      : "Начать тренировки"}
               </Button>
             </div>
           </div>

@@ -3,15 +3,15 @@ import { useParams } from "react-router-dom";
 import CoursesBlock from "./CoursesBlock";
 import CourseDescription from "./CourseDescription";
 import { useCourses } from "@/context/courseContext";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 
 const Course: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { courses, loading } = useCourses();
 
-  const moveUp=()=>{
-    window.location.href='#heading-section';
-}
+  const moveUp = () => {
+    window.location.href = "#heading-section";
+  };
 
   console.log("URL ID:", id);
   console.log("Loaded courses:", courses);
@@ -34,11 +34,11 @@ const Course: React.FC = () => {
     <div className="mx-auto mt-14">
       <CoursesBlock course={course} />
       <CourseDescription course={course} />
-      <div className="flex justify-center">
-        <Button className="h-12 w-32" onClick={moveUp}>
-        Наверх ↑
-        </Button>
-      </div>
+      <a className="w-full flex justify-center mt-8" href="#heading-section">
+        <div className="w-full flex justify-center mt-8">
+          <Button className="h-12 w-32">Наверх ↑</Button>
+        </div>
+      </a>
     </div>
   );
 };

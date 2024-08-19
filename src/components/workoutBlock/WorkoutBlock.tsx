@@ -3,7 +3,7 @@ import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
 import { useModal } from "@/context/modalContext";
 import { Workout } from "@/types/types";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
 import { constRoutes } from "@/lib/paths";
 
 export const WorkoutBlock = () => {
@@ -25,10 +25,10 @@ export const WorkoutBlock = () => {
 
   return (
     <>
-      <h1 className="text-sm sm:text-lg md:text-xl lg:text-6xl font-medium mb-8 mt-10">
+      <h1 className="text-lg md:text-xl lg:text-4xl font-bold my-8">
         {course.name}
       </h1>
-      <h2 className="text-sm sm:text-lg md:text-xl lg:text-4xl font-medium mb-8 mt-10 flex underline">
+      <h2 className="text-lg md:text-xl lg:text-4xl font-bold my-8 flex underline">
         {workout.url_desc}
       </h2>
 

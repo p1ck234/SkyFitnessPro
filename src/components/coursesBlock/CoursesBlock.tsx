@@ -42,7 +42,6 @@ const CoursesBlock: React.FC<CoursesBlockProps> = ({ course }) => {
           onError={() => setIsImageLoading(false)} // Убираем лоадер если произошла ошибка при загрузке
         />
       </section>
-      
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 import { useModal } from "@/context/modalContext";
-import { Button } from "@/components/Button"; // Assuming you have a Button component
+import { Button } from "@/components/shared/Button"; // Assuming you have a Button component
 
 const ExersicesProgress = ({
   workout,
@@ -71,19 +71,19 @@ const ExersicesProgress = ({
 
   return (
     <div className="border rounded-3xl bg-white p-14 shadow-lg mt-12 mb-12">
-      <h1 className="font-medium mb-3 text-3xl">
+      <h1 className="font-medium mb-3 text-3xl mb-8">
         Упражнения тренировки {workout.id}
       </h1>
-      <div className="grid grid-cols-3 gap-5 text-lg">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 text-lg md:text-xl">
         {workout.exercise.map((exercise: any, index: number) => (
-          <div key={exercise.id}>
-            <p>
+          <div key={exercise.id} className="mb-4 flex flex-col justify-between">
+            <p className="mb-2 text-center flex-grow">
               {exercise.name} - Прогресс:{" "}
               {progress[index]?.count_completed || 0}/{exercise.count}
             </p>
-            <div className="mb-6 h-1 w-full bg-neutral-200 dark:bg-neutral-600">
+            <div className="relative w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
               <div
-                className="h-1 bg-custumBlue"
+                className="absolute top-0 left-0 h-full bg-custumBlue rounded-full"
                 style={{
                   width: `${
                     ((progress[index]?.count_completed || 0) / exercise.count) *
@@ -95,8 +95,12 @@ const ExersicesProgress = ({
           </div>
         ))}
       </div>
-      <div className="flex ">
-        <Button className="flex-1 max-w-80 min-w-60" onClick={handleOpenProgressModal}>
+
+      <div className="flex">
+        <Button
+          className="flex-1 max-w-80 min-w-60 mt-8"
+          onClick={handleOpenProgressModal}
+        >
           {hasCompletedExercises
             ? "Обновить свой прогресс"
             : "Записать свой прогресс"}

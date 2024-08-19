@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../Button";
+import { Button } from "../shared/Button";
+import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { logout, resetPassword } from "@/services/authService";
 import { useState } from "react";
 import { useModal } from "@/context/modalContext";
+import { showAlert } from "@/utils/sweetalert";
 
 export const Person = () => {
   const navigate = useNavigate();
@@ -11,11 +13,29 @@ export const Person = () => {
   const { user, userData } = useUser(); // Достаем user и userData из контекста
   const { openModal } = useModal();
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
+  const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние загрузки кнопки
 
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate("/"); // Перенаправление на главную страницу после выхода
+      // Пример вызова showAlert с использованием кастомных классов от компонента Button
+      const result = await showAlert({
+        title: "Вы уверены?",
+        text: "Вы действительно хотите выйти из системы?",
+        icon: "warning",
+        confirmButtonText: "Выйти",
+        cancelButtonText: "Отмена",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "py-2 px-4 rounded-full bg-customGreen text-black", // Классы из вашего Button компонента
+          cancelButton:
+            "py-2 px-4 rounded-full bg-white text-black border border-black", // Добавлен класс для рамки
+        },
+      });
+
+      if (result.isConfirmed) {
+        await logout();
+        navigate("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -30,6 +50,7 @@ export const Person = () => {
     }
 
     try {
+      setIsButtonLoading(true); // Включаем загрузку
       await resetPassword(email); // Вызов функции для восстановления пароля
       openModal("password_reset_confirmation", { email }); // Открываем модальное окно подтверждения и передаем email
     } catch (error) {
@@ -37,6 +58,8 @@ export const Person = () => {
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
       );
       console.error("Password reset failed:", error);
+    } finally {
+      setIsButtonLoading(false); // Выключаем загрузку после завершения
     }
   };
 
@@ -60,7 +83,7 @@ export const Person = () => {
                 </p>
                 <div>
                   <span className="text-xl font-medium">
-                  Логин: {user.email}
+                    Логин: {user.email}
                   </span>
                   <p className="text-xl font-medium">Пароль: *******</p>
                 </div>
@@ -73,8 +96,9 @@ export const Person = () => {
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60"
                 onClick={handlePasswordReset}
+                disabled={isButtonLoading} // Отключаем кнопку во время загрузки
               >
-               Сбросить пароль
+                {isButtonLoading ? "Загрузка..." : "Изменить пароль"}
               </Button>
               <Button
                 className="flex-1 text-xl max-w-60 min-w-60 border"

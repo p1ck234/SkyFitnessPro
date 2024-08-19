@@ -35,11 +35,7 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
 
   return (
     <div className={`relative ${className}`}>
-      {isLoading && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          <div className="loader"></div>
-        </div>
-      )}
+      {isLoading && <div className="loader"></div>}
       {imageUrl && (
         <img
           className={`w-full rounded-3xl ${
