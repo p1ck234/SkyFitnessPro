@@ -50,7 +50,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
     }
     try {
       await resetPassword(email); // Вызов функции для восстановления пароля
-      openModal("password_reset_confirmation", email); // Открываем модальное окно подтверждения
+      openModal("password_reset_confirmation", { email }); // Открываем модальное окно подтверждения и передаем email
     } catch (error) {
       setError(
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
