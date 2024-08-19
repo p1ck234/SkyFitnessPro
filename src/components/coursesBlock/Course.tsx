@@ -30,11 +30,11 @@ const Course: React.FC = () => {
     <div className="mx-auto mt-14">
       <CoursesBlock course={course} />
       <CourseDescription course={course} />
-      <div className="flex justify-center">
-        <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
-        </Button>
-      </div>
+      <a href="#heading-section">
+        <div className="flex justify-center">
+          <Button className="h-12 w-32">Наверх ↑</Button>
+        </div>
+      </a>
     </div>
   );
 };
