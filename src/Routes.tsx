@@ -76,22 +76,19 @@ export const AppRoutes: React.FC = () => {
       </Routes>
       {modalState === "login" && (
         <LogInPage
-          switchToRegister={() =>
-            navigate(constRoutes.REGISTRATION, {
-              state: { backgroundLocation: location },
-            })
-          }
+          switchToRegister={() => {
+            openModal("register");
+          }}
         />
       )}
       {modalState === "register" && (
         <RegistrationPage
-          switchToLogin={() =>
-            navigate(constRoutes.LOGIN, {
-              state: { backgroundLocation: location },
-            })
-          }
+          switchToLogin={() => {
+            openModal("login");
+          }}
         />
       )}
+
       {modalState === "select_workouts" && <PopSelectWorkoutPage />}
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
       {modalState === "progress_update" && <PopProgress />}

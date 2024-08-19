@@ -71,7 +71,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       closeModal();
-      navigate(location.state?.backgroundLocation || "/", { replace: true });
+      navigate(location.state?.backgroundLocation, { replace: true });
     }
   };
 
