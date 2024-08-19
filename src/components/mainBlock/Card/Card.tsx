@@ -67,7 +67,20 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
 
   const handleAddCourse = () => {
     setIsLoading(true);
-    if (user && course) {
+
+    // Проверяем, есть ли пользователь
+    if (!user) {
+      showAlert({
+        title: "Ошибка!",
+        text: "Необходимо авторизоваться!",
+        icon: "error",
+      });
+      console.error("Пользователь не авторизован");
+      setIsLoading(false);
+      return;
+    }
+
+    if (course) {
       const uid = user.uid;
       const courseId = course.id.toString();
       dispatch(fetchAddCourse({ uid, courseId }))
@@ -81,6 +94,9 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      console.error("Курс не выбран");
+      setIsLoading(false);
     }
   };
 
@@ -243,10 +259,10 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
                 {isButtonLoading
                   ? "Загрузка..."
                   : progress === 100
-                  ? "Начать заново"
-                  : progress > 0
-                  ? "Продолжить"
-                  : "Начать тренировки"}
+                    ? "Начать заново"
+                    : progress > 0
+                      ? "Продолжить"
+                      : "Начать тренировки"}
               </Button>
             </div>
           </div>
