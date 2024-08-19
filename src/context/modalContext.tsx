@@ -11,6 +11,7 @@ type ModalState =
   | "otherState"
   | "add_course"
   | "delete_course"
+  | "progress_success"
   | null;
 
 interface ModalContextType {

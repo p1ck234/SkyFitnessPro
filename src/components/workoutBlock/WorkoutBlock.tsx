@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
@@ -10,7 +9,6 @@ import { constRoutes } from "@/lib/paths";
 export const WorkoutBlock = () => {
   const { courseId, workoutId } = useParams();
   const { userCourses } = useUserCourses(0);
-  const { openModal } = useModal();
   const navigate = useNavigate();
 
   const course = userCourses.find(

@@ -12,4 +12,5 @@ export const constRoutes = {
   SELECT_WORKOUTS: "/select_workouts",
   PROFILE: "/profile",
   WORKOUTS: "/workouts",
+  SUCCESS:'/progress_success',
 };

@@ -15,7 +15,7 @@ interface Exercise {
 }
 
 const PopProgress = () => {
-  const { closeModal, modalData } = useModal();
+  const { closeModal, modalData, openModal } = useModal();
   const { workout, onSave } = modalData || {};
   const { user } = useUser();
   const { courses } = useCourses();
@@ -197,7 +197,8 @@ const PopProgress = () => {
       });
 
       console.log("Progress saved successfully");
-      onSave();
+
+      if (onSave) onSave(); // Вызов функции onSave для обновления данных в ExersicesProgress
     } catch (error) {
       console.error("Error saving progress:", error);
     } finally {
@@ -205,6 +206,7 @@ const PopProgress = () => {
     }
 
     closeModal();
+    openModal("progress_success");
     navigate(location.pathname, { replace: true });
   };
 

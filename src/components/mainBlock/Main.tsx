@@ -2,6 +2,7 @@ import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
 import { Course } from "@/types/types";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
 
 type MainProps = {
@@ -9,6 +10,9 @@ type MainProps = {
 };
 export function Main({ course }: MainProps) {
   const { courses, loading, error } = useCourses();
+  const moveUp = () => {
+    window.location.href = "#heading-section";
+  };
 
   if (loading) {
     return <div className="loader"></div>;
@@ -26,11 +30,14 @@ export function Main({ course }: MainProps) {
           <Card key={course.id} course={course} />
         ))}
       </div>
-      <div className="flex justify-center">
-        <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
-        </Button>
-      </div>
+      <a
+              className="w-full flex justify-center mt-8"
+              href="#heading-section"
+            >
+              <div className="w-full flex justify-center mt-8">
+                <Button className="h-12 w-32">Наверх ↑</Button>
+              </div>
+            </a>
     </div>
   );
 }

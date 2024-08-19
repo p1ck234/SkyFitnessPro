@@ -43,7 +43,7 @@ export const Person = () => {
 
   const handlePasswordReset = async () => {
     const email = user?.email;
-
+ 
     if (!email) {
       setError("Email пользователя не найден.");
       return;

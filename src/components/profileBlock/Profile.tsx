@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,7 +9,6 @@ import { Course } from "@/types/types";
 import { Button } from "../shared/Button";
 
 export const Profile = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);
@@ -17,6 +16,9 @@ export const Profile = () => {
   const [showSelectWorkouts, setShowSelectWorkouts] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null); // Исправляем тип состояния
 
+  const moveUp = () => {
+    window.location.href = "#heading-section";
+  };
   const handleOpenSelectWorkoutModal = (course: Course | null = null) => {
     if (course) {
       setSelectedCourse(course); // Сохраняем выбранный курс, если есть
@@ -60,11 +62,14 @@ export const Profile = () => {
                 onSelectWorkouts={() => handleOpenSelectWorkoutModal(course)}
               />
             ))}
-            <div className="w-full flex justify-center mt-8">
-              <Button className="h-12 w-32">
-                <a href="#heading-section">Наверх ↑</a>
-              </Button>
-            </div>
+            <a
+              className="w-full flex justify-center mt-8"
+              href="#heading-section"
+            >
+              <div className="w-full flex justify-center mt-8">
+                <Button className="h-12 w-32">Наверх ↑</Button>
+              </div>
+            </a>
           </>
         ) : (
           <div className="w-full flex justify-center">
@@ -80,7 +85,7 @@ export const Profile = () => {
       {showSelectWorkouts && selectedCourse && (
         <PopSelectWorkouts
           workouts={selectedCourse?.workouts || []} // Передаем тренировки выбранного курса
-          courseId={Number(selectedCourse.id)}          // Передаем идентификатор курса
+          courseId={Number(selectedCourse.id)} // Передаем идентификатор курса
           onClose={handleCloseModal} // Закрытие попапа
         />
       )}

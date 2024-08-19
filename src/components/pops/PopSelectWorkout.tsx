@@ -5,7 +5,7 @@ import { useUser } from "@/context/userContext";
 
 interface PopSelectWorkoutsProps {
   workouts: any[];
-  courseId: number;
+  courseId: string;
   onClose: () => void;
 }
 
@@ -87,7 +87,7 @@ export const PopSelectWorkouts = ({
       onClick={handleBackgroundClick}
     >
       <div
-        className="relative bg-white rounded-3xl shadow-xl p-4 w-80 p-8"
+        className="relative bg-white rounded-3xl shadow-xl w-80 p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <form className="flex flex-col items-center w-full rounded-xl">
@@ -113,7 +113,7 @@ export const PopSelectWorkouts = ({
                       disabled={isCompleted}
                     />
                     <span
-                      className={`inline-block h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${
+                      className={` h-4 w-4 border border-black rounded-full mr-2 flex-shrink-0 flex justify-center items-center ${
                         isCompleted ? "bg-customGreen border-none" : "bg-white"
                       }`}
                     >
