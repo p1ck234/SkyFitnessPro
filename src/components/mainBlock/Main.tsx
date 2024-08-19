@@ -3,12 +3,17 @@ import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
 import { Course } from "@/types/types";
 import { Button } from "../Button";
+import { Link, useNavigate } from "react-router-dom";
 
 type MainProps = {
   course: Course;
 };
 export function Main({ course }: MainProps) {
   const { courses, loading, error } = useCourses();
+  const navigate=useNavigate()
+  const moveUp=()=>{
+    navigate('#heading-section')
+  }
 
   if (loading) {
     return <div className="loader"></div>;
@@ -28,7 +33,7 @@ export function Main({ course }: MainProps) {
       </div>
       <div className="flex justify-center">
         <Button className="h-12 w-32">
-          <a href="#heading-section">Наверх ↑</a>
+        <a href="#heading-section">Наверх ↑</a>
         </Button>
       </div>
     </div>

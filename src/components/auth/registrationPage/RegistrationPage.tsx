@@ -3,7 +3,6 @@ import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
 import { register } from "@/services/authService";
-import { saveUser } from "@/services/firestoreService";
 import { useModal } from "@/context/modalContext";
 import { Button } from "@/components/Button";
 

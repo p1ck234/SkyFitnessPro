@@ -5,7 +5,7 @@ import { useUser } from "@/context/userContext";
 
 interface PopSelectWorkoutsProps {
   workouts: any[];
-  courseId: number;
+  courseId: string;
   onClose: () => void;
 }
 

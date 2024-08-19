@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { useUser } from "@/context/userContext";
 import { logout } from "@/services/authService";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch } from "react-redux";
 import { login } from "@/store/slices/authSlice";
 import { setIsProfile } from "@/store/slices/courseSlice";
 

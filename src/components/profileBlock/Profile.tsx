@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card } from "../mainBlock/Card/Card";
 import { Person } from "./Person";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,7 +9,6 @@ import { Course } from "@/types/types";
 import { Button } from "../Button";
 
 export const Profile = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
   const [refreshKey, setRefreshKey] = useState(0);

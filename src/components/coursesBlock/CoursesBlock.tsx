@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ImageComponent } from "../imageComponent/ImageComponent";
 import { Course } from "@/types/types";
-import { Button } from "../Button";
 
 interface CoursesBlockProps {
   course: Course;
