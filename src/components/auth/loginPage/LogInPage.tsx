@@ -21,9 +21,9 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    navigate(constRoutes.REGISTRATION, {
-      state: { backgroundLocation: location.state?.backgroundLocation },
-    });
+    // navigate(constRoutes.REGISTRATION, {
+    //   state: { backgroundLocation: location.state?.backgroundLocation },
+    // });
   };
 
   const handleLogin = async (e: React.FormEvent) => {

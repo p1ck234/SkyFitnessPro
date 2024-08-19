@@ -13,10 +13,11 @@ import HomePage from "./pages/homePage";
 import { useEffect } from "react";
 import { PopExit } from "./components/pops/PopExit";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
 import PopProgress from "./components/pops/PopProgress"; // Import PopProgress
+import { login } from "./store/slices/authSlice";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -76,22 +77,19 @@ export const AppRoutes: React.FC = () => {
       </Routes>
       {modalState === "login" && (
         <LogInPage
-          switchToRegister={() =>
-            navigate(constRoutes.REGISTRATION, {
-              state: { backgroundLocation: location },
-            })
-          }
+          switchToRegister={() => {
+            openModal("register");
+          }}
         />
       )}
       {modalState === "register" && (
         <RegistrationPage
-          switchToLogin={() =>
-            navigate(constRoutes.LOGIN, {
-              state: { backgroundLocation: location },
-            })
-          }
+          switchToLogin={() => {
+            openModal("login");
+          }}
         />
       )}
+
       {modalState === "select_workouts" && <PopSelectWorkoutPage />}
       {modalState === "exit" && <PopExit closeModal={closeModal} />}
       {modalState === "progress_update" && <PopProgress />}

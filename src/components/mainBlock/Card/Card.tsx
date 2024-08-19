@@ -18,6 +18,7 @@ import { ImageComponent } from "@/components/imageComponent/ImageComponent";
 import { Course } from "@/types/types";
 import { useAppDispatch } from "@/services/useDispatch";
 import { showAlert } from "@/utils/sweetalert";
+import { useUserCourses } from "@/customHooks/useUserCourses";
 
 interface CardProps {
   course: Course;
@@ -50,6 +51,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние для кнопки
+  const { userCourses } = useUserCourses(0); // Получаем курсы пользователя
+  const [isHaveCourse, setIsHaveCourse] = useState(false); // Состояние наличия курса
 
   UserProgress();
 
@@ -62,12 +65,31 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   }, [dispatch, user, course.id]);
 
   useEffect(() => {
+    if (userCourses && userCourses.some((c) => c.id === course.id)) {
+      setIsHaveCourse(true);
+    }
+  }, [userCourses, course.id]);
+
+  useEffect(() => {
     dispatch(setIsProfile(location.pathname === constRoutes.PROFILE));
   }, [location.pathname, dispatch]);
 
   const handleAddCourse = () => {
     setIsLoading(true);
-    if (user && course) {
+
+    // Проверяем, есть ли пользователь
+    if (!user) {
+      showAlert({
+        title: "Ошибка!",
+        text: "Необходимо авторизоваться!",
+        icon: "error",
+      });
+      console.error("Пользователь не авторизован");
+      setIsLoading(false);
+      return;
+    }
+
+    if (course) {
       const uid = user.uid;
       const courseId = course.id.toString();
       dispatch(fetchAddCourse({ uid, courseId }))
@@ -81,6 +103,9 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         .finally(() => {
           setIsLoading(false);
         });
+    } else {
+      console.error("Курс не выбран");
+      setIsLoading(false);
     }
   };
 
@@ -190,17 +215,42 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         >
           {isLoading ? (
             <div className="loader"></div>
-          ) : (
-            <div>
+          ) : isProfile ? (
+            <button
+              className="flex items-center"
+              onClick={(e) => {
+                e.stopPropagation(); // предотвращаем выполнение клика по карточке
+                handleRemoveCourse();
+              }}
+            >
               <img
-                src={isProfile ? "/img/icon/minus.svg" : "/img/icon/plus.svg"}
-                alt={isProfile ? "Удалить курс" : "Добавить курс"}
+                src="/img/icon/minus.svg"
+                alt="Удалить курс"
                 className="w-6 h-6"
               />
               <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
-                {isProfile ? "Удалить курс" : "Добавить курс"}
+                Удалить курс
               </span>
-            </div>
+            </button>
+          ) : (
+            !isHaveCourse && (
+              <button
+                className="flex items-center"
+                onClick={(e) => {
+                  e.stopPropagation(); // предотвращаем выполнение клика по карточке
+                  handleAddCourse();
+                }}
+              >
+                <img
+                  src="/img/icon/plus.svg"
+                  alt="Добавить курс"
+                  className="w-6 h-6"
+                />
+                <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
+                  Добавить курс
+                </span>
+              </button>
+            )
           )}
         </button>
       </div>
@@ -243,10 +293,10 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
                 {isButtonLoading
                   ? "Загрузка..."
                   : progress === 100
-                  ? "Начать заново"
-                  : progress > 0
-                  ? "Продолжить"
-                  : "Начать тренировки"}
+                    ? "Начать заново"
+                    : progress > 0
+                      ? "Продолжить"
+                      : "Начать тренировки"}
               </Button>
             </div>
           </div>

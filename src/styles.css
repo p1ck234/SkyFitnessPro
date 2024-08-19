@@ -31,6 +31,15 @@ html {
   animation: spin 1s linear infinite;
 }
 
+.container-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 100px;
+}
+
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
