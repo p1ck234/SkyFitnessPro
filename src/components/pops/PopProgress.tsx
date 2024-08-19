@@ -196,8 +196,6 @@ const PopProgress = () => {
         ),
       });
 
-      console.log("Progress saved successfully");
-
       if (onSave) onSave(); // Вызов функции onSave для обновления данных в ExersicesProgress
     } catch (error) {
       console.error("Error saving progress:", error);

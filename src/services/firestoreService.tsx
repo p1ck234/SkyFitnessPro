@@ -153,9 +153,6 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     );
 
     if (courseAlreadyAdded) {
-      console.log(
-        `Course with ID ${courseId} is already added for user ${uid}.`
-      );
       return; // Если курс уже добавлен, выходим из функции
     }
 
@@ -213,10 +210,6 @@ export const addCourseToUser = async (uid: string, courseId: number) => {
     await updateDoc(courseRef, {
       users: arrayUnion(uid),
     });
-
-    console.log(
-      `Course with ID ${courseId} successfully added to user ${uid}.`
-    );
   } catch (error) {
     console.error("Error adding course to user:", error);
     throw error;

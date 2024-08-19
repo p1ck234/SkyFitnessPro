@@ -26,7 +26,6 @@ export const useUserCourses = (refreshKey: number) => {
             ...doc.data(),
           }));
 
-          console.log("Fetched courses:", courses);
 
           setUserCourses(courses);
         } catch (error) {

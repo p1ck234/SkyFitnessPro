@@ -9,13 +9,6 @@ const Course: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { courses, loading } = useCourses();
 
-  const moveUp = () => {
-    window.location.href = "#heading-section";
-  };
-
-  console.log("URL ID:", id);
-  console.log("Loaded courses:", courses);
-
   if (loading) {
     return (
       <div className="absolute inset-0 flex justify-center items-center">
