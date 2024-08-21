@@ -72,7 +72,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
       onClick={handleBackgroundClick}
     >
       <form
-        className="flex flex-col items-center w-full max-w-md text-black rounded-3xl bg-white p-8"
+        className="flex flex-col items-center max-w-md text-black rounded-3xl bg-white p-8 w-360px"
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleLogin}
       >
