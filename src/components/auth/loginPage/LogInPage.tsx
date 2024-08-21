@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
-import { constRoutes } from "@/lib/paths";
 import { useModal } from "@/context/modalContext";
 import { login, resetPassword } from "@/services/authService";
 import { Button } from "@/components/shared/Button";
@@ -11,19 +10,16 @@ interface LogInPageProps {
 }
 
 export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
-  const [email, setEmail] = useState(""); // Email пользователя
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Состояние загрузки
-  const [error, setError] = useState<string | null>(null); // Состояние ошибки
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null); 
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal, openModal } = useModal();
 
   const handleSwitchToRegister = () => {
     switchToRegister();
-    // navigate(constRoutes.REGISTRATION, {
-    //   state: { backgroundLocation: location.state?.backgroundLocation },
-    // });
   };
 
   const handleLogin = async (e: React.FormEvent) => {

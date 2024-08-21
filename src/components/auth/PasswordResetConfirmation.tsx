@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useModal } from "@/context/modalContext"; // Импортируйте useModal
+import { useModal } from "@/context/modalContext";
 import { Logo } from "../shared/logo/Logo";
 
 export const PasswordResetConfirmation: React.FC = () => {
   const navigate = useNavigate();
-  const { modalData, closeModal } = useModal(); // Используем modalData для получения email
+  const { modalData, closeModal } = useModal(); 
 
-  const email = modalData?.email; // Получаем email из modalData
+  const email = modalData?.email; 
 
   const handleBackgroundClick = () => {
-    closeModal(); // Закрываем модальное окно
-    navigate("/"); // Перенаправляем на главную страницу
+    closeModal(); 
+    navigate("/");
   };
 
   return (
