@@ -110,7 +110,6 @@ const PopProgress = () => {
 
   const handleSave = async () => {
     if (!user) {
-      console.error("User not authenticated");
       return;
     }
 
@@ -175,7 +174,6 @@ const PopProgress = () => {
       const course = courses.find((c: any) => c.id === courseId);
 
       if (!course) {
-        console.error("Курс не найден");
         return;
       }
 
@@ -198,7 +196,6 @@ const PopProgress = () => {
 
       if (onSave) onSave(); // Вызов функции onSave для обновления данных в ExersicesProgress
     } catch (error) {
-      console.error("Error saving progress:", error);
     } finally {
       setLoading(false);
     }

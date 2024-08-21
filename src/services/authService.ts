@@ -35,7 +35,6 @@ export const register = async (
 
     return user;
   } catch (error) {
-    console.error("Error during registration:", error);
     throw error;
   }
 };
@@ -49,7 +48,6 @@ export const login = async (email: string, password: string) => {
     );
     return userCredential.user;
   } catch (error) {
-    console.error("Error during login:", error);
     throw error;
   }
 };
@@ -58,7 +56,6 @@ export const logout = async () => {
   try {
     await signOut(auth);
   } catch (error) {
-    console.error("Error during logout:", error);
     throw error;
   }
 };
@@ -68,7 +65,6 @@ export const resetPassword = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
   } catch (error) {
-    console.error("Error during password reset:", error);
     throw error;
   }
 };
@@ -80,11 +76,9 @@ export const getUserData = async (uid: string) => {
     if (userDoc.exists()) {
       return userDoc.data();
     } else {
-      console.error("No such user!");
       return null;
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
     throw error;
   }
 };

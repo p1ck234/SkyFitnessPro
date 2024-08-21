@@ -69,7 +69,6 @@ export const PopExit = ({ closeModal }: PopExitProps) => {
         navigate("/");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
     }
   };
 

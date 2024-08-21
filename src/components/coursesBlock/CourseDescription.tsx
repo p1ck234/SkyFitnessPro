@@ -37,7 +37,6 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
       try {
         setIsLoading(true); // Устанавливаем состояние загрузки
         await addCourseToUser(user.uid, parseInt(course.id));
-        // alert("Курс успешно добавлен в ваш профиль");
         navigate(constRoutes.PROFILE);
         showAlert({
           title: "Успешно!",
@@ -45,8 +44,6 @@ const CourseDescription: React.FC<CourseDescriptionProps> = ({ course }) => {
           icon: "success",
         });
       } catch (error) {
-        console.error("Ошибка при добавлении курса:", error);
-        // alert("Не удалось добавить курс");
         showAlert({
           title: "Ошибка!",
           text: "Не удалось добавить курс.",

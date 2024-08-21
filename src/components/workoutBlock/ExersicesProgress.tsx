@@ -40,7 +40,6 @@ const ExersicesProgress = ({
           );
           if (workoutProgress) {
             setProgress(workoutProgress.exercises_progress);
-            // Check if there are any completed exercises
             const hasCompleted = workoutProgress.exercises_progress.some(
               (ep: any) => ep.completed
             );
@@ -62,7 +61,7 @@ const ExersicesProgress = ({
   };
 
   if (loading) {
-    return <div>Загрузка данных...</div>;
+    return <div className="loader"></div>;
   }
 
   if (!workout.exercise || workout.exercise.length === 0) {

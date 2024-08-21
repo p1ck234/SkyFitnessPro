@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getFileURL } from "@/services/storageService";
 
 interface ImageComponentProps {
-  filePath: string; // Пропс для пути к файлу
-  altText?: string; // Пропс для альтернативного текста (опционально)
-  className?: string; // Пропс для дополнительных классов
-  onLoad?: () => void; // Пропс для обработки события загрузки изображения
-  onError?: () => void; // Пропс для обработки ошибки загрузки изображения
+  filePath: string; 
+  altText?: string; 
+  className?: string; 
+  onLoad?: () => void; 
+  onError?: () => void; 
 }
 
 export const ImageComponent: React.FC<ImageComponentProps> = ({
@@ -25,7 +25,6 @@ export const ImageComponent: React.FC<ImageComponentProps> = ({
         const url = await getFileURL(filePath);
         setImageUrl(url);
       } catch (error) {
-        console.error("Error fetching image:", error);
         if (onError) onError();
       }
     };

@@ -81,7 +81,6 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         text: "Необходимо авторизоваться!",
         icon: "error",
       });
-      console.error("Пользователь не авторизован");
       setIsLoading(false);
       return;
     }
@@ -94,14 +93,12 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         .then(() => {
           navigate(constRoutes.PROFILE);
         })
-        .catch((error) => {
-          console.error("Ошибка при добавлении курса:", error);
+        .catch(() => {
         })
         .finally(() => {
           setIsLoading(false);
         });
     } else {
-      console.error("Курс не выбран");
       setIsLoading(false);
     }
   };
@@ -136,8 +133,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
                 onCourseRemoved();
               }
             })
-            .catch((error) => {
-              console.error("Ошибка при удалении курса:", error);
+            .catch(() => {
             })
             .finally(() => {
               setIsLoading(false);
@@ -145,7 +141,6 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
         }
       }
     } catch (error) {
-      console.error("Error during course removal:", error);
     }
   };
 

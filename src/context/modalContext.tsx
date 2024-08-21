@@ -21,7 +21,7 @@ interface ModalContextType {
   currentPath: string;
   setCurrentPath: (path: string) => void;
   email: string | null;
-  modalData: any; // Add modalData for storing additional data
+  modalData: any; 
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);

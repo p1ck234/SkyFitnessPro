@@ -7,7 +7,6 @@ export function Heading() {
       <div className="hidden md:flex lg:hidden xl:flex maw-w-60 justity">
         <img
           src={"img/Slogan.png"}
-          // className="max-w-full h-auto justify-center"
           alt="Слоган"
         />
       </div>

@@ -37,7 +37,6 @@ export const Person = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
     }
   };
 
@@ -57,7 +56,6 @@ export const Person = () => {
       setError(
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
       );
-      console.error("Password reset failed:", error);
     } finally {
       setIsButtonLoading(false); // Выключаем загрузку после завершения
     }

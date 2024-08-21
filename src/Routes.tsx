@@ -13,7 +13,7 @@ import HomePage from "./pages/homePage";
 import { useEffect } from "react";
 import { PopExit } from "./components/pops/PopExit";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
 import PopProgress from "./components/pops/PopProgress"; // Import PopProgress
@@ -21,7 +21,6 @@ import { PopProgressConfirm } from "./components/pops/PopProgressConfirm";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const state = location.state as { backgroundLocation?: Location };
   const { modalState, openModal, closeModal, setCurrentPath, currentPath } =
     useModal();
@@ -32,19 +31,26 @@ export const AppRoutes: React.FC = () => {
   useEffect(() => {
     if (location.pathname !== currentPath) {
       setCurrentPath(location.pathname);
-      if (location.pathname === constRoutes.LOGIN) {
-        openModal("login");
-      } else if (location.pathname === constRoutes.REGISTRATION) {
-        openModal("register");
-      } else if (location.pathname === constRoutes.SELECT_WORKOUTS) {
-        openModal("select_workouts");
-      } else if (location.pathname === constRoutes.EXIT) {
-        openModal("exit");
-      } else  { 
-        closeModal();
+
+      switch (location.pathname) {
+        case constRoutes.LOGIN:
+          openModal("login");
+          break;
+        case constRoutes.REGISTRATION:
+          openModal("register");
+          break;
+        case constRoutes.SELECT_WORKOUTS:
+          openModal("select_workouts");
+          break;
+        case constRoutes.EXIT:
+          openModal("exit");
+          break;
+        default:
+          closeModal();
+          break;
       }
     }
-  }, [location, currentPath, openModal, closeModal, setCurrentPath]);
+  }, [location.pathname, currentPath, openModal, closeModal, setCurrentPath]);
 
   return (
     <>

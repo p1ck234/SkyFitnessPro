@@ -2,7 +2,6 @@ import { Heading } from "./Heading/Heading";
 import { useCourses } from "@/context/courseContext";
 import { Card } from "../mainBlock/Card/Card";
 import { Course } from "@/types/types";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
 
 type MainProps = {

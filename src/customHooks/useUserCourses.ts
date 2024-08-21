@@ -17,7 +17,6 @@ export const useUserCourses = (refreshKey: number) => {
           const db = getFirestore();
           const coursesRef = collection(db, "courses");
 
-          // Запрос на все курсы, где user.uid есть в массиве users
           const q = query(coursesRef, where("users", "array-contains", user.uid));
           const querySnapshot = await getDocs(q);
 
@@ -29,7 +28,6 @@ export const useUserCourses = (refreshKey: number) => {
 
           setUserCourses(courses);
         } catch (error) {
-          console.error("Error fetching user courses:", error);
           setError("Ошибка при загрузке курсов");
         } finally {
           setLoading(false);

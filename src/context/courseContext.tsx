@@ -40,7 +40,6 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
         const fetchedCourses = await getCourses();
         setCourses(fetchedCourses);
       } catch (error) {
-        console.error("Error fetching courses:", error);
         setError("Failed to load courses");
       } finally {
         setLoading(false);

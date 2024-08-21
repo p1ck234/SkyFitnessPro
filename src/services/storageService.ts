@@ -7,7 +7,6 @@ export const getFileURL = async (filePath: string): Promise<string> => {
     const url = await getDownloadURL(storageRef);
     return url;
   } catch (error) {
-    console.error("Error getting file URL:", error);
     throw error;
   }
 };

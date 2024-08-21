@@ -13,7 +13,7 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { closeModal, openModal } = useModal();
@@ -32,7 +32,6 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error) {
-      console.error("Login failed:", error);
       setError("Пароль введен неверно, попробуйте еще раз."); // Устанавливаем сообщение об ошибке
     } finally {
       setIsLoading(false); // Завершаем загрузку
@@ -51,7 +50,6 @@ export const LogInPage: React.FC<LogInPageProps> = ({ switchToRegister }) => {
       setError(
         "Не удалось отправить письмо для восстановления пароля. Пожалуйста, попробуйте еще раз."
       );
-      console.error("Password reset failed:", error);
     }
   };
 
