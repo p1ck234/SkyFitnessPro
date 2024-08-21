@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Logo } from "../../shared/logo/Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { constRoutes } from "@/lib/paths";
-import { register } from "@/services/authService";
 import { useModal } from "@/context/modalContext";
 import { Button } from "@/components/shared/Button";
 
@@ -53,7 +52,6 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     setIsLoading(true);
 
     try {
-      const user = await register(email, password, username);
       closeModal();
       navigate(location.state?.backgroundLocation || "/", { replace: true });
     } catch (error: any) {
@@ -146,6 +144,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             width="w-full"
             className="text-black py-2 px-6 rounded-full border border-black mt-2.5 text-xl"
             onClick={handleSwitchToLogin}
+            variant="custom-achrom"
           >
             Войти
           </Button>

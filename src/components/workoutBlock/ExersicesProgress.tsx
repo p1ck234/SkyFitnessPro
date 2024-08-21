@@ -40,7 +40,6 @@ const ExersicesProgress = ({
           );
           if (workoutProgress) {
             setProgress(workoutProgress.exercises_progress);
-            // Check if there are any completed exercises
             const hasCompleted = workoutProgress.exercises_progress.some(
               (ep: any) => ep.completed
             );
@@ -81,7 +80,7 @@ const ExersicesProgress = ({
               {exercise.name} - Прогресс:{" "}
               {progress[index]?.count_completed || 0}/{exercise.count}
             </p>
-            <div className="relative w-full bg-neutral-200 dark:bg-neutral-600 rounded-full h-2">
+            <div className="relative w-full bg-neutral-200 dark:bg-neutral-100 rounded-full h-2">
               <div
                 className="absolute top-0 left-0 h-full bg-custumBlue rounded-full"
                 style={{

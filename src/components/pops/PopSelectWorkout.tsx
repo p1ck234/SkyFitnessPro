@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/userContext";
 
 interface PopSelectWorkoutsProps {
@@ -14,12 +14,11 @@ export const PopSelectWorkouts = ({
   courseId,
   onClose,
 }: PopSelectWorkoutsProps) => {
-  const { user } = useUser(); 
+  const { user } = useUser();
   const navigate = useNavigate();
-  const location = useLocation();
   const [progressData, setProgressData] = useState<any[]>([]);
-  const [checkedWorkouts, setCheckedWorkouts] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [, setCheckedWorkouts] = useState<number[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -46,13 +45,12 @@ export const PopSelectWorkouts = ({
   }, [user, courseId]);
 
   const toggleCheckbox = (id: number) => {
-    setCheckedWorkouts((prevChecked) =>
+    setCheckedWorkouts((prevChecked = []) =>
       prevChecked.includes(id)
         ? prevChecked.filter((workoutId) => workoutId !== id)
         : [...prevChecked, id]
     );
   };
-
   const handleWorkoutSelect = (workoutId: number, isCompleted: boolean) => {
     if (!isCompleted) {
       navigate(`/workouts/${courseId}/${workoutId}`);
@@ -89,9 +87,9 @@ export const PopSelectWorkouts = ({
         onClick={(e) => e.stopPropagation()}
       >
         <form className="flex flex-col items-center w-full rounded-xl">
-          <h1 className="text-center text-3xl mb-6">Выберите тренировку</h1>
+          <h1 className="text-center text-2xl mb-6">Выберите тренировку</h1>
           <ul className="w-full flex flex-col overflow-y-auto max-h-[60vh] scrollbar-thin">
-            {workouts.map((workout, index) => {
+            {workouts.map((workout) => {
               const isCompleted = isWorkoutCompleted(workout.id);
 
               return (

@@ -139,6 +139,7 @@ const initialState: CourseState = {
   loading: false,
   error: null,
   progress: {},
+  exerciseProgress: {},
   isProfile: false,
   selectedWorkout: [],
   workouts: [],
@@ -166,6 +167,20 @@ const courseSlice = createSlice({
     ) {
       const { courseId, progress } = action.payload;
       state.progress[courseId] = progress;
+    },
+    setExerciseProgress(
+      state,
+      action: PayloadAction<{
+        courseId: string;
+        exerciseId: string;
+        progress: number;
+      }>
+    ) {
+      const { courseId, exerciseId, progress } = action.payload;
+      if (!state.exerciseProgress[courseId]) {
+        state.exerciseProgress[courseId] = {};
+      }
+      state.exerciseProgress[courseId][exerciseId] = progress;
     },
     setSelectedWorkout(state, action: PayloadAction<Workout[]>) {
       state.selectedWorkout = action.payload;
@@ -269,6 +284,39 @@ const courseSlice = createSlice({
   },
 });
 
+export const fetchExerciseProgress = createAsyncThunk<
+  { courseId: string; exerciseId: string; progress: number },
+  { uid: string; courseId: string; exerciseId: string },
+  { rejectValue: string }
+>(
+  "course/fetchExerciseProgress",
+  async ({ uid, courseId, exerciseId }, thunkAPI) => {
+    try {
+      const db = getFirestore();
+      const userRef = doc(db, "dataUsers", uid);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const exerciseProgress = userData.exercises_progress?.find(
+          (ep: any) =>
+            ep.courseId === parseInt(courseId) && ep.exerciseId === exerciseId
+        );
+        return {
+          courseId,
+          exerciseId,
+          progress: exerciseProgress?.progress || 0,
+        };
+      }
+      return { courseId, exerciseId, progress: 0 };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        "Ошибка при загрузке прогресса упражнения"
+      );
+    }
+  }
+);
+
 export const {
   setProgress,
   setSelectedWorkout,
@@ -278,5 +326,6 @@ export const {
   setCourse,
   setRefreshKey,
   setRemoveCourse,
+  setExerciseProgress,
 } = courseSlice.actions;
 export default courseSlice.reducer;

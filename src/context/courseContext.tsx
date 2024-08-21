@@ -31,7 +31,7 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress]=useState<number>(25)
+  const [progress] = useState<number>(25);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,8 +48,8 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchCourses();
-  }, []); 
-  
+  }, []);
+
   return (
     <CourseContext.Provider value={{ courses, loading, error, progress }}>
       {children}

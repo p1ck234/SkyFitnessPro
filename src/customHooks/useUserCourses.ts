@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import { useUser } from "@/context/userContext";
 
-
-
 export const useUserCourses = (refreshKey: number) => {
   const [userCourses, setUserCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +23,6 @@ export const useUserCourses = (refreshKey: number) => {
             id: doc.id,
             ...doc.data(),
           }));
-
 
           setUserCourses(courses);
         } catch (error) {

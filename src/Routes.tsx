@@ -13,15 +13,14 @@ import HomePage from "./pages/homePage";
 import { useEffect } from "react";
 import { PopExit } from "./components/pops/PopExit";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import ScrollToTop from "./customHooks/ScrollToTop";
 import PopProgress from "./components/pops/PopProgress"; // Import PopProgress
 import { PopProgressConfirm } from "./components/pops/PopProgressConfirm";
+import { useSelector } from "react-redux";
 
 export const AppRoutes: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const state = location.state as { backgroundLocation?: Location };
   const { modalState, openModal, closeModal, setCurrentPath, currentPath } =
     useModal();

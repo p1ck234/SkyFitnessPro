@@ -33,7 +33,7 @@ interface ModalProviderProps {
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalState, setModalState] = useState<ModalState>(null);
   const [currentPath, setCurrentPath] = useState<string>("/");
-  const [email, setEmail] = useState<string | null>(null);
+  const [email] = useState<string | null>(null);
   const [modalData, setModalData] = useState<any>(null);
 
   const openModal = (modalType: ModalState, data?: any) => {

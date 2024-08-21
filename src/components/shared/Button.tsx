@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -24,28 +24,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [isActive, setIsActive] = useState(false);
     const variantClass =
       variant === "custom-achrom" ? "btn-custom-achrom" : "btn-custom-color";
-
-    const handleMouseEnter = () => setIsHovered(true);
-    const handleMouseLeave = () => setIsHovered(false);
-    const handleMouseDown = () => setIsActive(true);
-    const handleMouseUp = () => setIsActive(false);
 
     return (
       <button
         ref={ref}
         className={`py-2 px-4 rounded-full ${color} ${width} ${
           borderColor ? `border ${borderColor}` : ""
-        } ${variantClass} ${className} ${
-          isHovered ? "hover" : isActive ? "active" : ""
-        }`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
+        } ${variantClass} ${className}`}
         onClick={onClick}
         {...props}
       >
@@ -54,3 +41,5 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
+Button.displayName = "Button";

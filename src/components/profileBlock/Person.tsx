@@ -1,6 +1,5 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../shared/Button";
-import { constRoutes } from "@/lib/paths";
 import { useUser } from "@/context/userContext";
 import { logout, resetPassword } from "@/services/authService";
 import { useState } from "react";
@@ -9,7 +8,6 @@ import { showAlert } from "@/utils/sweetalert";
 
 export const Person = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, userData } = useUser(); // Достаем user и userData из контекста
   const { openModal } = useModal();
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
@@ -43,7 +41,7 @@ export const Person = () => {
 
   const handlePasswordReset = async () => {
     const email = user?.email;
- 
+
     if (!email) {
       setError("Email пользователя не найден.");
       return;

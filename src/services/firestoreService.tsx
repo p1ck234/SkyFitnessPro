@@ -22,16 +22,6 @@ import { firebaseConfig } from "../firebaseConfig";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Create or Update User
-// export const saveUser = async (uid: string, data: any) => {
-//   try {
-//     await setDoc(doc(db, "users", uid), data, { merge: true });
-//   } catch (error) {
-//     console.error("Error saving user:", error);
-//     throw error;
-//   }
-// };
-
 // Get User
 export const getUser = async (uid: string) => {
   try {

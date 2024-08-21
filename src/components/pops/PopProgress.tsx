@@ -123,7 +123,7 @@ const PopProgress = () => {
       const userSnap = await getDoc(userRef);
       const userData = userSnap.data();
 
-      let updatedCoursesProgress = userData?.courses_progress || [];
+      const updatedCoursesProgress = userData?.courses_progress || [];
 
       const courseId = parseInt(location.pathname.split("/")[2]);
 

@@ -36,15 +36,8 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   const progress = useSelector(
     (state: RootState) => state.course.progress[course.id.toString()] ?? 0
   );
-  const loading = useSelector((state: RootState) => state.course.loading);
   const isProfile = useSelector((state: RootState) => state.course.isProfile);
-  const handleCourseRemoved = useSelector(
-    (state: RootState) => state.course.refreshKey
-  );
-  const progressObj = useSelector(
-    (state: RootState) => state.course.progress
-  ) ?? { value: 0 };
-  const progressValue = progressObj.value;
+ 
   const formattedProgress =
     typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);

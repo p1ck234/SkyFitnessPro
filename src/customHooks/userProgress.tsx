@@ -2,13 +2,13 @@ import { useUser } from "@/context/userContext";
 import { setProgress } from "@/store/slices/courseSlice";
 import { RootState } from "@/store/store";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export const UserProgress = () => {
-    const { user } = useUser();
-    const isProfile = useSelector((state:RootState) => state.course.isProfile)
-    const course = useSelector((state:RootState) => state.course.course)
+  const { user } = useUser();
+  const isProfile = useSelector((state: RootState) => state.course.isProfile);
+  const course = useSelector((state: RootState) => state.course.course);
 
   useEffect(() => {
     const fetchUserProgress = async () => {

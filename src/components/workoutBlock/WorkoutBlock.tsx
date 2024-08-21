@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import ExersicesProgress from "./ExersicesProgress";
 import { useUserCourses } from "@/customHooks/useUserCourses";
-import { useModal } from "@/context/modalContext";
 import { Workout } from "@/types/types";
 import { Button } from "../shared/Button";
 import { constRoutes } from "@/lib/paths";

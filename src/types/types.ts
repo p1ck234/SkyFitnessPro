@@ -6,6 +6,10 @@ export type Workout = {
   url_desc: string;
 };
 
+export type ExerciseProgress = {
+  [exerciseId: string]: number; // Прогресс для каждого упражнения
+};
+
 export type Course = {
   id: string;
   name: string;
@@ -31,5 +35,6 @@ export type CourseState = {
   workouts: Workout[];
   course: Course;
   refreshKey: number;
+  exerciseProgress: { [courseId: string] : ExerciseProgress}
 };
 

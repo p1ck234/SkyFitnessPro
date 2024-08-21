@@ -6,9 +6,6 @@ import { RegistrationPage } from "./auth/registrationPage/RegistrationPage";
 import { useModal } from "@/context/modalContext";
 import { PasswordResetConfirmation } from "./auth/PasswordResetConfirmation";
 
-interface ModalData {
-  email?: string; // email может быть строкой или undefined
-}
 export const Layout = () => {
   const { modalState, openModal, closeModal, email } = useModal(); // Получаем email из контекста
 
