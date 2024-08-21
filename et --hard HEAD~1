@@ -1,0 +1,171 @@
+[33mcommit aa959857e2b42838a319ddc5e931e7f78ec94b41[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Sat Jul 27 18:29:16 2024 +0400
+
+    fix dont work project
+
+[33mcommit ad5cb45f79a47a2a842f36029da3e504ba8337c8[m
+Merge: cb5254d af364de
+Author: Vetrov Daniil <93711640+p1ck234@users.noreply.github.com>
+Date:   Sat Jul 27 18:26:53 2024 +0400
+
+    Merge pull request #5 from p1ck234/InnaS
+    
+    Inna s ts
+
+[33mcommit af364def81d4f5ed3d07b0348e5356bfd90e639b[m
+Merge: fd58666 cb5254d
+Author: Inna-Ser <serebrakovainna1@gmail.com>
+Date:   Sat Jul 27 09:24:57 2024 -0500
+
+    компиляция tsc
+
+[33mcommit fd586667adab1913683919e520797851828e5aee[m
+Author: Inna-Ser <serebrakovainna1@gmail.com>
+Date:   Sat Jul 27 09:06:49 2024 -0500
+
+    скомпелированы на ts
+
+[33mcommit cb5254d881ffff2a5c3ee2aaa140ccc34b62a3f5[m
+Merge: 0b8f416 3a46d35
+Author: Vetrov Daniil <93711640+p1ck234@users.noreply.github.com>
+Date:   Fri Jul 26 15:08:04 2024 +0400
+
+    Merge pull request #4 from p1ck234/Vetrov
+    
+    Vetrov
+
+[33mcommit 3a46d352afdc64c3c31898213f93ca6e5f0dcd5b[m
+Merge: a2094b6 448031b
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 15:05:57 2024 +0400
+
+    Merge branch 'Vetrov' of https://github.com/p1ck234/SkyFitnessPro into Vetrov
+
+[33mcommit a2094b695f0e4b48c38fd97f77a17412a451b910[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 20:13:48 2024 +0400
+
+    app css
+
+[33mcommit 0b8f41697642850429a18f1ff09b343b594361b2[m
+Merge: a140436 403410c
+Author: Vetrov Daniil <93711640+p1ck234@users.noreply.github.com>
+Date:   Fri Jul 26 15:04:48 2024 +0400
+
+    Merge pull request #3 from p1ck234/InnaS
+    
+    Inna s
+
+[33mcommit 403410ccdb600e6c1d872e20fd68374d4b8445ec[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 15:04:01 2024 +0400
+
+    test main components
+
+[33mcommit e1d393cf3119aabef9d6d187892c78a50ad37ed0[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 15:03:52 2024 +0400
+
+    ts configurate
+
+[33mcommit cb34dd6d723d81e257c1d50f816bae599ff42b93[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 15:03:36 2024 +0400
+
+    rename js to tsx
+
+[33mcommit 549687ea59a80575df57951d8fedc61c387ec30d[m
+Author: Inna-Ser <serebrakovainna1@gmail.com>
+Date:   Fri Jul 26 05:30:22 2024 -0500
+
+    поменя расширения
+
+[33mcommit 9bdafe6f48e817ad7a16d2b8ee73ddc34962f735[m
+Author: Inna-Ser <serebrakovainna1@gmail.com>
+Date:   Fri Jul 26 05:16:31 2024 -0500
+
+    установила и скомпелировала тайпскрипт
+
+[33mcommit a1404369a91476c3c4e7c7ba16a93f342f1ac874[m
+Merge: d63a0b3 85edf97
+Author: Vetrov Daniil <93711640+p1ck234@users.noreply.github.com>
+Date:   Fri Jul 26 12:44:48 2024 +0400
+
+    Merge pull request #2 from p1ck234/InnaS
+    
+    Inna s Структура проекта
+
+[33mcommit 85edf9761a42861fe371015d2e8c873ebbf8c4e4[m
+Merge: d3917fc d63a0b3
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:43:05 2024 +0400
+
+    Resolved merge conflicts, keeping changes from main
+
+[33mcommit d3917fc513b6f91f9b3b73d458602b6dfd4ec8cb[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:39:55 2024 +0400
+
+    install dependencies
+
+[33mcommit 228e38d01c628fccd6875895fd81586b8a6facc7[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:37:03 2024 +0400
+
+    rename
+
+[33mcommit d63a0b391475bb5472239135aeadf5d25c970c96[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:09:19 2024 +0400
+
+    config tailwind and postcss
+
+[33mcommit e898be51b131dd0dd50a93baa0cf3073373a2209[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:06:54 2024 +0400
+
+    install @reduxjs/toolkit react-redux
+
+[33mcommit 243dcd3bc1924902bdbbef3fe0d7172311738c19[m
+Author: p1ck234 <danil-vetrov47@mail.ru>
+Date:   Fri Jul 26 12:02:17 2024 +0400
+
+    install react-dom, router, jest, firebase, stylelint, typescript
+
+[33mcommit 9f68064b30a6bd6ae84db777bb4889adfcc72816[m
+Author: Inna-Ser <serebrakovainna1@gmail.com>
+Date:   Thu Jul 25 17:00:44 2024 -0500
+
+    Сделала базовую структуру кода
+
+[33mcommit 448031b5cb588e35d1137e65e2f94f5c85d9457e[m
+Merge: 55666a7 2a7aeb1
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 21:51:06 2024 +0400
+
+    Merge branch 'Vetrov' of https://github.com/p1ck234/SkyFitnessPro into Vetrov
+
+[33mcommit 55666a73662a921fce04ea704798bc78f894f393[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 20:13:48 2024 +0400
+
+    app css
+
+[33mcommit 088361699384bf1ed4dd586f60961f11d6febe65[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 20:46:26 2024 +0400
+
+    install tailwind css
+
+[33mcommit 2a7aeb158f23620fb70dcd9191d4ae74e56f5d37[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 20:13:48 2024 +0400
+
+    app css
+
+[33mcommit 01ee1d4bffcf58eaac51dc1feb47315339c16ed7[m
+Author: p1ck23 <danil-vetrov47@mail.ru>
+Date:   Thu Jul 25 20:01:59 2024 +0400
+
+    first commit
