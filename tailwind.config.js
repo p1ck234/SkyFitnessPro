@@ -9,6 +9,7 @@ module.exports = {
         customYellow: "#FFC700",
         customGreenCurse: "#BCEC30",
         custumBlue: "#00C1FF",
+        customGray: '#FAFAFA', // Ваш кастомный цвет
       },
       cursor: {
         custom: "url(/img/customCursor.png), auto", // Ensure the image path is correct

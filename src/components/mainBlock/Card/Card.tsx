@@ -28,8 +28,6 @@ interface CardProps {
 }
 
 export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
-  console.log("Card component rendered");
-
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -46,13 +44,13 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   const progressObj = useSelector(
     (state: RootState) => state.course.progress
   ) ?? { value: 0 };
-  const progressValue = progressObj.value; // Извлечение числового значения
+  const progressValue = progressObj.value;
   const formattedProgress =
     typeof progress === "number" ? progress.toFixed(1) : "0.0";
   const [isLoading, setIsLoading] = useState(false);
-  const [isButtonLoading, setIsButtonLoading] = useState(false); // Состояние для кнопки
-  const { userCourses } = useUserCourses(0); // Получаем курсы пользователя
-  const [isHaveCourse, setIsHaveCourse] = useState(false); // Состояние наличия курса
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const { userCourses } = useUserCourses(0);
+  const [isHaveCourse, setIsHaveCourse] = useState(false);
 
   UserProgress();
 
@@ -77,7 +75,6 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
   const handleAddCourse = () => {
     setIsLoading(true);
 
-    // Проверяем, есть ли пользователь
     if (!user) {
       showAlert({
         title: "Ошибка!",
@@ -134,16 +131,16 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
           dispatch(fetchRemoveCourse({ uid, courseId }))
             .unwrap()
             .then(() => {
-              dispatch(setRemoveCourse(course)); // Обновление состояния после удаления
+              dispatch(setRemoveCourse(course));
               if (onCourseRemoved) {
-                onCourseRemoved(); // Дополнительные действия после удаления курса
+                onCourseRemoved();
               }
             })
             .catch((error) => {
               console.error("Ошибка при удалении курса:", error);
             })
             .finally(() => {
-              setIsLoading(false); // Остановка загрузки после завершения
+              setIsLoading(false);
             });
         }
       }
@@ -156,7 +153,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     navigate(`${constRoutes.COURSE}/${id}`);
   };
 
-  const handleCourseAction = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCourseAction = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (isProfile) {
       handleRemoveCourse();
@@ -167,7 +164,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
 
   const handleButtonClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsButtonLoading(true); // Начало загрузки при нажатии
+    setIsButtonLoading(true);
 
     if (progress === 100) {
       try {
@@ -198,7 +195,7 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
       handleCardClick(course.id);
     }
 
-    setIsButtonLoading(false); // Остановка загрузки после завершения
+    setIsButtonLoading(false);
   };
 
   return (
@@ -209,20 +206,14 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
     >
       <div className="relative">
         <ImageComponent filePath={course.imgMobile} />
-        <button
-          className="absolute top-2 right-5 flex items-center group"
+        <div
+          className="absolute top-2 right-5 flex items-center group cursor-pointer"
           onClick={handleCourseAction}
         >
           {isLoading ? (
             <div className="loader"></div>
           ) : isProfile ? (
-            <button
-              className="flex items-center"
-              onClick={(e) => {
-                e.stopPropagation(); // предотвращаем выполнение клика по карточке
-                handleRemoveCourse();
-              }}
-            >
+            <>
               <img
                 src="/img/icon/minus.svg"
                 alt="Удалить курс"
@@ -231,16 +222,10 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
               <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
                 Удалить курс
               </span>
-            </button>
+            </>
           ) : (
             !isHaveCourse && (
-              <button
-                className="flex items-center"
-                onClick={(e) => {
-                  e.stopPropagation(); // предотвращаем выполнение клика по карточке
-                  handleAddCourse();
-                }}
-              >
+              <>
                 <img
                   src="/img/icon/plus.svg"
                   alt="Добавить курс"
@@ -249,10 +234,10 @@ export function Card({ course, onSelectWorkouts, onCourseRemoved }: CardProps) {
                 <span className="z-10 opacity-0 group-hover:opacity-100 bg-white text-black text-sm px-2 py-1 rounded-md ml-2 absolute top-1/2 left-full transform -translate-y-1/2 translate-x-2 transition-opacity duration-300 shadow-lg hidden sm:block">
                   Добавить курс
                 </span>
-              </button>
+              </>
             )
           )}
-        </button>
+        </div>
       </div>
       <div className="w-80 p-3 flex flex-col">
         <h3 className="font-bold text-2xl py-5 phone:text-3xl">

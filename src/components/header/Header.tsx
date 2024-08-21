@@ -40,7 +40,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="flex justify-between items-center" id="heading-section">
+    <header className="flex justify-between items-center">
       <div className="flex flex-col items-start">
         <Logo />
       </div>

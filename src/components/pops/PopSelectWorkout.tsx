@@ -30,12 +30,10 @@ export const PopSelectWorkouts = ({
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
-          console.log("User data from Firestore:", userData);
 
           const courseProgress = userData.courses_progress.find(
             (course: any) => course.id_course === courseId
           );
-          console.log("Course progress:", courseProgress);
 
           if (courseProgress) {
             setProgressData(courseProgress.workouts_progress);
