@@ -1,9 +1,26 @@
-import { useState } from "react";
-import "./App.css";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { ModalProvider } from "./context/modalContext";
+import { UserProvider } from "./context/userContext";
+import { CourseProvider } from "./context/courseContext";
+import { AppRoutes } from "./Routes";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
-function App() {
-  const [count, setCount] = useState(0);
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <UserProvider>
+        <CourseProvider>
+          <ModalProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ModalProvider>
+        </CourseProvider>
+      </UserProvider>
+    </Provider>
+  );
+};
 
-  return <div>asdf</div>;
-}
 export default App;
